@@ -2,7 +2,7 @@
 
 
 require_once (dirname(__FILE__) . '/couchsimple.php');
-//require_once (dirname(__FILE__) . '/lib.php');
+require_once (dirname(__FILE__) . '/lib.php');
 require_once (dirname(__FILE__) . '/reference.php');
 
 //--------------------------------------------------------------------------------------------------
@@ -35,6 +35,12 @@ function display_record($id)
 		header('Location: ' . $config['web_root'] . "\n\n");
 		exit(0);
 	}
+	
+	/*
+	echo '<pre>';
+	print_r($reference);
+	echo '</pre>';
+	*/
 	
 	if (isset($reference->journal))
 	{
@@ -124,6 +130,25 @@ function display_record($id)
 	echo '<pre>';
 	echo json_encode(reference_to_citeprocjs($reference), JSON_PRETTY_PRINT);
 	echo '</pre>';
+	
+	// display
+	$json = get('http://biostor.org/reference/' . str_replace('biostor/', '', $id) . '.json');
+	$obj = json_decode($json);
+	
+	if (isset($obj->bhl_pages))
+	{
+		echo '<div>';
+
+		foreach ($obj->bhl_pages as $PageID)
+		{
+			echo '<div style="float:left;padding:20px;">';
+			echo '<img style="border:1px solid black;" src="http://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',50,50" />';
+			echo '<div style="text-align:center">' . $PageID . '</div>';
+			echo '</div>';
+		}
+		
+		echo '</div>';
+	}
 	
 }
 
@@ -286,9 +311,12 @@ function display_search($text, $bookmark = '')
 		
 		
 			//echo '<span style="color:green;">' . $row->highlights->default[0] . '</span>';
-			echo '<div>';
-			echo '<span style="font-family:sans-serif;font-size:12px;color:#222;">' . $row->highlights->default[0] . '</span>';
-			echo '</div>';
+			if (isset($row->highlights))
+			{
+				echo '<div>';
+				echo '<span style="font-family:sans-serif;font-size:12px;color:#222;">' . $row->highlights->default[0] . '</span>';
+				echo '</div>';
+			}
 		
 		
 			echo '<div class="item-links">';

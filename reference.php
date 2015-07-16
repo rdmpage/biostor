@@ -575,7 +575,7 @@ function reference_to_google_scholar($reference)
 	{
 		foreach ($reference->link as $link)
 		{
-			switch ($reference->anchor)
+			switch ($link->anchor)
 			{
 				case 'PDF':
 					$meta .= '<meta name="citation_pdf_url" content="' . $link->url . '" />' . "\n";

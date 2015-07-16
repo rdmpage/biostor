@@ -131,6 +131,14 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 		foreach ($reference->author as $author)
 		{
 			$a = new stdclass;
+			
+			// hack while we work with old BioStor BibJSON
+			if (isset($author->forename))
+			{
+				$author->firstname = $author->forename;
+			}
+			
+			
 			if (isset($author->firstname))
 			{
 				$a->given = $author->firstname;

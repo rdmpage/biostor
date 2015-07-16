@@ -36,6 +36,28 @@ function display_record($id)
 		exit(0);
 	}
 	
+	
+	echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />';
+	
+	echo  reference_to_google_scholar($reference);
+	
+	echo '<title>' . $reference->title . '</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+		function show_formatted_citation(format) {
+			$.get("api.php?id=' . $id . '&format=citationprocjs&style=" + format + "&callback=?",
+				function(data){
+					$("#citation").html(data);
+			});
+		}
+	</script>
+	</head>
+<body>';
+	
+	
 	/*
 	echo '<pre>';
 	print_r($reference);
@@ -92,28 +114,30 @@ function display_record($id)
 	
 	echo "<h1>" . $reference->title . "</h1>";	
 	
-			if (isset($reference->author))
+	if (isset($reference->author))
+	{
+		$authors = array();
+		foreach ($reference->author as $author)
+		{
+			$string = '';
+			if (isset($author->firstname))
 			{
-				$authors = array();
-				foreach ($reference->author as $author)
-				{
-					$string = '';
-					if (isset($author->firstname))
-					{
-						$string = $author->firstname . ' ' . $author->lastname;
-					}
-					else
-					{
-						$string = $author->name;
-					}
-					
-					$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
-			
-				}
-				echo 'Authors: ' . join(', ', $authors);
+				$string = $author->firstname . ' ' . $author->lastname;
 			}
+			else
+			{
+				$string = $author->name;
+			}
+			
+			$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
 	
+		}
+		echo 'Authors: ' . join(', ', $authors);
+	}
 	
+	echo reference_to_coins($reference);
+	
+	/*
 	echo '<pre>';
 	echo htmlentities(reference_to_google_scholar($reference));
 	echo '</pre>';
@@ -130,6 +154,18 @@ function display_record($id)
 	echo '<pre>';
 	echo json_encode(reference_to_citeprocjs($reference), JSON_PRETTY_PRINT);
 	echo '</pre>';
+	*/
+
+	echo '<select id="format" onchange="show_formatted_citation(this.options[this.selectedIndex].value);">
+		<option label="Format" disabled="disabled" selected="selected"></option>
+		<option label="APA" value="apa"></option>
+		<option label="BibTeX" value="bibtex"></option>
+		<option label="ZooKeys" value="zookeys">
+		<!-- <option label="Zootaxa" value="zootaxa"></option> -->
+	</select>';
+	
+	echo '<div id="citation" style="width:400px;height:100px;border:1px solid black;"></div>';
+
 	
 	// display
 	$json = get('http://biostor.org/reference/' . str_replace('biostor/', '', $id) . '.json');
@@ -142,13 +178,17 @@ function display_record($id)
 		foreach ($obj->bhl_pages as $PageID)
 		{
 			echo '<div style="float:left;padding:20px;">';
-			echo '<img style="border:1px solid black;" src="http://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',50,50" />';
+			//echo '<img style="border:1px solid black;" src="http://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',50,50" />';
+			echo '<img style="box-shadow:2px 2px 2px #ccc;" src="http://biostor.org/bhl_image.php?PageID=' . $PageID . '&thumbnail" alt="Page ' . $PageID . '" />';
 			echo '<div style="text-align:center">' . $PageID . '</div>';
 			echo '</div>';
 		}
 		
 		echo '</div>';
 	}
+	
+	echo '</body>
+	</html>';
 	
 }
 

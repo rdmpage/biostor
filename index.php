@@ -5,7 +5,7 @@ require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/lib.php');
 require_once (dirname(__FILE__) . '/reference.php');
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 function default_display()
 {
 	global $config;
@@ -15,82 +15,409 @@ function default_display()
 	echo "hi";
 }
 
-//--------------------------------------------------------------------------------------------------
-function display_record($id)
+//----------------------------------------------------------------------------------------
+// List of all years that we have articles for, grouped by decade.
+// Display on page for entire journal, and on page for a given year
+function display_journal_volumes($namespace = 'issn', $identifier, $year = '')
 {
 	global $config;
-	global $couch;
-	
-	$reference = null;
-	
-	// grab JSON from CouchDB
-	$couch_id = $id;
-	
-	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
-	
-	$reference = json_decode($resp);
-	if (isset($reference->error))
+
+	// all volumes for journal
+	$url = 'http://localhost/~rpage/biostor/api_journal.php?';
+	switch ($namespace)
 	{
-		// bounce
-		header('Location: ' . $config['web_root'] . "\n\n");
-		exit(0);
+		case 'issn':
+			$url .= 'issn=' . $identifier;
+			break;
+			
+		case 'oclc':
+			$url .= 'oclc=' . $identifier;
+			break;
+			
+		default:
+			break;
 	}
+	$url .= '&volumes';
 	
+	$json = get($url);
 	
-	echo '<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8" />';
-	
-	echo  reference_to_google_scholar($reference);
-	
-	echo '<title>' . $reference->title . '</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script>
-		function show_formatted_citation(format) {
-			$.get("api.php?id=' . $id . '&format=citationprocjs&style=" + format + "&callback=?",
-				function(data){
-					$("#citation").html(data);
-			});
-		}
-	</script>
-	</head>
-<body>';
-	
-	
-	/*
-	echo '<pre>';
-	print_r($reference);
-	echo '</pre>';
-	*/
-	
-	if (isset($reference->journal))
+	if ($json != '')
 	{
-		$issn = '';
-		if (isset($reference->journal->identifier))
+		$obj = json_decode($json);
+		
+		
+		echo '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">' . "\n";
+
+		foreach ($obj->decades as $k => $decade)
 		{
-			foreach ($reference->journal->identifier as $identifier)
+			$current_decade = false;
+			if ($year != '')
 			{
-				if ($identifier->type == 'issn')
+				$current_decade = (floor($year / 10) == $k);
+			}
+			
+			echo '  <div class="panel panel-default">' . "\n";
+
+			// heading
+			
+    		echo '<div class="panel-heading" role="tab" id="heading' . $k . '">' . "\n";
+      		echo '<h4 class="panel-title">' . "\n";
+        	echo '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse' . $k . '"';
+        	
+			if ($current_decade)
+			{
+				echo 'aria-expanded="true"';
+			}
+			else
+			{
+				echo 'aria-expanded="false"';
+			}
+			
+        	
+        	echo ' aria-controls="collapse' . $k .'">' . "\n";
+          	echo $k . '0\'s';
+        	echo '</a>' . "\n";
+      		echo '</h4>' . "\n";
+    		echo '</div>' . "\n";
+			
+			// content
+			
+			/*
+			echo '<div style="border:1px solid black;">';
+			if ($current_decade)
+			{
+				echo "Active<br />";
+			}
+			
+			echo '<ul>';
+			*/
+			
+			
+			echo '<div id="collapse' . $k . '" class="panel-collapse collapse';
+			if ($current_decade)
+			{
+				echo ' in';
+			}
+			echo '" role="tabpanel" aria-labelledby="id' . $k . '">' . "\n";
+      		echo '<div class="panel-body">' . "\n";
+
+			echo '<ul>';
+			foreach ($decade as $k => $v)
+			{
+				$current_year = false;
+				if ($year != '')
 				{
-					$issn = $identifier->id;
+					$current_year = ($year == $k);
+				}
+				echo '<li>';
+				if ($current_year)
+				{
+					echo '<b>';
+				}
+				
+				//echo $k;
+				
+				echo '<a href="?' . $namespace . '=' . $identifier . '&year=' . $k . '">' . $k . '</a>';
+				
+				
+				if ($current_year)
+				{
+					echo '</b>';
+				}
+				
+				echo ' <span class="badge">' .$v . '</span>';
+				echo '</li>';
+			}
+			echo '</ul>';
+
+			echo '</div>';	
+			echo '</div>';	
+				
+			echo '</div>';
+			
+		}
+		
+		echo '</div>';
+	}		
+}
+
+//----------------------------------------------------------------------------------------
+function display_record_summary ($reference, $highlights = null)
+{
+		echo '<tr>';
+	
+		echo '<td valign="top" style="text-align:center;width:100px;">';
+		if (isset($reference->thumbnail))
+		{
+			echo '<img style="box-shadow:2px 2px 2px #ccc;width:64px;" src="' . $reference->thumbnail .  '">';								
+		}
+		echo '</td>';
+	
+		echo '<td valign="top" class="item-data">';
+			
+		echo '<div style="font-size:24px;">';
+		echo '<a href="?id=' . $reference->_id . '">' . $reference->title . '</a>';
+		//echo $reference->title;
+		echo '</div>';
+	
+		echo '<div style="color:rgb(128,128,128);">';
+		if (isset($reference->year))
+		{
+			echo 'Published in <b>' . $reference->year . '</b>';
+		}
+		if (isset($reference->journal))
+		{
+			$issn = '';
+			if (isset($reference->journal->identifier))
+			{
+				foreach ($reference->journal->identifier as $identifier)
+				{
+					if ($identifier->type == 'issn')
+					{
+						$issn = $identifier->id;
+					}
 				}
 			}
-		}
-		if ($issn != '')
-		{
-			echo '<a href="issn/' . $issn . '">' . $reference->journal->name . '</a>';			
+			if ($issn != '')
+			{
+				echo ' in <b><a href="?issn=' . $issn . '">' . $reference->journal->name . '</a></b>';			
+			}
+			else
+			{
+				echo ' in <b>' . $reference->journal->name . '</b>';
+			}
+			if (isset($reference->journal->volume))
+			{
+				echo ', volume <b>' . $reference->journal->volume . '</b>';
+			}
+			if (isset($reference->journal->issue))
+			{
+				echo ', issue <b>' . $reference->journal->issue . '</b>';
+			}		
+			if (isset($reference->journal->pages))
+			{
+				echo ', on pages <b>' . str_replace('--', '-', $reference->journal->pages) . '</b>';
+			}
 		}
 		else
 		{
-			echo $reference->journal->name;
+			// not a journal...
+			echo ', on pages <b>' . str_replace('--', '-', $reference->pages) . '</b>';
+		}		
+		echo '</div>';
+	
+		echo '<div>';
+	
+		if (isset($reference->author))
+		{
+			$authors = array();
+			foreach ($reference->author as $author)
+			{
+				$string = '';
+				if (isset($author->firstname))
+				{
+					$string = $author->firstname . ' ' . $author->lastname;
+				}
+				else
+				{
+					$string = $author->name;
+				}
+				
+				$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
+		
+			}
+			echo 'Authors: ' . join(', ', $authors);
+		}
+	
+	
+		echo '</div>';
+	
+	
+		//echo '<span style="color:green;">' . $row->highlights->default[0] . '</span>';
+		if (isset($highlights))
+		{
+			echo '<div>';
+			echo '<span style="font-family:sans-serif;font-size:12px;color:green;">' . $highlights->default[0] . '</span>';
+			echo '</div>';
+		}
+	
+	
+		echo '<div class="item-links">';
+	
+		//echo '<a href="">cite</a>';
+			
+		if (isset($reference->identifier))
+		{
+			foreach ($reference->identifier as $identifier)
+			{
+				switch ($identifier->type)
+				{
+					case 'bhl':
+						echo '<a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>http://biodiversitylibrary.org/page/' . $identifier->id . '</a>';
+						break;
+						
+					case 'doi':
+						echo '<a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>http://doi.dx.org/' . $identifier->id . '</a>';
+						break;
+					/*					
+					case 'biostor':
+						echo '<a href="http://biostor.org/reference/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>biostor.org/reference/' . $identifier->id . '</a>';
+						break;
+					
+					case 'cinii':
+						echo '<a href="http://ci.nii.ac.jp/naid/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>ci.nii.ac.jp/naid/' . $identifier->id . '</a>';
+						break;										
+
+					case 'doi':
+						echo '<a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>doi.dx.org/' . $identifier->id . '</a>';
+						break;
+				
+					case 'handle':
+						echo '<a href="http://hdl.handle.net/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>hdl.handle.net/' . $identifier->id . '</a>';
+						break;
+
+					case 'jstor':
+						echo '<a href="http://www.jstor.org/stable/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>www.jstor.org/stable/' . $identifier->id . '</a>';
+						break;
+					*/	
+					default:
+						break;
+				}
+			}
+		}
+		echo '</div>';
+	
+	
+		echo '</td>';
+		echo '</tr>';
+
+}
+
+//----------------------------------------------------------------------------------------
+// Display articles for a given year
+function display_journal_year($namespace = 'issn', $identifier, $year)
+{
+	global $config;
+	
+	display_html_start();
+	display_navbar();
+
+	// Breadcrumbs -----------------------------------------------------------------------
+	echo '<ol class="breadcrumb">' . "\n";	
+	echo '<li><a href="?titles">All titles</a></li>' . "\n";	
+	
+	echo '<li>';
+	switch ($namespace)
+	{
+		case 'issn':
+		case 'oclc':
+			echo '<a href="?' . $namespace . '=' . $identifier . '">' . $identifier . '</a>';					
+			break;
+		default:
+			echo $identifier;
+			break;					
+	}
+	echo '</li>' . "\n";
+	
+	echo '<li class="active">' . $year . '</li>' . "\n";
+	
+	echo '</ol>';
+	
+	echo '<div class="container-fluid">' . "\n";
+	echo '  <div class="row">' . "\n";
+	echo '		<div class="col-md-2">' . "\n";
+	
+	display_journal_volumes($namespace, $identifier, $year);
+	
+	echo '      </div>' . "\n";
+			
+	echo '      <div class="col-md-10">' . "\n";
+
+	// all volumes for journal
+	$url = 'http://localhost/~rpage/biostor/api_journal.php?';
+	switch ($namespace)
+	{
+		case 'issn':
+		case 'oclc':
+			$url .= $namespace . '=' . $identifier;
+			break;
+			
+		default:
+			break;
+	}
+	$url .= '&year=' . $year;
+	
+	$json = get($url);
+	
+	if ($json != '')
+	{
+		$obj = json_decode($json);
+		
+		echo '<table class="table" cellpadding="20">';
+		echo '<thead>';
+		echo '</thead>';
+		echo '<tbody>';
+		
+		foreach ($obj->articles as $reference)
+		{
+			// display
+			display_record_summary ($reference);
 		}
 		
+		echo '</tbody>';
+		echo '</table>';
+	}
+
+	echo '      </div>' . "\n";
+	echo '   </div>' . "\n";
+	echo '</div>' . "\n";
+	
+	
+	display_html_end();
+}
+
+//----------------------------------------------------------------------------------------
+// Display articles for a given year
+function display_journal($namespace = 'issn', $identifier)
+{
+	global $config;
+	
+	display_html_start();
+	display_navbar();
+
+	// Breadcrumbs -----------------------------------------------------------------------
+	echo '<ol class="breadcrumb">' . "\n";	
+	echo '<li><a href="?titles">All titles</a></li>' . "\n";		
+	echo '<li class="active">' .$identifier . '</li>' . "\n";
+	echo '</ol>';
+	
+	echo '<div class="container-fluid">' . "\n";
+	echo '  <div class="row">' . "\n";
+	echo '		<div class="col-md-2">' . "\n";
+	display_journal_volumes($namespace, $identifier, $year);
+	echo '      </div>' . "\n";
+			
+	echo '      <div class="col-md-10">' . "\n";
+	
+	echo        'Info on journal';
+	
+	echo '      </div>' . "\n";
+	echo '   </div>' . "\n";
+	echo '</div>' . "\n";
+	
+	display_html_end();
+}
+
+function display_article_metadata($reference)
+{
+	// Metadata --------------------------------------------------------------------------
+	if (isset($reference->journal))
+	{
+		echo $reference->journal->name;		
 		if (isset($reference->journal->series))
 		{
 			echo ' series ' . $reference->journal->series;
-		}		
-		
+		}				
 		if (isset($reference->year))
 		{
 			echo ' ' . $reference->year;
@@ -106,35 +433,40 @@ function display_record($id)
 		}		
 		if (isset($reference->journal->pages))
 		{
-			echo ':' . str_replace('--', '-', $reference->journal->pages) . '</b>';
+			echo ':' . str_replace('--', '-', $reference->journal->pages);
 		}
+		echo '<br />';
 	}
 	
+	// Title -----------------------------------------------------------------------------	
+	echo "<h3>" . $reference->title . "</h3>";	
 	
-	
-	echo "<h1>" . $reference->title . "</h1>";	
-	
+	// Authors ---------------------------------------------------------------------------
 	if (isset($reference->author))
 	{
-		$authors = array();
-		foreach ($reference->author as $author)
+		if (count($reference->author) > 0)
 		{
-			$string = '';
-			if (isset($author->firstname))
+			$authors = array();
+			foreach ($reference->author as $author)
 			{
-				$string = $author->firstname . ' ' . $author->lastname;
-			}
-			else
-			{
-				$string = $author->name;
-			}
+				$string = '';
+				if (isset($author->firstname))
+				{
+					$string = $author->firstname . ' ' . $author->lastname;
+				}
+				else
+				{
+					$string = $author->name;
+				}
 			
-			$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
+				$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
 	
+			}
+			echo join(', ', $authors);
 		}
-		echo 'Authors: ' . join(', ', $authors);
 	}
-	
+
+	// COinS -----------------------------------------------------------------------------
 	echo reference_to_coins($reference);
 	
 	/*
@@ -155,44 +487,261 @@ function display_record($id)
 	echo json_encode(reference_to_citeprocjs($reference), JSON_PRETTY_PRINT);
 	echo '</pre>';
 	*/
-
-	echo '<select id="format" onchange="show_formatted_citation(this.options[this.selectedIndex].value);">
-		<option label="Format" disabled="disabled" selected="selected"></option>
-		<option label="APA" value="apa"></option>
-		<option label="BibTeX" value="bibtex"></option>
-		<option label="ZooKeys" value="zookeys">
-		<!-- <option label="Zootaxa" value="zootaxa"></option> -->
-	</select>';
-	
-	echo '<div id="citation" style="width:400px;height:100px;border:1px solid black;"></div>';
-
-	
-	// display
-	$json = get('http://biostor.org/reference/' . str_replace('biostor/', '', $id) . '.json');
-	$obj = json_decode($json);
-	
-	if (isset($obj->bhl_pages))
-	{
-		echo '<div>';
-
-		foreach ($obj->bhl_pages as $PageID)
-		{
-			echo '<div style="float:left;padding:20px;">';
-			//echo '<img style="border:1px solid black;" src="http://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',50,50" />';
-			echo '<img style="box-shadow:2px 2px 2px #ccc;" src="http://biostor.org/bhl_image.php?PageID=' . $PageID . '&thumbnail" alt="Page ' . $PageID . '" />';
-			echo '<div style="text-align:center">' . $PageID . '</div>';
-			echo '</div>';
-		}
-		
-		echo '</div>';
-	}
-	
-	echo '</body>
-	</html>';
-	
 }
 
 //--------------------------------------------------------------------------------------------------
+// Display one article
+function display_record($id, $page = 0)
+{
+	global $config;
+	global $couch;
+	
+	$reference = null;
+	
+	// grab JSON from CouchDB
+	$couch_id = $id;
+	
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
+	
+	$reference = json_decode($resp);
+	if (isset($reference->error))
+	{
+		// bounce
+		header('Location: ' . $config['web_root'] . "\n\n");
+		exit(0);
+	}
+	
+	$script = '<script>
+		function show_formatted_citation(format) {
+			$.get("api.php?id=' . $id . '&format=citationprocjs&style=" + format + "&callback=?",
+				function(data){
+					$("#citation").html(data);
+			});
+		}
+	</script>';
+	
+	display_html_start($reference->title, reference_to_google_scholar($reference), $script);
+	display_navbar();	
+	
+	/*
+	echo '<pre>';
+	print_r($reference);
+	echo '</pre>';
+	*/
+	
+	
+	// Breadcrumbs -----------------------------------------------------------------------
+	echo '<ol class="breadcrumb">' . "\n";	
+	echo '<li><a href="?titles">All titles</a></li>' . "\n";	
+	
+	if (isset($reference->journal))
+	{
+		$journal_namespace = '';
+		$journal_identifier = '';
+	
+		$issn = '';
+		$oclc = '';
+		if (isset($reference->journal->identifier))
+		{
+			foreach ($reference->journal->identifier as $identifier)
+			{
+				switch ($identifier->type)
+				{
+					case 'issn':
+						$journal_namespace = 'issn';
+						$journal_identifier = $identifier->id;
+						break;
+					case 'oclc':
+						$journal_namespace = 'oclc';
+						$journal_identifier = $identifier->id;
+						break;
+					default:
+						break;					
+				}
+			}
+		}
+		echo '<li>';
+		if ($journal_namespace != '')
+		{
+			echo '<a href="?' . $journal_namespace . '=' . $journal_identifier . '">' . $reference->journal->name . '</a>';			
+		}
+		else
+		{
+			echo $reference->journal->name;
+		}		
+		if (isset($reference->journal->series))
+		{
+			echo ' series ' . $reference->journal->series;
+		}	
+		echo '</li>' . "\n";	
+		
+		if (isset($reference->year))
+		{
+			echo '<li>';
+			if ($journal_namespace != '')
+			{
+				echo '<a href="?' . $journal_namespace . '=' . $journal_identifier  . '&year=' . $reference->year . '">' . $reference->year . '</a>';			
+			}
+			else
+			{		
+				echo ' ' . $reference->year;
+			}
+			echo '</li>' . "\n";	
+		}				
+		echo '<li class="active">' . $id . '</li>' . "\n";
+	}
+	echo '</ol>';
+	
+	
+	// display article
+	
+	
+		// display
+	$json = get('http://biostor.org/reference/' . str_replace('biostor/', '', $id) . '.json');
+	$obj = json_decode($json);
+	
+	$num_pages = count($obj->bhl_pages );
+
+	
+	echo '<div class="container-fluid">' . "\n";
+	
+	if ($page == 0)
+	{
+		// thumbnails
+		echo '<div class="row">' . "\n";
+	    echo '	<div class="col-md-8">' . "\n";
+	    
+	    echo '<div>';
+	    display_article_metadata($reference);
+	    echo '</div>';
+	    
+	    // thumbnail images
+	    
+		for ($i = 0; $i < $num_pages; $i++)
+		{
+			echo '<div class="col-md-2">';
+			//echo '<img style="border:1px solid black;" src="http://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',50,50" />';
+			
+			echo '<a href="?id=' . $id . '&page=' . ($i + 1) . '" class="thumbnail">';
+			
+			echo '<img style="box-shadow:2px 2px 2px #ccc;width:100px;" src="http://biostor.org/bhl_image.php?PageID=' .  $obj->bhl_pages[$i] . '&thumbnail" alt="Page ' . $PageID . '" />';
+			echo '<p style="text-align:center">' . $obj->bhl_pages[$i] . '</p>';
+			echo '</a>';
+			echo '</div>';
+			
+		}  
+		echo '</div>';  
+
+	    echo '	<div class="col-md-4">' . "\n";
+	    
+	    echo '<div>';
+		echo '<select id="format" onchange="show_formatted_citation(this.options[this.selectedIndex].value);">
+			<option label="Citation format" disabled="disabled" selected="selected"></option>
+			<option label="APA" value="apa"></option>
+			<option label="BibTeX" value="bibtex"></option>
+			<option label="ZooKeys" value="zookeys">
+			<!-- <option label="Zootaxa" value="zootaxa"></option> -->
+		</select>';
+	
+		echo '<div id="citation" style=font-size:11px;"width:300px;height:100px;border:1px solid black;"></div>';
+		echo '</div>';
+	    
+	    
+	    
+	    
+	    echo '  </div>' . "\n";
+		
+		echo '</div>' . "\n";
+
+	}
+	else
+	{
+		// page viewer
+		echo '<div class="row">' . "\n";
+	    echo '	<div class="col-md-12">' . "\n";
+	    
+	    echo '<div>';
+	    display_article_metadata($reference);
+	    echo '</div>';
+	    
+			// Navigation
+			echo '<nav>';
+			echo '  <ul class="pager">';
+			echo '    <li class="previous';
+			if ($page == 1)
+			{
+				echo ' disabled';
+			}
+			echo '"><a href="?id=' . $id . '&page=' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';
+			echo '    <li class="next';
+			if ($page == $num_pages)
+			{
+				echo ' disabled';
+			}
+			echo '"><a href="?id=' . $id . '&page=' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
+			echo '  </ul>';
+			echo '</nav>';
+
+			$PageID = $obj->bhl_pages[$page - 1];
+
+
+			$xml_url = 'http://biostor.org/bhl_page_xml.php?PageID=' . $PageID;
+			$image_url = 'http://biostor.org/bhl_image.php?PageID=' . $PageID;
+
+			$xml = get($xml_url);
+
+			//echo $xml;
+
+			//$xml = file_get_contents('43642463.xml');
+
+			if (0)//$xml != '')
+			{
+					// Enable text selection	
+					$xp = new XsltProcessor();
+					$xsl = new DomDocument;
+					$xsl->load(dirname(__FILE__) . '/djvu2html.xsl');
+					$xp->importStylesheet($xsl);
+		
+					$doc = new DOMDocument;
+					$doc->loadXML($xml);
+		
+					$xp->setParameter('', 'widthpx', '800');
+					$xp->setParameter('', 'imageUrl', $image_url);
+		
+					$html = $xp->transformToXML($doc);
+					echo $html;
+
+
+			}
+			else
+			{
+				echo '<div class="col-md-1"></div>';
+				echo '<div class="col-md-8">';
+				echo '<img width="700" style="box-shadow:2px 2px 2px #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';
+				echo '</div>';
+				echo '<div class="col-md-1"></div>';
+			}
+	    
+	    
+	    echo '  </div>' . "\n";
+		
+		echo '</div>' . "\n";
+		
+		
+	}
+	
+	echo '</div>';
+	
+
+	
+	
+	
+	display_html_end();	
+}
+
+//--------------------------------------------------------------------------------------------------
+// Display a list of search results, possibly with a Cloudant bookmark to indicate 
+// the next set of results
 function display_search($text, $bookmark = '')
 {
 	global $couch;
@@ -242,6 +791,14 @@ function display_search($text, $bookmark = '')
 	{	
 		$total_rows = $obj->total_rows;
 		$bookmark = $obj->bookmark;
+		
+		echo '<div><form action="." method="GET"><input name="q" type="text" placeholder value="' . htmlentities($q) . '"></form></div>';
+		
+	echo '<div style="float:right;width:300px;height:1000px;border:1px solid red;">';
+	echo '<p>Stuff relevant to results</p>';
+	echo '</div>';
+	
+	
 	
 		echo '<h3>' . $total_rows . ' hit(s)' . '</h3>';
 	
@@ -260,153 +817,9 @@ function display_search($text, $bookmark = '')
 		foreach ($obj->rows as $row)
 		{
 			$reference = $row->doc;
-	
-			echo '<tr>';
-		
-			echo '<td valign="top" style="text-align:center;width:100px;">';
-			if (isset($reference->thumbnail))
-			{
-				echo '<img style="box-shadow:2px 2px 2px #ccc;width:64px;" src="' . $reference->thumbnail .  '">';								
-			}
-			echo '</td>';
-		
-			echo '<td valign="top" class="item-data">';
-				
-			echo '<div style="font-size:24px;font-weight:100;">';
-			echo '<a href="?id=' . $reference->_id . '">' . $reference->title . '</a>';
-			//echo $reference->title;
-			echo '</div>';
-		
-			echo '<div style="color:rgb(128,128,128);">';
-			if (isset($reference->year))
-			{
-				echo 'Published in <b>' . $reference->year . '</b>';
-			}
-			if (isset($reference->journal))
-			{
-				$issn = '';
-				if (isset($reference->journal->identifier))
-				{
-					foreach ($reference->journal->identifier as $identifier)
-					{
-						if ($identifier->type == 'issn')
-						{
-							$issn = $identifier->id;
-						}
-					}
-				}
-				if ($issn != '')
-				{
-					echo ' in <b><a href="issn/' . $issn . '">' . $reference->journal->name . '</a></b>';			
-				}
-				else
-				{
-					echo ' in <b>' . $reference->journal->name . '</b>';
-				}
-				if (isset($reference->journal->volume))
-				{
-					echo ', volume <b>' . $reference->journal->volume . '</b>';
-				}
-				if (isset($reference->journal->issue))
-				{
-					echo ', issue <b>' . $reference->journal->issue . '</b>';
-				}		
-				if (isset($reference->journal->pages))
-				{
-					echo ', on pages <b>' . str_replace('--', '-', $reference->journal->pages) . '</b>';
-				}
-			}
-			else
-			{
-				// not a journal...
-				echo ', on pages <b>' . str_replace('--', '-', $reference->pages) . '</b>';
-			}		
-			echo '</div>';
-		
-			echo '<div>';
-		
-			if (isset($reference->author))
-			{
-				$authors = array();
-				foreach ($reference->author as $author)
-				{
-					$string = '';
-					if (isset($author->firstname))
-					{
-						$string = $author->firstname . ' ' . $author->lastname;
-					}
-					else
-					{
-						$string = $author->name;
-					}
-					
-					$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
 			
-				}
-				echo 'Authors: ' . join(', ', $authors);
-			}
-		
-		
-			echo '</div>';
-		
-		
-			//echo '<span style="color:green;">' . $row->highlights->default[0] . '</span>';
-			if (isset($row->highlights))
-			{
-				echo '<div>';
-				echo '<span style="font-family:sans-serif;font-size:12px;color:#222;">' . $row->highlights->default[0] . '</span>';
-				echo '</div>';
-			}
-		
-		
-			echo '<div class="item-links">';
-		
-			//echo '<a href="">cite</a>';
-				
-			if (isset($reference->identifier))
-			{
-				foreach ($reference->identifier as $identifier)
-				{
-					switch ($identifier->type)
-					{
-						case 'bhl':
-							echo '<a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>http://biodiversitylibrary.org/page/' . $identifier->id . '</a>';
-							break;
-							
-						case 'doi':
-							echo '<a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>http://doi.dx.org/' . $identifier->id . '</a>';
-							break;
-						/*					
-						case 'biostor':
-							echo '<a href="http://biostor.org/reference/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>biostor.org/reference/' . $identifier->id . '</a>';
-							break;
-						
-						case 'cinii':
-							echo '<a href="http://ci.nii.ac.jp/naid/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>ci.nii.ac.jp/naid/' . $identifier->id . '</a>';
-							break;										
+			display_record_summary($reference, $row->highlights);
 	
-						case 'doi':
-							echo '<a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>doi.dx.org/' . $identifier->id . '</a>';
-							break;
-					
-						case 'handle':
-							echo '<a href="http://hdl.handle.net/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>hdl.handle.net/' . $identifier->id . '</a>';
-							break;
-
-						case 'jstor':
-							echo '<a href="http://www.jstor.org/stable/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>www.jstor.org/stable/' . $identifier->id . '</a>';
-							break;
-						*/	
-						default:
-							break;
-					}
-				}
-			}
-			echo '</div>';
-		
-		
-			echo '</td>';
-			echo '</tr>';
 		}
 	
 		echo '</tbody>';
@@ -421,6 +834,150 @@ function display_search($text, $bookmark = '')
 }
 
 //--------------------------------------------------------------------------------------------------
+// Displaynavigation bar
+function display_navbar()
+{
+
+echo '<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href=".">
+        <img alt="Brand" src="images/biostor-shadow32x32.png" height="20">
+      </a>      
+     <form class="navbar-form navbar-left" role="search">
+       <div class="form-group">
+         <input type="text" class="form-control" placeholder="Search" name="q">
+       </div>
+      </form>     
+      <ul class="nav navbar-nav">
+        <li><a href="?titles">Titles</a></li>  
+      </ul>
+    </div>
+  </div>
+</nav>';
+}
+
+//----------------------------------------------------------------------------------------
+function display_html_start($title = '', $meta = '', $script = '')
+{
+	echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->'
+    . $meta . '
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>'
+	. $script . '
+	<title>' . $title . '</title>
+	</head>
+<body style="padding-top:70px;padding-left:20px;padding-right:20px;padding-bottom:20px;">';
+
+}
+
+//----------------------------------------------------------------------------------------
+function display_html_end()
+{
+	echo '<div class="panel panel-default">
+  <div class="panel-body">
+    <p style="vertical-align: top">BioStor is built by <a href="https://twitter.com/rdmpage">@rdmpage</a>. 
+    Images from <a href="http://biodiversitylibrary.org">Biodiversity Heritage Library</a>.';
+    /*
+    echo "<a href=\"https://twitter.com/biostor_org\" class=\"twitter-follow-button\" data-show-count=\"false\">Follow @biostor_org</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>"; */
+    echo '
+    </p>
+  </div>
+</div>';
+
+	echo '</body>
+</html>';
+}
+
+
+//----------------------------------------------------------------------------------------
+// Display all the titles in the database (essentially all the journals)
+// Split by first letter of journal name
+function display_titles($letter= 'A')
+{
+	global $config;
+	global $couch;
+	
+	display_html_start('Titles');
+
+	display_navbar();
+	
+	echo '<div  class="container-fluid">' . "\n";
+	
+	echo '<h1>Titles starting with the letter "' . $letter . '"</h1>';
+
+	// all volumes for journal
+	$url = 'http://localhost/~rpage/biostor/api_journal.php?titles&letter=' . $letter;
+	
+	$json = get($url);
+	
+	if ($json != '')
+	{
+		$obj = json_decode($json);
+					
+		echo '<nav>' . "\n";
+  		echo '<ul class="pagination">' . "\n";
+		
+		$all_letters = range("A", "Z");
+		foreach ($all_letters as $starting_letter)
+		{
+			echo '<li';
+			if ($letter == $starting_letter)
+			{
+				echo ' class="active"';
+			}
+			echo '><a href="?titles&letter=' . $starting_letter . '">' .  $starting_letter . '</a>';
+			echo '</li>' . "\n";
+		}
+		echo '</ul>';
+		echo '</nav>';
+		
+		// journals
+		
+		echo '<div>';
+		echo '<ul>';
+		foreach ($obj->titles as $identifier => $title)
+		{
+			echo '<li>';
+			
+			if (isset($title->issn))
+			{
+				echo '<a href="?issn=' . $title->issn . '">';
+			}
+			if (isset($title->oclc))
+			{
+				echo '<a href="?oclc=' . $title->oclc . '">';
+			}
+			
+			echo $title->title;
+			 
+			if (isset($title->issn) || isset($title->oclc))
+			{
+				echo '</a>';
+			}
+			 
+			 
+			echo '</li>';
+		}
+		echo '</ul>';
+		echo '</div>';
+	}
+	
+	echo '</div>' . "\n";
+	
+	display_html_end();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Main...
 function main()
 {	
 	$query = '';
@@ -433,12 +990,80 @@ function main()
 		exit(0);
 	}
 	
-	// If show a single record
+	// Show a single record
 	if (isset($_GET['id']))
 	{	
 		$id = $_GET['id'];
+		
+		if (isset($_GET['page']))
+		{
+			// we are vieiwng pages
+			$page = $_GET['page'];
+			// to do: sanity check
+			
+			display_record($id, $page);
+			exit(0);			
+		}
+		
+		
 		display_record($id);
+		exit(0);
 	}
+	
+	// Show journals
+	if (isset($_GET['titles']))
+	{	
+		$letter = 'A';
+		if (isset($_GET['letter']))
+		{
+			$letter = $_GET['letter'];
+			// sanity check
+			if (!in_array($letter, range('A', 'Z')))
+			{
+				$letter = 'A';
+			}			
+		}
+				
+		display_titles($letter);
+		exit(0);
+	}
+
+	
+	// Show journal (ISSN)
+	if (isset($_GET['issn']))
+	{	
+		$issn = $_GET['issn'];
+		
+		if (isset($_GET['year']))
+		{
+			$year = $_GET['year'];
+			
+			display_journal_year('issn', $issn, $year);
+			exit(0);
+		}
+		
+		display_journal('issn', $issn, $year);
+		exit(0);
+	}
+	
+	// Show journal (OCLSC
+	if (isset($_GET['oclc']))
+	{	
+		$oclc = $_GET['oclc'];
+		
+		if (isset($_GET['year']))
+		{
+			$year = $_GET['year'];
+			
+			display_journal_year('oclc', $oclc, $year);
+			exit(0);
+		}
+		
+		display_journal('oclc', $oclc, $year);
+		exit(0);
+	}
+	
+	
 	
 	// Show search (text, author)
 	if (isset($_GET['q']))

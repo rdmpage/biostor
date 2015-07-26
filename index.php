@@ -1,5 +1,6 @@
 <?php
 
+error_reporting(E_ALL);
 
 require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/lib.php');
@@ -31,7 +32,7 @@ function display_journal_volumes($namespace = 'issn', $identifier, $year = '')
 	global $config;
 
 	// all volumes for journal
-	$url = 'http://localhost/~rpage/biostor/api_journal.php?';
+	$url = $config['web_server'] . $config['web_root'] . 'api_journal.php?';
 	switch ($namespace)
 	{
 		case 'issn':
@@ -336,7 +337,7 @@ function display_journal_year($namespace = 'issn', $identifier, $year)
 	echo '      <div class="col-md-10">' . "\n";
 
 	// all volumes for journal
-	$url = 'http://localhost/~rpage/biostor/api_journal.php?';
+	$url = $config['web_server'] . $config['web_root'] . 'api_journal.php?';
 	switch ($namespace)
 	{
 		case 'issn':
@@ -598,32 +599,36 @@ function display_record($id, $page = 0)
 	$num_pages = count($obj->bhl_pages );
 
 	
-	echo '<div class="container-fluid">' . "\n";
+	echo '<div class="container">' . "\n";
+	
+	echo '<div class="row">' . "\n";
 	
 	if ($page == 0)
 	{
 		// thumbnails
-		echo '<div class="row">' . "\n";
-	    echo '	<div class="col-md-8">' . "\n";
-	    
-	    echo '<div>';
+	    echo '<div class="col-md-8">' . "\n";
+	    echo '<div class="row">' . "\n";
+	    echo '  <div>';
 	    display_article_metadata($reference);
-	    echo '</div>';
-	    
+	    echo '  </div>';	    
+	    echo '</div>';  
+	    	
 	    // thumbnail images
+	    echo '<div class="row">' . "\n";
 	    
 		for ($i = 0; $i < $num_pages; $i++)
 		{
-			// see http://www.bootply.com/render/d08bOti6Zs
-			echo '<div class="col-lg-3 col-sm-4 col-xs-6">';			
-			echo '<a href="?id=' . $id . '&page=' . ($i + 1) . '" class="thumbnail">';
-			echo '<img style="box-shadow:2px 2px 2px #ccc;" src="http://biostor.org/bhl_image.php?PageID=' .  $obj->bhl_pages[$i] . '&thumbnail" alt="Page ' . $PageID . '" />';
+			echo '<div style="position:relative;display:inline-block;padding:20px;">';			
+			echo '<a href="?id=' . $id . '&page=' . ($i + 1) . '" >';
+			echo '<img style="box-shadow:2px 2px 2px #ccc;" src="http://biostor.org/bhl_image.php?PageID=' .  $obj->bhl_pages[$i] . '&thumbnail" alt="Page ' . $obj->bhl_pages[$i] . '" />';
 			echo '<p style="text-align:center">' . $obj->bhl_pages[$i] . '</p>';
 			echo '</a>';
-			echo '</div>';
-			
-		}  
+			echo '</div>';			
+		} 
+
 		echo '</div>';  
+		
+		echo '</div>'; // <div class="col-md-8">
 
 	    echo '	<div class="col-md-4">' . "\n";
 	    
@@ -638,13 +643,9 @@ function display_record($id, $page = 0)
 	
 		echo '<div id="citation" style=font-size:11px;"width:300px;height:100px;border:1px solid black;"></div>';
 		echo '</div>';
-	    
-	    
-	    
-	    
 	    echo '  </div>' . "\n";
 		
-		echo '</div>' . "\n";
+		echo '</div>' . "\n"; // <div class="col-md-4">
 
 	}
 	else
@@ -666,6 +667,9 @@ function display_record($id, $page = 0)
 				echo ' disabled';
 			}
 			echo '"><a href="?id=' . $id . '&page=' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';
+			
+			echo '<li><a href="?id=' . $id . '">Thumbnails</a></li>';
+			
 			echo '    <li class="next';
 			if ($page == $num_pages)
 			{
@@ -723,7 +727,8 @@ function display_record($id, $page = 0)
 		
 	}
 	
-	echo '</div>';
+	echo '</div>'; // row
+	echo '</div>'; // container
 	
 
 	
@@ -737,7 +742,7 @@ function display_record($id, $page = 0)
 // the next set of results
 function display_search($q, $bookmark = '')
 {
-	global $global;
+	global $config;
 	
 	$rows_per_page = 10;
 	
@@ -750,7 +755,7 @@ function display_search($q, $bookmark = '')
 	echo '  <div class="row">' . "\n";
 	echo '	  <div class="col-md-8">' . "\n";
 		
-	$url = 'http://localhost/~rpage/biostor/api.php?q=' . urlencode($q);
+	$url = $config['web_server'] . $config['web_root'] . 'api.php?q=' . urlencode($q);
 	
 	if ($bookmark != '')
 	{
@@ -887,7 +892,7 @@ function display_titles($letter= 'A')
 	echo '<h1>Titles starting with the letter "' . $letter . '"</h1>';
 
 	// all volumes for journal
-	$url = 'http://localhost/~rpage/biostor/api_journal.php?titles&letter=' . $letter;
+	$url = $config['web_server'] . $config['web_root'] . 'api_journal.php?titles&letter=' . $letter;
 	
 	$json = get($url);
 	

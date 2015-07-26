@@ -141,6 +141,9 @@ function display_search ($q, $bookmark = '', $callback = '')
 		
 		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
 		$obj = json_decode($resp);
+		
+		// Add status
+		$obj->status = 200;
 	}
 	
 	api_output($obj, $callback);

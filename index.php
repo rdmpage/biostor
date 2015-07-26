@@ -827,12 +827,19 @@ function display_search($q, $bookmark = '')
 		$obj = json_decode($json);
 	
 
-		echo '<h5>' . $obj->total_rows . ' hit(5)' . '</h3>';
+		echo '<h5>' . $obj->total_rows . ' hit(s)' . '</h3>';
 	
 	
 		if ($obj->total_rows > $rows_per_page)
 		{
-			echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a></p>';
+			echo '<nav>';
+			echo '  <ul class="pager">';
+			echo '    <li class="next">';
+			echo '      <a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a>';
+			echo '   </li>';
+			echo '  </ul>';
+			echo '</nav>';
+			//echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a></p>';
 		}
 	
 		foreach ($obj->rows as $row)
@@ -845,7 +852,15 @@ function display_search($q, $bookmark = '')
 		
 		if ($obj->total_rows > $rows_per_page)
 		{
-			echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a></p>';
+			echo '<nav>';
+			echo '  <ul class="pager">';
+			echo '    <li class="next">';
+			echo '      <a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a>';
+			echo '   </li>';
+			echo '  </ul>';
+			echo '</nav>';
+		
+			//echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a></p>';
 		}
 		
 	}

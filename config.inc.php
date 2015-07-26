@@ -14,6 +14,27 @@ global $config;
 // Date timezone
 date_default_timezone_set('UTC');
 
+if (1)
+{
+	// Server-------------------------------------------------------------------------------------------
+	$config['web_server']	= 'http://localhost'; 
+	$config['site_name']	= 'BioStor';
+
+	// Files--------------------------------------------------------------------------------------------
+	$config['web_dir']		= dirname(__FILE__);
+	$config['web_root']		= '/~rpage/biostor/';
+}
+else
+{
+	// Server-------------------------------------------------------------------------------------------
+	$config['web_server']	= 'http://biostor.gopagoda.io'; 
+	$config['site_name']	= 'BioStor';
+
+	// Files--------------------------------------------------------------------------------------------
+	$config['web_dir']		= dirname(__FILE__);
+	$config['web_root']		= '/';
+}
+
 // Proxy settings for connecting to the web--------------------------------------------------------- 
 // Set these if you access the web through a proxy server. 
 $config['proxy_name'] 	= '';

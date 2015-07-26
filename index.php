@@ -1014,6 +1014,8 @@ function main()
 	{	
 		$issn = $_GET['issn'];
 		
+		$year = '';
+		
 		if (isset($_GET['year']))
 		{
 			$year = $_GET['year'];

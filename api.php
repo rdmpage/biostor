@@ -117,7 +117,11 @@ function display_search ($q, $bookmark = '', $callback = '')
 		$obj = new stdclass;
 		$obj->rows = array();
 		$obj->total_rows = 0;
-		$obj->bookmark = '';		
+		$obj->bookmark = '';	
+		
+		// Add status
+		$obj->status = 404;
+			
 	}
 	else
 	{		

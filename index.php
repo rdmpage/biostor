@@ -238,7 +238,7 @@ function display_record_summary ($reference, $highlights = null)
 	
 	
 		//echo '<span style="color:green;">' . $row->highlights->default[0] . '</span>';
-		if (isset($highlights))
+		if (isset($highlights) && isset($highlights->default[0]))
 		{
 			echo '<div>';
 			echo '<span style="color:green;">' . $highlights->default[0] . '</span>';
@@ -486,6 +486,42 @@ function display_article_metadata($reference)
 }
 
 //----------------------------------------------------------------------------------------
+function altmetric_data_string($reference)
+{
+	$data_string = '';
+	if (isset($reference->identifier))
+	{
+		foreach ($reference->identifier as $identifier)
+		{
+			switch ($identifier->type)
+			{		
+				case "doi":
+					$data_string = 'data-doi="' . trim($identifier->id) . '"';
+					break;
+				
+				case "handle":
+					if ($data_string == '')
+					{
+						$data_string = 'data-handle="' . trim($identifier->id) . '"';
+					}
+					break;			
+
+				case "pmid":
+					if ($data_string == '')
+					{
+						$data_string = 'data-pmid="' . trim($identifier->id) . '"';
+					}
+					break;			
+													
+				default:
+					break;
+			}
+		}
+	}
+	return $data_string;
+}
+
+//----------------------------------------------------------------------------------------
 // Display one article
 function display_record($id, $page = 0)
 {
@@ -592,7 +628,7 @@ function display_record($id, $page = 0)
 	// display article
 	
 	
-		// display
+	// display
 	$json = get('http://biostor.org/reference/' . str_replace('biostor/', '', $id) . '.json');
 	$obj = json_decode($json);
 	
@@ -630,9 +666,12 @@ function display_record($id, $page = 0)
 		
 		echo '</div>'; // <div class="col-md-8">
 
+		// tools, linked stuff, etc.
 	    echo '	<div class="col-md-4">' . "\n";
 	    
-	    echo '<div>';
+	    
+	    // citation formatter
+	    echo '<div class="row">';
 		echo '<select id="format" onchange="show_formatted_citation(this.options[this.selectedIndex].value);">
 			<option label="Citation format" disabled="disabled" selected="selected"></option>
 			<option label="APA" value="apa"></option>
@@ -641,9 +680,24 @@ function display_record($id, $page = 0)
 			<!-- <option label="Zootaxa" value="zootaxa"></option> -->
 		</select>';
 	
-		echo '<div id="citation" style=font-size:11px;"width:300px;height:100px;border:1px solid black;"></div>';
+		
+		echo '<div id="citation" style=font-size:11px;"width:300px;height:100px;border:1px solid black;"><br/><br/><br/><br/><br/><br/></div>';
 		echo '</div>';
-	    echo '  </div>' . "\n";
+		
+		/* echo '<textarea id="citation" style="font-size:10px;" rows="6" readonly></textarea>'; */
+		
+	    
+	    echo '<div class="row">';
+	    // altmetric badge
+	    $data_string = altmetric_data_string($reference);
+	    if ($data_string != '')
+		{
+			echo '<div>';
+			echo '<div data-badge-details="right" data-badge-type="medium-donut" ' . $data_string . ' data-hide-no-mentions="true" class="altmetric-embed"></div>';					
+			echo '</div>';
+		}
+	    
+	    echo '</div>';
 		
 		echo '</div>' . "\n"; // <div class="col-md-4">
 
@@ -848,7 +902,10 @@ function display_html_start($title = '', $meta = '', $script = '')
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>'
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<!-- almetric -->
+	<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>'
+	
 	. $script . '
 	<title>' . $title . '</title>
 	</head>

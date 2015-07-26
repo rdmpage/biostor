@@ -103,6 +103,48 @@ function display_one ($id, $format= '', $callback = '')
 	api_output($obj, $callback);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Full text search
+function display_search ($q, $bookmark = '', $callback = '')
+{
+	global $config;
+	global $couch;
+	
+	$rows_per_page = 10;
+			
+	if ($q == '')
+	{
+		$obj = new stdclass;
+		$obj->rows = array();
+		$obj->total_rows = 0;
+		$obj->bookmark = '';		
+	}
+	else
+	{		
+		
+		$parameters = array(
+				'q'					=> $q,
+				'highlight_fields' 	=> '["default"]',
+				'highlight_pre_tag' => '"<span style=\"color:white;background-color:green;\">"',
+				'highlight_post_tag'=> '"</span>"',
+				'highlight_number'	=> 5,
+				'include_docs' 		=> 'true',
+				'limit' 			=> $rows_per_page
+			);
+			
+		if ($bookmark != '')
+		{
+			$parameters['bookmark'] = $bookmark;
+		}
+					
+		$url = '/_design/citation/_search/all?' . http_build_query($parameters);
+		
+		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+		$obj = json_decode($resp);
+	}
+	
+	api_output($obj, $callback);
+}
 
 //--------------------------------------------------------------------------------------------------
 function main()
@@ -151,6 +193,25 @@ function main()
 			
 		}
 	}
+	
+	if (!$handled)
+	{
+		if (isset($_GET['q']))
+		{	
+			$q = $_GET['q'];
+			
+			$bookmark = '';
+			if (isset($_GET['bookmark']))
+			{
+				$bookmark = $_GET['bookmark'];
+			}			
+			
+			display_search($q, $bookmark, $callback);
+			$handled = true;
+		}
+			
+	}
+	
 	
 	if (!$handled)
 	{

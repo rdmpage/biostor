@@ -9,10 +9,18 @@ require_once (dirname(__FILE__) . '/reference.php');
 function default_display()
 {
 	global $config;
-	global $couch;
+	
+	display_html_start('BioStor');
+	display_navbar();
+	
+	echo '<div class="jumbotron" style="text-align:center">
+        <h1>BioStor</h1>
+        <p>Articles from the Biodiversity Heritage Library</p>
+      </div>';
 
 
-	echo "hi";
+	display_html_end();
+	
 }
 
 //----------------------------------------------------------------------------------------
@@ -144,22 +152,17 @@ function display_journal_volumes($namespace = 'issn', $identifier, $year = '')
 //----------------------------------------------------------------------------------------
 function display_record_summary ($reference, $highlights = null)
 {
-		echo '<tr>';
-	
-		echo '<td valign="top" style="text-align:center;width:100px;">';
-		if (isset($reference->thumbnail))
-		{
-			echo '<img style="box-shadow:2px 2px 2px #ccc;width:64px;" src="' . $reference->thumbnail .  '">';								
-		}
-		echo '</td>';
-	
-		echo '<td valign="top" class="item-data">';
-			
-		echo '<div style="font-size:24px;">';
-		echo '<a href="?id=' . $reference->_id . '">' . $reference->title . '</a>';
-		//echo $reference->title;
-		echo '</div>';
-	
+  echo '<div class="media" style="padding-bottom:5px;">
+  <div class="media-left media-top" style="padding:10px;">';
+    echo '<a href="?id=' . $reference->_id . '">';
+    echo '<img style="box-shadow:2px 2px 2px #ccc;width:64px;" src="' . $reference->thumbnail .  '">';	
+  echo '  </a>
+  </div>
+  <div class="media-body" style="padding:10px;">
+    <h4 class="media-heading">';
+	echo '<a href="?id=' . $reference->_id . '">' . $reference->title . '</a>';    
+    echo '</h4>';
+    
 		echo '<div style="color:rgb(128,128,128);">';
 		if (isset($reference->year))
 		{
@@ -237,10 +240,9 @@ function display_record_summary ($reference, $highlights = null)
 		if (isset($highlights))
 		{
 			echo '<div>';
-			echo '<span style="font-family:sans-serif;font-size:12px;color:green;">' . $highlights->default[0] . '</span>';
+			echo '<span style="color:green;">' . $highlights->default[0] . '</span>';
 			echo '</div>';
-		}
-	
+		}	
 	
 		echo '<div class="item-links">';
 	
@@ -253,11 +255,11 @@ function display_record_summary ($reference, $highlights = null)
 				switch ($identifier->type)
 				{
 					case 'bhl':
-						echo '<a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>http://biodiversitylibrary.org/page/' . $identifier->id . '</a>';
+						echo ' <a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></i>http://biodiversitylibrary.org/page/' . $identifier->id . '</a>';
 						break;
 						
 					case 'doi':
-						echo '<a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>http://doi.dx.org/' . $identifier->id . '</a>';
+						echo ' <a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></i>http://doi.dx.org/' . $identifier->id . '</a>';
 						break;
 					/*					
 					case 'biostor':
@@ -285,11 +287,11 @@ function display_record_summary ($reference, $highlights = null)
 				}
 			}
 		}
-		echo '</div>';
-	
-	
-		echo '</td>';
-		echo '</tr>';
+		echo '</div>';    
+    
+    
+  echo '</div>
+</div>';
 
 }
 
@@ -353,19 +355,11 @@ function display_journal_year($namespace = 'issn', $identifier, $year)
 	{
 		$obj = json_decode($json);
 		
-		echo '<table class="table" cellpadding="20">';
-		echo '<thead>';
-		echo '</thead>';
-		echo '<tbody>';
-		
 		foreach ($obj->articles as $reference)
 		{
 			// display
 			display_record_summary ($reference);
 		}
-		
-		echo '</tbody>';
-		echo '</table>';
 	}
 
 	echo '      </div>' . "\n";
@@ -408,6 +402,7 @@ function display_journal($namespace = 'issn', $identifier)
 	display_html_end();
 }
 
+//----------------------------------------------------------------------------------------
 function display_article_metadata($reference)
 {
 	// Metadata --------------------------------------------------------------------------
@@ -489,7 +484,7 @@ function display_article_metadata($reference)
 	*/
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Display one article
 function display_record($id, $page = 0)
 {
@@ -619,12 +614,10 @@ function display_record($id, $page = 0)
 	    
 		for ($i = 0; $i < $num_pages; $i++)
 		{
-			echo '<div class="col-md-2">';
-			//echo '<img style="border:1px solid black;" src="http://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',50,50" />';
-			
+			// see http://www.bootply.com/render/d08bOti6Zs
+			echo '<div class="col-lg-3 col-sm-4 col-xs-6">';			
 			echo '<a href="?id=' . $id . '&page=' . ($i + 1) . '" class="thumbnail">';
-			
-			echo '<img style="box-shadow:2px 2px 2px #ccc;width:100px;" src="http://biostor.org/bhl_image.php?PageID=' .  $obj->bhl_pages[$i] . '&thumbnail" alt="Page ' . $PageID . '" />';
+			echo '<img style="box-shadow:2px 2px 2px #ccc;" src="http://biostor.org/bhl_image.php?PageID=' .  $obj->bhl_pages[$i] . '&thumbnail" alt="Page ' . $PageID . '" />';
 			echo '<p style="text-align:center">' . $obj->bhl_pages[$i] . '</p>';
 			echo '</a>';
 			echo '</div>';
@@ -715,11 +708,11 @@ function display_record($id, $page = 0)
 			}
 			else
 			{
-				echo '<div class="col-md-1"></div>';
+				echo '<div class="col-md-2"></div>';
 				echo '<div class="col-md-8">';
 				echo '<img width="700" style="box-shadow:2px 2px 2px #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';
 				echo '</div>';
-				echo '<div class="col-md-1"></div>';
+				echo '<div class="col-md-2"></div>';
 			}
 	    
 	    
@@ -739,80 +732,49 @@ function display_record($id, $page = 0)
 	display_html_end();	
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Display a list of search results, possibly with a Cloudant bookmark to indicate 
 // the next set of results
-function display_search($text, $bookmark = '')
+function display_search($q, $bookmark = '')
 {
-	global $couch;
-	global $config;
+	global $global;
 	
 	$rows_per_page = 10;
 	
-	$q = $text;
+	display_html_start('Search results');
+	display_navbar(htmlentities($q));	
+	
+	echo '<h4>Search results for "' . htmlentities($q) . '"</h4>';
+	
+	echo '<div class="container-fluid">' . "\n";
+	echo '  <div class="row">' . "\n";
+	echo '	  <div class="col-md-8">' . "\n";
 		
-	if ($q == '')
+	$url = 'http://localhost/~rpage/biostor/api.php?q=' . urlencode($q);
+	
+	if ($bookmark != '')
 	{
-		$obj = new stdclass;
-		$obj->rows = array();
-		$obj->total_rows = 0;
-		$obj->bookmark = '';		
-	}
-	else
-	{		
-		
-		$parameters = array(
-				'q'					=> $q,
-				'highlight_fields' 	=> '["default"]',
-				'highlight_pre_tag' => '"<strong>"',
-				'highlight_post_tag'=> '"</strong>"',
-				'highlight_number'	=> 5,
-				'include_docs' 		=> 'true',
-				'limit' 			=> $rows_per_page
-			);
-			
-		if ($bookmark != '')
-		{
-			$parameters['bookmark'] = $bookmark;
-		}
-					
-		$url = '/_design/citation/_search/all?' . http_build_query($parameters);
-		
-		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
-		$obj = json_decode($resp);
+		$url .= '&bookmark=' . $bookmark;
 	}
 	
-	if (isset($obj->error))
+	//echo $url;
+				
+	$json = get($url);
+	
+	//echo $json;
+	
+	if ($json != '')
 	{
-		echo '<h3>Error</h3>';
-		echo '<p>' . $obj->reason . '</p>';
-	}
-	else
-	{	
-		$total_rows = $obj->total_rows;
-		$bookmark = $obj->bookmark;
-		
-		echo '<div><form action="." method="GET"><input name="q" type="text" placeholder value="' . htmlentities($q) . '"></form></div>';
-		
-	echo '<div style="float:right;width:300px;height:1000px;border:1px solid red;">';
-	echo '<p>Stuff relevant to results</p>';
-	echo '</div>';
+		$obj = json_decode($json);
+	
+
+		echo '<h5>' . $obj->total_rows . ' hit(5)' . '</h3>';
 	
 	
-	
-		echo '<h3>' . $total_rows . ' hit(s)' . '</h3>';
-	
-	
-		if ($total_rows > $rows_per_page)
+		if ($obj->total_rows > $rows_per_page)
 		{
-			echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $bookmark . '">More »</a></p>';
+			echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a></p>';
 		}
-
-
-		echo '<table class="table" cellpadding="20">';
-		echo '<thead>';
-		echo '</thead>';
-		echo '<tbody>';
 	
 		foreach ($obj->rows as $row)
 		{
@@ -821,21 +783,31 @@ function display_search($text, $bookmark = '')
 			display_record_summary($reference, $row->highlights);
 	
 		}
-	
-		echo '</tbody>';
-		echo '</table>';
 		
-		if ($total_rows > $rows_per_page)
+		if ($obj->total_rows > $rows_per_page)
 		{
-			echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $bookmark . '">More »</a></p>';
+			echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a></p>';
 		}
 		
 	}
+	
+	echo '   </div>';
+	
+	// Put furthe rinfo about results here...
+	echo '	 <div class="col-md-4">' . "\n";
+	echo '.';
+	echo '   </div>';
+	
+	
+	echo '  </div>';
+	echo '</div>';
+	
+	display_html_end();	
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Displaynavigation bar
-function display_navbar()
+function display_navbar($q = "")
 {
 
 echo '<nav class="navbar navbar-default navbar-fixed-top">
@@ -846,7 +818,7 @@ echo '<nav class="navbar navbar-default navbar-fixed-top">
       </a>      
      <form class="navbar-form navbar-left" role="search">
        <div class="form-group">
-         <input type="text" class="form-control" placeholder="Search" name="q">
+         <input type="text" class="form-control" placeholder="Search" name="q" value="' . $q . '">
        </div>
       </form>     
       <ul class="nav navbar-nav">
@@ -976,7 +948,7 @@ function display_titles($letter= 'A')
 	display_html_end();
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Main...
 function main()
 {	

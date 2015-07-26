@@ -396,9 +396,12 @@ function reference_to_openurl($reference)
 	{
 		foreach ($reference->link as $link)
 		{
-			if ($link->anchor == 'LINK')
+			if (isset($link->anchor))
 			{
-				$openurl .= '&amp;rft_id='. urlencode($link->url);
+				if ($link->anchor == 'LINK')
+				{
+					$openurl .= '&amp;rft_id='. urlencode($link->url);
+				}
 			}
 		}
 	}
@@ -583,14 +586,17 @@ function reference_to_google_scholar($reference)
 	{
 		foreach ($reference->link as $link)
 		{
-			switch ($link->anchor)
-			{
-				case 'PDF':
-					$meta .= '<meta name="citation_pdf_url" content="' . $link->url . '" />' . "\n";
-					break;
+			if (isset($link->anchor))
+			{		
+				switch ($link->anchor)
+				{
+					case 'PDF':
+						$meta .= '<meta name="citation_pdf_url" content="' . $link->url . '" />' . "\n";
+						break;
 				
-				default:
-					break;
+					default:
+						break;
+				}
 			}
 		}
 	}

@@ -47,7 +47,7 @@ function display_journal_volumes($namespace = 'issn', $identifier, $year = '')
 			break;
 	}
 	$url .= '&volumes';
-	
+		
 	$json = get($url);
 	
 	if ($json != '')
@@ -389,7 +389,7 @@ function display_journal($namespace = 'issn', $identifier)
 	echo '<div class="container-fluid">' . "\n";
 	echo '  <div class="row">' . "\n";
 	echo '		<div class="col-md-2">' . "\n";
-	display_journal_volumes($namespace, $identifier, $year);
+	display_journal_volumes($namespace, $identifier);
 	echo '      </div>' . "\n";
 			
 	echo '      <div class="col-md-10">' . "\n";
@@ -894,6 +894,9 @@ function display_titles($letter= 'A')
 	// all volumes for journal
 	$url = $config['web_server'] . $config['web_root'] . 'api_journal.php?titles&letter=' . $letter;
 	
+	echo $url . '<br />';
+
+	
 	$json = get($url);
 	
 	if ($json != '')
@@ -1027,6 +1030,8 @@ function main()
 	if (isset($_GET['oclc']))
 	{	
 		$oclc = $_GET['oclc'];
+		
+		$year = '';
 		
 		if (isset($_GET['year']))
 		{

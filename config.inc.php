@@ -14,7 +14,7 @@ global $config;
 // Date timezone
 date_default_timezone_set('UTC');
 
-if (1)
+if (0)
 {
 	// Server-------------------------------------------------------------------------------------------
 	$config['web_server']	= 'http://localhost'; 
@@ -63,6 +63,7 @@ if ($config['proxy_name'] != '')
 	}
 }
 
+$config['stale'] = true;
 
 
 	

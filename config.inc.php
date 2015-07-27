@@ -14,35 +14,42 @@ global $config;
 // Date timezone
 date_default_timezone_set('UTC');
 
-if (0)
-{
-	// Server-------------------------------------------------------------------------------------------
-	$config['web_server']	= 'http://localhost'; 
-	$config['site_name']	= 'BioStor';
+$site = 'local';
+//$site = 'biostor';
+$site = 'pagoda';
 
-	// Files--------------------------------------------------------------------------------------------
-	$config['web_dir']		= dirname(__FILE__);
-	$config['web_root']		= '/~rpage/biostor/';
-}
-if (1)
+switch ($site)
 {
-	// Server-------------------------------------------------------------------------------------------
-	$config['web_server']	= 'http://biostor.gopagoda.io'; 
-	$config['site_name']	= 'BioStor';
+	case 'pagoda':
+		// Server-------------------------------------------------------------------------
+		$config['web_server']	= 'http://biostor.gopagoda.io'; 
+		$config['site_name']	= 'BioStor';
 
-	// Files--------------------------------------------------------------------------------------------
-	$config['web_dir']		= dirname(__FILE__);
-	$config['web_root']		= '/';
-}
-if (0)
-{
-	// Server-------------------------------------------------------------------------------------------
-	$config['web_server']	= 'http://biostor.org'; 
-	$config['site_name']	= 'BioStor';
+		// Files--------------------------------------------------------------------------
+		$config['web_dir']		= dirname(__FILE__);
+		$config['web_root']		= '/';	
+		break;
+		
+	case 'biostor':
+		// Server-------------------------------------------------------------------------
+		$config['web_server']	= 'http://biostor.org'; 
+		$config['site_name']	= 'BioStor';
 
-	// Files--------------------------------------------------------------------------------------------
-	$config['web_dir']		= dirname(__FILE__);
-	$config['web_root']		= '/';
+		// Files--------------------------------------------------------------------------
+		$config['web_dir']		= dirname(__FILE__);
+		$config['web_root']		= '/';	
+		break;
+
+	case 'local':
+	default:
+		// Server-------------------------------------------------------------------------
+		$config['web_server']	= 'http://localhost'; 
+		$config['site_name']	= 'BioStor';
+
+		// Files--------------------------------------------------------------------------
+		$config['web_dir']		= dirname(__FILE__);
+		$config['web_root']		= '/~rpage/biostor/';
+		break;
 }
 
 // Proxy settings for connecting to the web--------------------------------------------------------- 

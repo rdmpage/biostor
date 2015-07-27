@@ -24,10 +24,20 @@ if (0)
 	$config['web_dir']		= dirname(__FILE__);
 	$config['web_root']		= '/~rpage/biostor/';
 }
-else
+if (1)
 {
 	// Server-------------------------------------------------------------------------------------------
 	$config['web_server']	= 'http://biostor.gopagoda.io'; 
+	$config['site_name']	= 'BioStor';
+
+	// Files--------------------------------------------------------------------------------------------
+	$config['web_dir']		= dirname(__FILE__);
+	$config['web_root']		= '/';
+}
+if (0)
+{
+	// Server-------------------------------------------------------------------------------------------
+	$config['web_server']	= 'http://biostor.org'; 
 	$config['site_name']	= 'BioStor';
 
 	// Files--------------------------------------------------------------------------------------------

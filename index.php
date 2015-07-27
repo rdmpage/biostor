@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 
 require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/lib.php');
-require_once (dirname(__FILE__) . '/reference.php');
+require_once (dirname(__FILE__) . '/reference_code.php');
 
 //----------------------------------------------------------------------------------------
 function default_display()
@@ -126,7 +126,8 @@ function display_journal_volumes($namespace = 'issn', $identifier, $year = '')
 				
 				//echo $k;
 				
-				echo '<a href="?' . $namespace . '=' . $identifier . '&year=' . $k . '">' . $k . '</a>';
+				//echo '<a href="?' . $namespace . '=' . $identifier . '&year=' . $k . '">' . $k . '</a>';
+				echo '<a href="' . $namespace . '/' . $identifier . '/year/' . $k . '">' . $k . '</a>';
 				
 				
 				if ($current_year)
@@ -155,13 +156,15 @@ function display_record_summary ($reference, $highlights = null)
 {
   echo '<div class="media" style="padding-bottom:5px;">
   <div class="media-left media-top" style="padding:10px;">';
-    echo '<a href="?id=' . $reference->_id . '">';
+    //echo '<a href="?id=' . $reference->_id . '">';
+    echo '<a href="reference/' . $reference->_id . '">';
     echo '<img style="box-shadow:2px 2px 2px #ccc;width:64px;" src="' . $reference->thumbnail .  '">';	
   echo '  </a>
   </div>
   <div class="media-body" style="padding:10px;">
     <h4 class="media-heading">';
-	echo '<a href="?id=' . $reference->_id . '">' . $reference->title . '</a>';    
+//	echo '<a href="?id=' . $reference->_id . '">' . $reference->title . '</a>';    
+	echo '<a href="reference/' . $reference->_id . '">' . $reference->title . '</a>';    
     echo '</h4>';
     
 		echo '<div style="color:rgb(128,128,128);">';
@@ -184,7 +187,8 @@ function display_record_summary ($reference, $highlights = null)
 			}
 			if ($issn != '')
 			{
-				echo ' in <b><a href="?issn=' . $issn . '">' . $reference->journal->name . '</a></b>';			
+//				echo ' in <b><a href="?issn=' . $issn . '">' . $reference->journal->name . '</a></b>';			
+				echo ' in <b><a href="issn/' . $issn . '">' . $reference->journal->name . '</a></b>';			
 			}
 			else
 			{
@@ -227,7 +231,8 @@ function display_record_summary ($reference, $highlights = null)
 					$string = $author->name;
 				}
 				
-				$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
+				//$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
+				$authors[] = '<a href="' . 'search/author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
 		
 			}
 			echo 'Authors: ' . join(', ', $authors);
@@ -307,14 +312,16 @@ function display_journal_year($namespace = 'issn', $identifier, $year)
 
 	// Breadcrumbs -----------------------------------------------------------------------
 	echo '<ol class="breadcrumb">' . "\n";	
-	echo '<li><a href="?titles">All titles</a></li>' . "\n";	
+	//echo '<li><a href="?titles">All titles</a></li>' . "\n";	
+	echo '<li><a href="titles">All titles</a></li>' . "\n";	
 	
 	echo '<li>';
 	switch ($namespace)
 	{
 		case 'issn':
 		case 'oclc':
-			echo '<a href="?' . $namespace . '=' . $identifier . '">' . $identifier . '</a>';					
+//			echo '<a href="?' . $namespace . '=' . $identifier . '">' . $identifier . '</a>';					
+			echo '<a href="' . $namespace . '/' . $identifier . '">' . $identifier . '</a>';					
 			break;
 		default:
 			echo $identifier;
@@ -382,7 +389,8 @@ function display_journal($namespace = 'issn', $identifier)
 
 	// Breadcrumbs -----------------------------------------------------------------------
 	echo '<ol class="breadcrumb">' . "\n";	
-	echo '<li><a href="?titles">All titles</a></li>' . "\n";		
+//	echo '<li><a href="?titles">All titles</a></li>' . "\n";		
+	echo '<li><a href="titles">All titles</a></li>' . "\n";		
 	echo '<li class="active">' .$identifier . '</li>' . "\n";
 	echo '</ol>';
 	
@@ -455,7 +463,8 @@ function display_article_metadata($reference)
 					$string = $author->name;
 				}
 			
-				$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
+				//$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
+				$authors[] = '<a href="' . 'search/author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
 	
 			}
 			echo join(', ', $authors);
@@ -564,7 +573,8 @@ function display_record($id, $page = 0)
 	
 	// Breadcrumbs -----------------------------------------------------------------------
 	echo '<ol class="breadcrumb">' . "\n";	
-	echo '<li><a href="?titles">All titles</a></li>' . "\n";	
+//	echo '<li><a href="?titles">All titles</a></li>' . "\n";	
+	echo '<li><a href="titles">All titles</a></li>' . "\n";	
 	
 	if (isset($reference->journal))
 	{
@@ -595,7 +605,8 @@ function display_record($id, $page = 0)
 		echo '<li>';
 		if ($journal_namespace != '')
 		{
-			echo '<a href="?' . $journal_namespace . '=' . $journal_identifier . '">' . $reference->journal->name . '</a>';			
+//			echo '<a href="?' . $journal_namespace . '=' . $journal_identifier . '">' . $reference->journal->name . '</a>';			
+			echo '<a href="' . $journal_namespace . '/' . $journal_identifier . '">' . $reference->journal->name . '</a>';			
 		}
 		else
 		{
@@ -612,7 +623,8 @@ function display_record($id, $page = 0)
 			echo '<li>';
 			if ($journal_namespace != '')
 			{
-				echo '<a href="?' . $journal_namespace . '=' . $journal_identifier  . '&year=' . $reference->year . '">' . $reference->year . '</a>';			
+//				echo '<a href="?' . $journal_namespace . '=' . $journal_identifier  . '&year=' . $reference->year . '">' . $reference->year . '</a>';			
+				echo '<a href="' . $journal_namespace . '/' . $journal_identifier  . '/year/' . $reference->year . '">' . $reference->year . '</a>';			
 			}
 			else
 			{		
@@ -655,7 +667,8 @@ function display_record($id, $page = 0)
 		for ($i = 0; $i < $num_pages; $i++)
 		{
 			echo '<div style="position:relative;display:inline-block;padding:20px;">';			
-			echo '<a href="?id=' . $id . '&page=' . ($i + 1) . '" >';
+//			echo '<a href="?id=' . $id . '&page=' . ($i + 1) . '" >';
+			echo '<a href="reference/' . $id . '/page/' . ($i + 1) . '" >';
 			echo '<img style="box-shadow:2px 2px 2px #ccc;" src="http://biostor.org/bhl_image.php?PageID=' .  $obj->bhl_pages[$i] . '&thumbnail" alt="Page ' . $obj->bhl_pages[$i] . '" />';
 			echo '<p style="text-align:center">' . $obj->bhl_pages[$i] . '</p>';
 			echo '</a>';
@@ -676,8 +689,9 @@ function display_record($id, $page = 0)
 			<option label="Citation format" disabled="disabled" selected="selected"></option>
 			<option label="APA" value="apa"></option>
 			<option label="BibTeX" value="bibtex"></option>
+			<option label="Wikipedia" value="wikipedia">
 			<option label="ZooKeys" value="zookeys">
-			<!-- <option label="Zootaxa" value="zootaxa"></option> -->
+			<option label="Zootaxa" value="zootaxa"></option>
 		</select>';
 	
 		
@@ -720,16 +734,19 @@ function display_record($id, $page = 0)
 			{
 				echo ' disabled';
 			}
-			echo '"><a href="?id=' . $id . '&page=' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';
+//			echo '"><a href="?id=' . $id . '&page=' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';
+			echo '"><a href="reference/' . $id . '/page/' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';
 			
-			echo '<li><a href="?id=' . $id . '">Thumbnails</a></li>';
+			//echo '<li><a href="?id=' . $id . '">Thumbnails</a></li>';
+			echo '<li><a href="reference/' . $id . '">Thumbnails</a></li>';
 			
 			echo '    <li class="next';
 			if ($page == $num_pages)
 			{
 				echo ' disabled';
 			}
-			echo '"><a href="?id=' . $id . '&page=' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
+			//echo '"><a href="?id=' . $id . '&page=' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
+			echo '"><a href="reference/' . $id . '/page/' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
 			echo '  </ul>';
 			echo '</nav>';
 
@@ -835,11 +852,11 @@ function display_search($q, $bookmark = '')
 			echo '<nav>';
 			echo '  <ul class="pager">';
 			echo '    <li class="next">';
-			echo '      <a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a>';
+			//echo '      <a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a>';
+			echo '      <a class="btn" href="search/' . urlencode($q) . '/bookmark/' . $obj->bookmark . '">More results »</a>';
 			echo '   </li>';
 			echo '  </ul>';
 			echo '</nav>';
-			//echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a></p>';
 		}
 	
 		foreach ($obj->rows as $row)
@@ -855,12 +872,11 @@ function display_search($q, $bookmark = '')
 			echo '<nav>';
 			echo '  <ul class="pager">';
 			echo '    <li class="next">';
-			echo '      <a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a>';
+			//echo '      <a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a>';
+			echo '      <a class="btn" href="search/' . urlencode($q) . '/bookmark/' . $obj->bookmark . '">More results »</a>';
 			echo '   </li>';
 			echo '  </ul>';
 			echo '</nav>';
-		
-			//echo '<p><a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a></p>';
 		}
 		
 	}
@@ -884,19 +900,22 @@ function display_search($q, $bookmark = '')
 function display_navbar($q = "")
 {
 
+	global $config;
+
 echo '<nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href=".">
         <img alt="Brand" src="images/biostor-shadow32x32.png" height="20">
       </a>      
-     <form class="navbar-form navbar-left" role="search">
+     <form class="navbar-form navbar-left" role="search" action="' . $config['web_root'] . '">
        <div class="form-group">
          <input type="text" class="form-control" placeholder="Search" name="q" value="' . $q . '">
        </div>
       </form>     
       <ul class="nav navbar-nav">
-        <li><a href="?titles">Titles</a></li>  
+        <!-- <li><a href="?titles">Titles</a></li> -->
+        <li><a href="titles">Browse titles</a></li>
       </ul>
     </div>
   </div>
@@ -906,6 +925,8 @@ echo '<nav class="navbar navbar-default navbar-fixed-top">
 //----------------------------------------------------------------------------------------
 function display_html_start($title = '', $meta = '', $script = '')
 {
+	global $config;
+	
 	echo '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -913,6 +934,11 @@ function display_html_start($title = '', $meta = '', $script = '')
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->'
     . $meta . '
+    
+    <!-- base -->
+    <base href="' . $config['web_root'] . '" />
+    
+    <!-- Boostrap -->
     <!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -933,8 +959,8 @@ function display_html_end()
 {
 	echo '<div class="panel panel-default">
   <div class="panel-body">
-    <p style="vertical-align: top">BioStor is built by <a href="https://twitter.com/rdmpage">@rdmpage</a>. 
-    Images from <a href="http://biodiversitylibrary.org">Biodiversity Heritage Library</a>.';
+    <p style="vertical-align: top">BioStor is built by <a href="https://twitter.com/rdmpage">@rdmpage</a>, code on <a href="https://github.com/rdmpage/biostor">github</a>. 
+    Page images from the <a href="http://biodiversitylibrary.org">Biodiversity Heritage Library</a>.';
     /*
     echo "<a href=\"https://twitter.com/biostor_org\" class=\"twitter-follow-button\" data-show-count=\"false\">Follow @biostor_org</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>"; */
     echo '
@@ -966,8 +992,6 @@ function display_titles($letter= 'A')
 	// all volumes for journal
 	$url = $config['web_server'] . $config['web_root'] . 'api_journal.php?titles&letter=' . $letter;
 	
-	echo $url . '<br />';
-
 	
 	$json = get($url);
 	
@@ -986,7 +1010,8 @@ function display_titles($letter= 'A')
 			{
 				echo ' class="active"';
 			}
-			echo '><a href="?titles&letter=' . $starting_letter . '">' .  $starting_letter . '</a>';
+//			echo '><a href="?titles&letter=' . $starting_letter . '">' .  $starting_letter . '</a>';
+			echo '><a href="titles/letter/' . $starting_letter . '">' .  $starting_letter . '</a>';
 			echo '</li>' . "\n";
 		}
 		echo '</ul>';
@@ -1002,11 +1027,13 @@ function display_titles($letter= 'A')
 			
 			if (isset($title->issn))
 			{
-				echo '<a href="?issn=' . $title->issn . '">';
+				//echo '<a href="issn/' . $title->issn . '">';
+				echo '<a href="issn/' . $title->issn . '">';
 			}
 			if (isset($title->oclc))
 			{
-				echo '<a href="?oclc=' . $title->oclc . '">';
+				//echo '<a href="?oclc=' . $title->oclc . '">';
+				echo '<a href="oclc/' . $title->oclc . '">';
 			}
 			
 			echo $title->title;

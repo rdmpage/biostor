@@ -1,0 +1,41 @@
+RewriteEngine On
+
+# Some hosts may require you to use the `RewriteBase` directive.
+# If you need to use the `RewriteBase` directive, it should be the
+# absolute physical path to the directory that contains this htaccess file.
+#
+#RewriteBase /
+RewriteBase /~rpage/biostor/
+
+#-----------------------------------------------------------------------------------------
+# BioStor reference URL
+RewriteRule ^reference/([0-9]+)/page/([0-9]+)  index.php?id=biostor/$1&page=$2 [NC,L]
+RewriteRule ^reference/biostor/([0-9]+)/page/([0-9]+)  index.php?id=biostor/$1&page=$2 [NC,L]
+RewriteRule ^reference/([0-9]+)$  index.php?id=biostor/$1 [NC,L]
+RewriteRule ^reference/(biostor/[0-9]+)$   index.php?id=$1 [NC,L]
+
+#-----------------------------------------------------------------------------------------
+# DOI
+#RewriteRule ^doi/(.*)   index.php?doi=$1 [NC,L]
+
+#-----------------------------------------------------------------------------------------
+# ISSN
+RewriteRule ^issn/([0-9]{4})-([0-9]{3})([0-9]|X)/year/([0-9]{4})   ?issn=$1-$2$3&year=$4 [NC,L]
+RewriteRule ^issn/([0-9]{4})-([0-9]{3})([0-9]|X)$   ?issn=$1-$2$3 [NC,L]
+
+#-----------------------------------------------------------------------------------------
+# OCLC
+RewriteRule ^oclc/([0-9]+)/year/([0-9]{4})   ?oclc=$1&year=$2 [NC,L]
+RewriteRule ^oclc/([0-9]+)$   ?oclc=$1 [NC,L]
+
+#-----------------------------------------------------------------------------------------
+# All titles
+RewriteRule ^titles/letter/([A-Z])   ?titles&letter=$1 [NC,L]
+RewriteRule ^titles   ?titles [NC,L]
+
+#-----------------------------------------------------------------------------------------
+# Search
+RewriteRule ^search/(.*)/bookmark/(.*)   ?q=$1&bookmark=$2  [NC,L]
+RewriteRule ^search/(.*)   ?q=$1   [NC,L]
+
+

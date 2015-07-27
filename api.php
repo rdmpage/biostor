@@ -2,7 +2,7 @@
 
 require_once (dirname(__FILE__) . '/api_utils.php');
 require_once (dirname(__FILE__) . '/couchsimple.php');
-require_once (dirname(__FILE__) . '/reference.php');
+require_once (dirname(__FILE__) . '/reference_code.php');
 
 require_once(dirname(__FILE__) . '/CiteProc.php');
 
@@ -45,7 +45,9 @@ function display_formatted_citation($id, $style)
 		{
 			case 'apa':
 			case 'bibtex':
+			case 'wikipedia':
 			case 'zookeys':
+			case 'zootaxa':
 				$cslfilename .= $style . '.csl';
 				break;
 				

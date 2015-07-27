@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only">
+   <info>
+      <title>Wikipedia Citation Template</title>
+      <id></id>
+      <link href="" rel="self"/>
+      <link href="http://en.wikipedia.org/wiki/Template:Citation" rel="documentation"/>
+		<author>
+			<name>
+				Roderic D. M. Page
+			</name>
+			<email>
+				rdmpage@gmail.com
+			</email>
+			<uri>
+				http://iphylo.blogspot.com
+			</uri>
+		</author>
+      <category field="generic-base"/>
+      <updated></updated>
+      <rights>This work is licensed under a Creative Commons Attribution-Share Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/</rights>
+   </info>
+   <macro name="zotero2wikipediaType">
+      <choose>
+         <if type="bill book graphic legal_case motion_picture report song" match="any">
+            <text value="book"/>
+         </if>
+         <else-if type="chapter" match="any">
+            <text value="book"/>
+         </else-if>
+         <else-if type="article article-journal article-magazine" match="any">
+            <text value="journal"/>
+         </else-if>
+         <else-if type="article-newspaper" match="any">
+            <text value="news"/>
+         </else-if>
+         <else-if type="thesis" match="any">
+            <text value="thesis"/>
+         </else-if>
+         <else-if type="manuscript" match="any">
+            <text value=""/>
+         </else-if>
+         <else-if type="paper-conference" match="any">
+            <text value="conference"/>
+         </else-if>
+         <else-if type="report" match="any">
+            <text value="techreport"/>
+         </else-if>
+         <else>
+            <text value=""/>
+         </else>
+      </choose>
+   </macro>
+   <macro name="citeKey">
+      <group delimiter="_">
+         <text macro="author-short" text-case="lowercase"/>
+         <text macro="issued-year"/>
+      </group>
+   </macro>
+   <macro name="author-short">
+      <names variable="author">
+         <name form="short" delimiter="_" delimiter-precedes-last="always"/>
+         <substitute>
+            <names variable="editor"/>
+            <names variable="translator"/>
+            <choose>
+               <if type="bill book graphic legal_case motion_picture report song" match="any">
+                  <text variable="title" form="short"/>
+               </if>
+               <else>
+                  <text variable="title" form="short"/>
+               </else>
+            </choose>
+         </substitute>
+      </names>
+   </macro>
+   <macro name="issued-year">
+      <date variable="issued">
+         <date-part name="year"/>
+      </date>
+   </macro>
+   <macro name="issued-month">
+      <date variable="issued">
+         <date-part name="month" form="short" strip-periods="true"/>
+      </date>
+   </macro>
+   <macro name="author">
+      <names variable="author">
+         <name sort-separator=", " delimiter="; " delimiter-precedes-last="always" name-as-sort-order="all"/>
+         <label form="long" text-case="capitalize-first"/>
+      </names>
+   </macro>
+   <macro name="editor-translator">
+      <names variable="editor translator" delimiter=", ">
+         <name sort-separator=", " delimiter=" and " delimiter-precedes-last="always" name-as-sort-order="all"/>
+         <label form="long" text-case="capitalize-first"/>
+      </names>
+   </macro>
+   <macro name="title">
+      <text variable="title"/>
+   </macro>
+   <macro name="number">
+      <text variable="issue"/>
+      <text variable="number"/>
+   </macro>
+   <macro name="container-title">
+      <choose>
+         <if type="chapter paper-conference" match="any">
+            <text variable="container-title" prefix=" |includedworktitle=" suffix=""/>
+         </if>
+         <else>
+            <text variable="container-title" prefix=" |journal=" />
+         </else>
+      </choose>
+   </macro>
+   <macro name="publisher">
+      <choose>
+         <if type="thesis">
+            <text variable="publisher" prefix=" |publisher=" suffix=""/>
+         </if>
+         <else-if type="report">
+            <text variable="publisher" prefix=" |publisher=" suffix=""/>
+         </else-if>
+         <else>
+            <text variable="publisher" prefix=" |publisher=" suffix=""/>
+         </else>
+      </choose>
+   </macro>
+   <macro name="pages">
+      <text variable="page"/>
+   </macro>
+   <macro name="edition">
+      <text variable="edition"/>
+   </macro>
+   <citation et-al-min="10" et-al-use-first="10" et-al-subsequent-min="10" et-al-subsequent-use-first="10" disambiguate-add-year-suffix="true" disambiguate-add-names="false" disambiguate-add-givenname="false" collapse="year">
+      <sort>
+         <key macro="author"/>
+         <key variable="issued"/>
+      </sort>
+      <layout delimiter="_">
+         <text macro="citeKey"/>
+      </layout>
+   </citation>
+   <bibliography hanging-indent="false" et-al-min="10" et-al-use-first="10">
+      <sort>
+         <key macro="author"/>
+         <key variable="issued"/>
+      </sort>
+      <layout>
+         
+         <group prefix="{{cite " suffix="}}" delimiter="">
+         	<text macro="zotero2wikipediaType" prefix=" " suffix=" "/>
+            <!-- <text macro="citeKey"/> -->
+            <text variable="publisher-place" prefix=" |location=" suffix=""/>
+            <!-- <text variable="chapter-number" prefix=" chapter={" suffix="}"/> -->
+            <text macro="edition" prefix=" edition={" suffix="}"/><!--Is this in CSL? <text variable="type" prefix=" type={" suffix="}" />-->
+            <text variable="collection-title" prefix=" series={" suffix="}"/>
+            <text macro="title" prefix="|title=" suffix=""/>
+            <text variable="volume" prefix=" |volume=" />
+            <text variable="ISBN" prefix=" |isbn="/>
+            <!--Not in CSL <text variable="ISSN" prefix=" ISSN={" suffix="}" />-->
+            <!--Not in CSL <text variable="LCCN" prefix=" callNumber={" suffix="}" />-->
+            <!-- <text variable="archive_location" prefix=" archiveLocation={" suffix="}"/> -->
+            <text variable="URL" prefix=" |url="/>
+            <text variable="DOI" prefix=" |doi="/>
+            <!-- <text variable="abstract" prefix=" |abstract=" /> -->
+            <!-- <text variable="note" prefix=" note={" suffix="}"/> -->
+            <text macro="number" prefix=" |issue=" />
+            <text macro="container-title"/>
+            <text macro="publisher"/>
+            <text macro="author" prefix=" |author=" suffix=""/>
+            <text macro="editor-translator" prefix=" editor={" suffix="}"/>
+            <text macro="issued-year" prefix=" |year=" suffix=""/>
+            <text macro="issued-month" prefix=" |month=" suffix=""/> -->
+            <text macro="pages" prefix=" |pages="/>
+            <text variable="collection-title" prefix=" collection={" suffix="}"/>
+         </group>
+      </layout>
+   </bibliography>
+</style>

@@ -4,8 +4,13 @@ RewriteEngine On
 # If you need to use the `RewriteBase` directive, it should be the
 # absolute physical path to the directory that contains this htaccess file.
 #
-#RewriteBase /
-RewriteBase /~rpage/biostor/
+RewriteBase /
+#RewriteBase /~rpage/biostor/
+
+# If URL has "www" prefix strip and redirect to biostor.org
+# We also need to disable default hostname (uncheck checkbox in Server Admin/Web/Sites)
+#RewriteCond %{HTTP_HOST} ^www.biostor.org$ 														[NC]
+#RewriteRule ^(.*)$ 								http://130.209.46.234/$1 						[R=301,L]
 
 #-----------------------------------------------------------------------------------------
 # BioStor reference URL

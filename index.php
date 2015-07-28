@@ -865,11 +865,8 @@ function display_search($q, $bookmark = '')
 	{
 		$url .= '&bookmark=' . $bookmark;
 	}
-	
-	//echo $url;
-				
+					
 	$json = get($url);
-	
 	//echo $json;
 	
 	if ($json != '')

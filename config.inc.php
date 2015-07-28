@@ -15,7 +15,7 @@ global $config;
 date_default_timezone_set('UTC');
 
 $site = 'local';
-//$site = 'biostor';
+$site = 'biostor';
 //$site = 'pagoda';
 
 switch ($site)
@@ -32,7 +32,8 @@ switch ($site)
 		
 	case 'biostor':
 		// Server-------------------------------------------------------------------------
-		$config['web_server']	= 'http://biostor.org'; 
+		//$config['web_server']	= 'http://biostor.org'; 
+		$config['web_server']	= 'http://130.209.46.234'; 
 		$config['site_name']	= 'BioStor';
 
 		// Files--------------------------------------------------------------------------

@@ -15,7 +15,7 @@ global $config;
 date_default_timezone_set('UTC');
 
 $site = 'local';
-$site = 'biostor';
+//$site = 'biostor';
 //$site = 'pagoda';
 
 switch ($site)
@@ -64,13 +64,23 @@ $config['proxy_port'] 	= '';
 
 // CouchDB------------------------------------------------------------------------------------------
 		
+// local
+$config['couchdb_options'] = array(
+		'database' => 'biostor',
+		'host' => 'localhost',
+		'port' => 5984,
+		'prefix' => 'http://'
+		);		
+		
 // Cloudant
+/*
 $config['couchdb_options'] = array(
 		'database' => 'biostor',
 		'host' => 'rdmpage:peacrab280398@rdmpage.cloudant.com',
 		'port' => 5984,
 		'prefix' => 'http://'
-		);		
+		);	
+*/	
 		
 // HTTP proxy
 if ($config['proxy_name'] != '')

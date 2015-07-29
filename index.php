@@ -629,7 +629,6 @@ function display_record($id, $page = 0)
 		echo '<li>';
 		if ($journal_namespace != '')
 		{
-//			echo '<a href="?' . $journal_namespace . '=' . $journal_identifier . '">' . $reference->journal->name . '</a>';			
 			echo '<a href="' . $journal_namespace . '/' . $journal_identifier . '">' . $reference->journal->name . '</a>';			
 		}
 		else
@@ -647,7 +646,6 @@ function display_record($id, $page = 0)
 			echo '<li>';
 			if ($journal_namespace != '')
 			{
-//				echo '<a href="?' . $journal_namespace . '=' . $journal_identifier  . '&year=' . $reference->year . '">' . $reference->year . '</a>';			
 				echo '<a href="' . $journal_namespace . '/' . $journal_identifier  . '/year/' . $reference->year . '">' . $reference->year . '</a>';			
 			}
 			else
@@ -662,173 +660,173 @@ function display_record($id, $page = 0)
 	
 	
 	// display article
+	$num_pages = count((array)$reference->bhl_pages);
 	
-	
-	// display
-	$json = get('http://biostor.org/reference/' . str_replace('biostor/', '', $id) . '.json');
-	
-	if ($json!= '')
-	{
-		$obj = json_decode($json);
-	
-		$num_pages = count($obj->bhl_pages );
+	echo '<div class="container">' . "\n";	
+	echo '<div class="row">' . "\n";
 
-	
-		echo '<div class="container">' . "\n";
-	
+	if (($page == 0) || ($page > $num_pages))
+	{
+		// thumbnails
+		echo '<div class="col-md-8">' . "\n";
+		echo '<div class="row">' . "\n";
+		echo '  <div>';
+		display_article_metadata($reference);
+		echo '  </div>';	    
+		echo '</div>';  
+		
+		// thumbnail images
 		echo '<div class="row">' . "\n";
 	
-		if (($page == 0) || ($page > $num_pages))
+		$page_count = 1;
+		foreach ($reference->bhl_pages as $label => $PageID)
 		{
-			// thumbnails
-			echo '<div class="col-md-8">' . "\n";
-			echo '<div class="row">' . "\n";
-			echo '  <div>';
-			display_article_metadata($reference);
-			echo '  </div>';	    
-			echo '</div>';  
+			echo '<div style="position:relative;display:inline-block;padding:20px;">';			
+			echo '<a href="reference/' . $id . '/page/' . $page_count . '" >';
+			echo '<img style="box-shadow:2px 2px 2px #ccc;border:1px solid #ccc;" src="http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',60,60" alt="' . $label . '" />';
+			echo '<p style="text-align:center">' . $label . '</p>';
+			echo '</a>';
+			echo '</div>';					
+			$page_count++;		
+		} 
+
+		echo '</div>';  
+		echo '</div>'; // <div class="col-md-8">
+
+		// tools, linked stuff, etc.
+		echo '	<div class="col-md-4">' . "\n";
 			
-			// thumbnail images
-			echo '<div class="row">' . "\n";
-		
-			for ($i = 0; $i < $num_pages; $i++)
-			{
-				echo '<div style="position:relative;display:inline-block;padding:20px;">';			
-	//			echo '<a href="?id=' . $id . '&page=' . ($i + 1) . '" >';
-				echo '<a href="reference/' . $id . '/page/' . ($i + 1) . '" >';
-				//echo '<img style="box-shadow:2px 2px 2px #ccc;border:1px solid #ccc;" src="http://biostor.org/bhl_image.php?PageID=' .  $obj->bhl_pages[$i] . '&thumbnail" alt="Page ' . $obj->bhl_pages[$i] . '" />';
-				echo '<img style="box-shadow:2px 2px 2px #ccc;border:1px solid #ccc;" src="http://www.biodiversitylibrary.org/pagethumb/' .  $obj->bhl_pages[$i] . ',60,60" alt="Page ' . $obj->bhl_pages[$i] . '" />';
-				echo '<p style="text-align:center">' . $obj->bhl_pages[$i] . '</p>';
-				echo '</a>';
-				echo '</div>';			
-			} 
-
-			echo '</div>';  
-		
-			echo '</div>'; // <div class="col-md-8">
-
-			// tools, linked stuff, etc.
-			echo '	<div class="col-md-4">' . "\n";
-		
-		
-			// citation formatter
-			echo '<div class="row">';
-			echo '<select id="format" onchange="show_formatted_citation(this.options[this.selectedIndex].value);">
-				<option label="Citation format" disabled="disabled" selected="selected"></option>
-				<option label="APA" value="apa"></option>
-				<option label="BibTeX" value="bibtex"></option>
-				<option label="Wikipedia" value="wikipedia">
-				<option label="ZooKeys" value="zookeys">
-				<option label="Zootaxa" value="zootaxa"></option>
-			</select>';
+		// citation formatter
+		echo '<div class="row">';
+		echo '<select id="format" onchange="show_formatted_citation(this.options[this.selectedIndex].value);">
+			<option label="Citation format" disabled="disabled" selected="selected"></option>
+			<option label="APA" value="apa"></option>
+			<option label="BibTeX" value="bibtex"></option>
+			<option label="Wikipedia" value="wikipedia">
+			<option label="ZooKeys" value="zookeys">
+			<option label="Zootaxa" value="zootaxa"></option>
+		</select>';	
 	
-		
-			echo '<div id="citation" style=font-size:11px;"width:300px;height:100px;border:1px solid black;"><br/><br/><br/><br/><br/><br/></div>';
-			echo '</div>';
-		
-			/* echo '<textarea id="citation" style="font-size:10px;" rows="6" readonly></textarea>'; */
-		
-		
-			echo '<div class="row">';
-			// altmetric badge
-			$data_string = altmetric_data_string($reference);
-			if ($data_string != '')
-			{
-				echo '<div>';
-				echo '<div data-badge-details="right" data-badge-type="medium-donut" ' . $data_string . ' data-hide-no-mentions="true" class="altmetric-embed"></div>';					
-				echo '</div>';
-			}
-		
-			echo '</div>';
-		
-			echo '</div>' . "\n"; // <div class="col-md-4">
-
-		}
-		else
+		echo '<div id="citation" style=font-size:11px;"width:300px;height:100px;border:1px solid black;"><br/><br/><br/><br/><br/><br/></div>';
+		echo '</div>';
+	
+		/* echo '<textarea id="citation" style="font-size:10px;" rows="6" readonly></textarea>'; */
+			
+		echo '<div class="row">';
+		// altmetric badge
+		$data_string = altmetric_data_string($reference);
+		if ($data_string != '')
 		{
-			// page viewer
-			echo '<div class="row">' . "\n";
-			echo '	<div class="col-md-12">' . "\n";
-		
 			echo '<div>';
-			display_article_metadata($reference);
+			echo '<div data-badge-details="right" data-badge-type="medium-donut" ' . $data_string . ' data-hide-no-mentions="true" class="altmetric-embed"></div>';					
 			echo '</div>';
-		
-				// Navigation
-				echo '<nav>';
-				echo '  <ul class="pager">';
-				echo '    <li class="previous';
-				if ($page == 1)
-				{
-					echo ' disabled';
-				}
-	//			echo '"><a href="?id=' . $id . '&page=' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';
-				echo '"><a href="reference/' . $id . '/page/' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';
-			
-				//echo '<li><a href="?id=' . $id . '">Thumbnails</a></li>';
-				echo '<li><a href="reference/' . $id . '">Thumbnails</a></li>';
-			
-				echo '    <li class="next';
-				if ($page == $num_pages)
-				{
-					echo ' disabled';
-				}
-				//echo '"><a href="?id=' . $id . '&page=' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
-				echo '"><a href="reference/' . $id . '/page/' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
-				echo '  </ul>';
-				echo '</nav>';
-
-				$PageID = $obj->bhl_pages[$page - 1];
-
-
-				//$xml_url = 'http://biostor.org/bhl_page_xml.php?PageID=' . $PageID;
-				$image_url = 'http://biostor.org/bhl_image.php?PageID=' . $PageID;
-				
-				$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500" alt="Page ' . $PageID;
-				
-
-				//$xml = get($xml_url);
-				$xml = '';
-
-				//echo $xml;
-
-				//$xml = file_get_contents('43642463.xml');
-
-				if (0)//$xml != '')
-				{
-						// Enable text selection	
-						$xp = new XsltProcessor();
-						$xsl = new DomDocument;
-						$xsl->load(dirname(__FILE__) . '/djvu2html.xsl');
-						$xp->importStylesheet($xsl);
-		
-						$doc = new DOMDocument;
-						$doc->loadXML($xml);
-		
-						$xp->setParameter('', 'widthpx', '800');
-						$xp->setParameter('', 'imageUrl', $image_url);
-		
-						$html = $xp->transformToXML($doc);
-						echo $html;
-
-
-				}
-				else
-				{
-					echo '<div class="col-md-2"></div>';
-					echo '<div class="col-md-8">';
-					echo '<img width="700" style="box-shadow:2px 2px 2px #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';
-					echo '</div>';
-					echo '<div class="col-md-2"></div>';
-				}
-		
-		
-			echo '  </div>' . "\n";
-		
-			echo '</div>' . "\n";
-		
-		
 		}
+		echo '</div>';
+		
+		echo '<div class="row">';
+		
+		if (isset($reference->geometry)) 
+		{
+			echo '<p class="muted">Localities in publication.</p>';
+			echo '<object id="mapsvg" type="image/svg+xml" width="360" height="180" data="map.php?coordinates=' . urlencode(json_encode($reference->geometry->coordinates)) . '"></object>';
+	
+			// schema.org
+			foreach ($reference->geometry->coordinates as $point)
+			{
+				echo '<span itemscope itemtype="http://schema.org/GeoCoordinates">';
+				echo '<meta itemprop="latitude" content="' . $point[1] . '" />';
+				echo '<meta itemprop="longitude" content="' . $point[0] . '" />';
+				echo '</span>';
+			}	
+		}		
+		echo '</div>';
+	
+		echo '</div>' . "\n"; // <div class="col-md-4">
+
+	}
+	else
+	{
+		// page viewer
+		echo '<div class="row">' . "\n";
+		echo '	<div class="col-md-12">' . "\n";
+	
+		echo '<div>';
+		display_article_metadata($reference);
+		echo '</div>';
+	
+			// Navigation
+			echo '<nav>';
+			echo '  <ul class="pager">';
+			echo '    <li class="previous';
+			if ($page == 1)
+			{
+				echo ' disabled';
+			}
+			echo '"><a href="reference/' . $id . '/page/' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';		
+			echo '<li><a href="reference/' . $id . '">Thumbnails</a></li>';
+			echo '    <li class="next';
+			if ($page == $num_pages)
+			{
+				echo ' disabled';
+			}
+			echo '"><a href="reference/' . $id . '/page/' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
+			echo '  </ul>';
+			echo '</nav>';
+
+			$keys = array();
+			foreach ($reference->bhl_pages as $k => $v)
+			{
+				$pages[] = $v;
+			}
+			$PageID = $pages[$page - 1];
+
+			//$xml_url = 'http://biostor.org/bhl_page_xml.php?PageID=' . $PageID;
+			$image_url = 'http://biostor.org/bhl_image.php?PageID=' . $PageID;
+			
+			// BHL
+			$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500" alt="Page ' . $PageID;			
+
+			//$xml = get($xml_url);
+			$xml = '';
+
+			//echo $xml;
+
+			//$xml = file_get_contents('43642463.xml');
+
+			if (0)//$xml != '')
+			{
+					// Enable text selection	
+					$xp = new XsltProcessor();
+					$xsl = new DomDocument;
+					$xsl->load(dirname(__FILE__) . '/djvu2html.xsl');
+					$xp->importStylesheet($xsl);
+	
+					$doc = new DOMDocument;
+					$doc->loadXML($xml);
+	
+					$xp->setParameter('', 'widthpx', '800');
+					$xp->setParameter('', 'imageUrl', $image_url);
+	
+					$html = $xp->transformToXML($doc);
+					echo $html;
+
+
+			}
+			else
+			{
+				echo '<div class="col-md-2"></div>';
+				echo '<div class="col-md-8">';
+				echo '<img width="700" style="box-shadow:2px 2px 2px #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';
+				echo '</div>';
+				echo '<div class="col-md-2"></div>';
+			}
+	
+	
+		echo '  </div>' . "\n";
+	
+		echo '</div>' . "\n";
+	
+	
 	}
 		
 	echo '</div>'; // row

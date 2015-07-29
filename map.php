@@ -33,7 +33,7 @@ width="360px" height="180px">
 <circle id="dot" x="-2" y="-2" r="2" style="stroke:none; stroke-width:0; fill:black; opacity:0.7;"/>
 
 
- <image x="0" y="0" width="360" height="180" xlink:href="' . 'images/map.jpg"/>
+ <image x="0" y="0" width="360" height="180" xlink:href="' . 'static/map.jpg"/>
 
  <g transform="translate(180,90) scale(1,-1)">';
  

@@ -934,7 +934,7 @@ echo '<nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href=".">
-        <img alt="Brand" src="images/biostor-shadow32x32.png" height="20">
+        <img alt="Brand" src="static/biostor-shadow32x32.png" height="20">
       </a>      
      <form class="navbar-form navbar-left" role="search" action="' . $config['web_root'] . '">
        <div class="form-group">

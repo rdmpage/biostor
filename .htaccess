@@ -39,6 +39,10 @@ RewriteRule ^titles/letter/([A-Z])   ?titles&letter=$1 [NC,L]
 RewriteRule ^titles   ?titles [NC,L]
 
 #-----------------------------------------------------------------------------------------
+# Images
+RewriteRule ^images   ?images [NC,L]
+
+#-----------------------------------------------------------------------------------------
 # Search
 RewriteRule ^search/(.*)/bookmark/(.*)   ?q=$1&bookmark=$2  [NC,L]
 RewriteRule ^search/(.*)   ?q=$1   [NC,L]

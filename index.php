@@ -944,6 +944,7 @@ echo '<nav class="navbar navbar-default navbar-fixed-top">
       <ul class="nav navbar-nav">
         <!-- <li><a href="?titles">Titles</a></li> -->
         <li><a href="titles">Browse titles</a></li>
+        <li><a href="images">Browse images</a></li>
       </ul>
     </div>
   </div>
@@ -1084,6 +1085,54 @@ function display_titles($letter= 'A')
 }
 
 //----------------------------------------------------------------------------------------
+// Display images from Pintrest
+function display_images()
+{
+	global $config;
+	global $couch;
+	
+	display_html_start('Images');
+
+	display_navbar();
+	
+	echo '<div  class="container-fluid">' . "\n";
+	
+	echo '<h1>Images from BioStor</h1>';
+	echo '<p>These images are from the <a href="https://www.pinterest.com/rdmpage/biostor/">BioStor board on Pintrest</a>.</p>';
+	
+	$url = $config['web_server'] . $config['web_root'] . 'api.php?images';
+	
+	$json = get($url);
+	$obj = null;
+	if ($json != '')
+	{
+		$obj = json_decode($json);
+	}
+	
+	//echo $json;
+	//print_r($obj);
+	
+	echo '<div class="container">' . "\n";	
+	echo '<div class="row">' . "\n";
+
+	if ($obj)
+	{
+		foreach ($obj->images as $image)
+		{
+			echo '<div style="position:relative;display:inline-block;padding:20px;">';			
+			echo '<a href="reference/' . $image->biostor . '" >';
+			echo '<img style="width:100px;box-shadow:2px 2px 2px #ccc;border:1px solid #ccc;" src="' . $image->src . '"/>';
+			echo '</a>';
+			echo '</div>';
+		}
+	}				
+	echo '</div>';  
+	echo '</div>'; // <div class="col-md-8">
+
+	
+	display_html_end();
+}
+//----------------------------------------------------------------------------------------
 // Main...
 function main()
 {	
@@ -1144,7 +1193,13 @@ function main()
 		display_titles($letter);
 		exit(0);
 	}
-
+	
+	// Show images
+	if (isset($_GET['images']))
+	{	
+		display_images();
+		exit(0);
+	}
 	
 	// Show journal (ISSN)
 	if (isset($_GET['issn']))

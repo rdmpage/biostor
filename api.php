@@ -156,6 +156,59 @@ function display_search ($q, $bookmark = '', $callback = '')
 }
 
 //--------------------------------------------------------------------------------------------------
+function display_images()
+{
+	global $config;
+	global $couch;
+	
+	$url = '_design/pintrest/_view/date_pin';	
+	
+	/*
+	if ($config['stale'])
+	{
+		$url .= '&stale=ok';
+	}	
+	*/	
+	
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+	
+	$response_obj = json_decode($resp);
+	
+	$obj = new stdclass;
+	$obj->status = 404;
+	$obj->url = $url;
+	
+	if (isset($response_obj->error))
+	{
+		$obj->error = $response_obj->error;
+	}
+	else
+	{
+		if (count($response_obj->rows) == 0)
+		{
+			$obj->error = 'Not found';
+		}
+		else
+		{	
+			$obj->status = 200;
+			
+			$obj->images = array();
+
+			foreach ($response_obj->rows as $row)
+			{
+				$image = new stdclass;
+				$image->src = $row->value->thumbnail;
+				$image->biostor = $row->value->biostor;
+				
+				$obj->images[] = $image;
+			}
+		}
+	}
+	
+	api_output($obj, $callback);
+}
+
+//--------------------------------------------------------------------------------------------------
 function main()
 {
 	$callback = '';
@@ -221,6 +274,14 @@ function main()
 			
 	}
 	
+	if (!$handled)
+	{
+		if (isset($_GET['images']))
+		{
+			display_images();
+			$handled = true;
+		}
+	}
 	
 	if (!$handled)
 	{

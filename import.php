@@ -11,6 +11,19 @@ $ids = array(
 146646
 );
 
+// pintrest
+$ids = array(
+145995,
+146005,
+146493,
+146511
+);
+
+
+$ids = array(
+115643,73934,146550,146551,142664,146640,146644,146655,146656
+);
+
 foreach ($ids as $id)
 {
 	$json = get('http://biostor.org/reference/' . $id . '.bibjson');

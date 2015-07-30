@@ -1,5 +1,6 @@
 {
    "_id": "_design/author",
+   "_rev": "1-157c7ea016bbc505c00cef5953292052",
    "language": "javascript",
    "views": {
        "lastname_firstname": {

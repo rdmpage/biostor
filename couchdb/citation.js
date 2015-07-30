@@ -1,5 +1,6 @@
 {
    "_id": "_design/citation",
+   "_rev": "1-159529fe6d1f0f7ef4876a3688699f50",
    "language": "javascript",
    "indexes": {
        "all": {

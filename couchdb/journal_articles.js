@@ -1,5 +1,6 @@
 {
    "_id": "_design/journal_articles",
+   "_rev": "1-7c7b943165edc1ebeb0ada38df4af4ac",
    "language": "javascript",
    "views": {
        "issn_year_page": {

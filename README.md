@@ -16,3 +16,10 @@ I found that sometimes Pagodabox would expect the github SSH key, authorities th
 ## Monitoring
 
 Added New Relic key, after a while New Relic shows data for the app https://rpm.newrelic.com/accounts/691868/applications/8332767
+
+## Replication
+
+Launch this from local machine to replicate CouchDB with Cloudant.
+````
+curl http://localhost:5984/_replicate -H ‘Content-Type: application/json’ -d ‘{ “source”: “biostor”, “target”: “https://<username>:<password>@rdmpage.cloudant.com/biostor”, “continuous”:true }’
+````

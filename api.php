@@ -156,7 +156,7 @@ function display_search ($q, $bookmark = '', $callback = '')
 }
 
 //--------------------------------------------------------------------------------------------------
-function display_images()
+function display_images($callback = '')
 {
 	global $config;
 	global $couch;

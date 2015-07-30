@@ -7,14 +7,21 @@ require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/lib.php');
 require_once (dirname(__FILE__) . '/reference_code.php');
 
+$biostor = 'http://biostor.org';
+$biostor = 'http://130.209.46.234'; // need IP when working on biostor-classic machine
+
+
 // 2015-07-30 latest BioStor 146770
 
 $start = 1;
 $end = 146770;
 
+$end = 1;
+
+
 for ($id = $start; $id <= $end; $id++)
 {
-	$json = get('http://biostor.org/reference/' . $id . '.bibjson');
+	$json = get($biostor . '/reference/' . $id . '.bibjson');
 	
 	if ($json != '')
 	{
@@ -43,7 +50,7 @@ for ($id = $start; $id <= $end; $id++)
 				$reference->citation = reference_to_citation_string($reference);	
 				
 				// thumbnail
-				$url = 'http://biostor.org/reference/' . $id . '.json';
+				$url = $biostor . '/reference/' . $id . '.json';
 				$json = get($url);
 				
 				if ($json != '')

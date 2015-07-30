@@ -7,24 +7,12 @@ require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/lib.php');
 require_once (dirname(__FILE__) . '/reference_code.php');
 
-$ids = array(
-146646
-);
+// 2015-07-30 latest BioStor 146770
 
-// pintrest
-$ids = array(
-145995,
-146005,
-146493,
-146511
-);
+$start = 1;
+$end = 146770;
 
-
-$ids = array(
-115643,73934,146550,146551,142664,146640,146644,146655,146656
-);
-
-foreach ($ids as $id)
+for ($id = $start; $id <= $end; $id++)
 {
 	$json = get('http://biostor.org/reference/' . $id . '.bibjson');
 	
@@ -61,7 +49,50 @@ foreach ($ids as $id)
 				if ($json != '')
 				{				
 					$obj = json_decode($json);
-					$reference->thumbnail = $obj->thumbnails[0];		
+					
+					// thumbnail
+					$reference->thumbnail = $obj->thumbnails[0];
+					
+					// date
+					if (isset($obj->date))
+					{
+						$reference->date = array();
+						if (preg_match('/(?<year>[0-9]{4})/', $obj->date, $m))
+						{
+							$reference->date[] = (Integer)$m['year'];
+						}
+						if (preg_match('/(?<year>[0-9]{4})-(?<month>\d+)/', $obj->date, $m))
+						{
+							$month = preg_replace('/^0+/', '', $m['month']);
+							if ($month != '')
+							{
+								$reference->date[] = (Integer)$month;
+							}
+						}
+						if (preg_match('/(?<year>[0-9]{4})\-(?<month>\d+)\-(?<day>\d+)$/', $obj->date, $m))
+						{
+							$day = preg_replace('/^0+/', '', $m['day']);
+							if ($day != '')
+							{
+								$reference->date[] = (Integer)$day;
+							}
+						}
+							
+					}		
+					
+					
+					// names
+					if (isset($obj->names))
+					{
+						$reference->names = $obj->names;
+					}		
+					
+					// classification
+					if (isset($obj->expanded))
+					{
+						$reference->classification = $obj->expanded;
+					}
+					
 				}
 				
 				print_r($reference);

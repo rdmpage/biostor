@@ -429,11 +429,33 @@ function display_article_metadata($reference)
 		{
 			echo ' series ' . $reference->journal->series;
 		}				
-		if (isset($reference->year))
+		
+		if (isset($reference->date))
 		{
-			echo ' ' . $reference->year;
+			switch (count($reference->date))
+			{
+				case 3:
+					echo ' ' . date('j F Y', strtotime(join('-', $reference->date)));
+					break;
+				case 2:	
+					// Set date to first of month, but only show month
+					echo ' ' . date('F Y', strtotime(join('-', $reference->date) . '-01'));
+					break;
+				case 1:	
+					echo ' ' . $reference->date[0];
+					break;
+				default:
+					break;
+			}
 		}
-				
+		else
+		{
+			if (isset($reference->year))
+			{
+				echo ' ' . $reference->year;
+			}
+		}
+						
 		if (isset($reference->journal->volume))
 		{
 			echo ' ' . $reference->journal->volume;
@@ -728,7 +750,7 @@ function display_record($id, $page = 0)
 		if (isset($reference->geometry)) 
 		{
 			echo '<p class="muted">Localities in publication.</p>';
-			echo '<object id="mapsvg" type="image/svg+xml" width="360" height="180" data="map.php?coordinates=' . urlencode(json_encode($reference->geometry->coordinates)) . '"></object>';
+			echo '<object id="mapsvg" type="image/svg+xml" width="360" height="180" data="api_map.php?coordinates=' . urlencode(json_encode($reference->geometry->coordinates)) . '"></object>';
 	
 			// schema.org
 			foreach ($reference->geometry->coordinates as $point)
@@ -943,8 +965,9 @@ echo '<nav class="navbar navbar-default navbar-fixed-top">
       </form>     
       <ul class="nav navbar-nav">
         <!-- <li><a href="?titles">Titles</a></li> -->
-        <li><a href="titles">Browse titles</a></li>
-        <li><a href="images">Browse images</a></li>
+        <li><a href="titles">Titles</a></li>
+        <li><a href="images">Images</a></li>
+        <li><a href="map">Map</a></li>
       </ul>
     </div>
   </div>
@@ -973,9 +996,11 @@ function display_html_start($title = '', $meta = '', $script = '')
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<!-- almetric -->
-	<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>'
-	
+	<!-- altmetric -->
+	<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+ 	<script src="http://www.google.com/jsapi"></script>
+ 	<script src="js/map.js"></script>
+	'	
 	. $script . '
 	<title>' . $title . '</title>
 	</head>
@@ -1132,6 +1157,33 @@ function display_images()
 	
 	display_html_end();
 }
+
+
+//----------------------------------------------------------------------------------------
+function display_map()
+{
+	global $config;
+	global $couch;
+	
+	display_html_start('Map');
+	display_navbar();
+	
+	echo '<div class="container-fluid">' . "\n";
+	echo '  <div class="row">' . "\n";
+	echo '	  <div class="col-md-8">' . "\n";
+	echo '      <div style="width:600px;height:500px;" id="map"></div>';
+	echo '    </div>';
+	echo '	  <div class="col-md-4">' . "\n";
+	echo '       <div id="hit" style="font-size:11px;"></div>';
+	echo '    </div>';
+	echo '  </div>';
+	echo '</div>';
+
+	
+	
+	display_html_end();
+}
+
 //----------------------------------------------------------------------------------------
 // Main...
 function main()
@@ -1201,6 +1253,13 @@ function main()
 		exit(0);
 	}
 	
+	// Show map
+	if (isset($_GET['map']))
+	{	
+		display_map();
+		exit(0);
+	}
+	
 	// Show journal (ISSN)
 	if (isset($_GET['issn']))
 	{	
@@ -1253,8 +1312,6 @@ function main()
 		display_search($query, $bookmark);
 		exit(0);
 	}	
-	
-	// Show journal
 	
 }
 

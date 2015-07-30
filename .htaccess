@@ -43,6 +43,10 @@ RewriteRule ^titles   ?titles [NC,L]
 RewriteRule ^images   ?images [NC,L]
 
 #-----------------------------------------------------------------------------------------
+# Images
+RewriteRule ^map   ?map [NC,L]
+
+#-----------------------------------------------------------------------------------------
 # Search
 RewriteRule ^search/(.*)/bookmark/(.*)   ?q=$1&bookmark=$2  [NC,L]
 RewriteRule ^search/(.*)   ?q=$1   [NC,L]

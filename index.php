@@ -462,7 +462,7 @@ function display_article_metadata($reference)
 		}
 		if (isset($reference->journal->issue))
 		{
-			echo ' (' . $reference->journal->issue . ')';
+			echo '(' . $reference->journal->issue . ')';
 		}		
 		if (isset($reference->journal->pages))
 		{

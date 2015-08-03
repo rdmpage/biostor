@@ -105,7 +105,7 @@ $xml .= '
 header("Content-type: image/svg+xml");
 // Comments this out if we are populating CouchDB and want to see map grow,
 // but in production uncomment so tiles are cached
-//header("Cache-control: max-age=3600");
+header("Cache-control: max-age=3600");
 
 echo $xml;
 

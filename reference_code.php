@@ -334,7 +334,7 @@ function reference_to_openurl($reference)
 			$openurl .= '&amp;rft.title=' . urlencode($reference->title);		
 		}
 		
-		$openurl .= '&amp;rft.pages=' . $reference->journal->pages;
+		//$openurl .= '&amp;rft.pages=' . $reference->journal->pages;
 		
 	}
 	

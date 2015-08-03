@@ -53,7 +53,7 @@ switch ($site)
 		break;
 }
 
-// Proxy settings for connecting to the web--------------------------------------------------------- 
+// Proxy settings for connecting to the web----------------------------------------------- 
 // Set these if you access the web through a proxy server. 
 $config['proxy_name'] 	= '';
 $config['proxy_port'] 	= '';
@@ -61,8 +61,11 @@ $config['proxy_port'] 	= '';
 //$config['proxy_name'] 	= 'wwwcache.gla.ac.uk';
 //$config['proxy_port'] 	= '8080';
 
+// Image source---------------------------------------------------------------------------
+$config['image_source']		= 'biostor'; // bhl to use remote images, biostor for local
 
-// CouchDB------------------------------------------------------------------------------------------
+
+// CouchDB--------------------------------------------------------------------------------
 		
 		
 switch ($site)

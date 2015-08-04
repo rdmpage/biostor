@@ -44,7 +44,7 @@ function default_display($error_msg = '')
       			<h3>Geography</h3>
 				<div class="media">
 					<a class="pull-left" href="map">
-						<img src="static/homepage_map.png" width="128">
+						<img src="static/homepage_map.png">
 					</a>
 					<div class="media-body">
 						Browse an interactive map of localities in BioStor articles.
@@ -56,7 +56,7 @@ function default_display($error_msg = '')
       			<h3>Images</h3>
 				<div class="media">
 					<a class="pull-left" href="images">
-						<img src="static/homepage_page.png" width="128">
+						<img src="static/homepage_page.png">
 					</a>
 					<div class="media-body">
 						Examples of interesting images from BioStor articles.
@@ -1047,8 +1047,9 @@ function display_html_start($title = '', $meta = '', $script = '')
     . $meta . 
     
     '<!-- base -->
-    <base href="' . $config['web_root'] . '" />
-    
+    <base href="' . $config['web_root'] . '" /><!--[if IE]></base><![endif]-->
+    <!-- favicon -->
+	<link href="static/biostor-shadow32x32.png" rel="icon" type="image/png">    
     <!-- Boostrap -->
     <!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">

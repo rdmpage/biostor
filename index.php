@@ -14,6 +14,8 @@ function default_display($error_msg = '')
 	display_html_start('BioStor');
 	display_navbar();
 	
+	echo  '<div class="container-fluid">';
+	
 	if ($error_msg != '')
 	{
 		echo '<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' . $error_msg . '</div>';
@@ -25,6 +27,47 @@ function default_display($error_msg = '')
         <h1>BioStor</h1>
         <p>Articles from the Biodiversity Heritage Library</p>
       </div>';
+      
+    echo '<div class="row">      
+      	
+       		
+        	<div class="col-md-4">
+      			<h3>Recent additions</h3>
+				<div>
+				<a class="twitter-timeline" href="https://twitter.com/biostor_org" data-widget-id="567310691699552256">Tweets by @biostor_org</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+				</div>
+      			
+      		</div>
+     		
+      	
+      		<div class="col-md-4">
+      			<h3>Geography</h3>
+				<div class="media">
+					<a class="pull-left" href="map">
+						<img src="static/homepage_map.png" width="128">
+					</a>
+					<div class="media-body">
+						Browse an interactive map of localities in BioStor articles.
+					</div>
+				</div>
+      		</div>
+      		
+      		<div class="col-md-4">
+      			<h3>Images</h3>
+				<div class="media">
+					<a class="pull-left" href="images">
+						<img src="static/homepage_page.png" width="128">
+					</a>
+					<div class="media-body">
+						Examples of interesting images from BioStor articles.
+					</div>
+				</div>
+      		</div>
+      		
+      	</div>';
+      	
+      echo '</div>';
+      
 
 
 	display_html_end();
@@ -998,10 +1041,12 @@ function display_html_start($title = '', $meta = '', $script = '')
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->'
-    . $meta . '
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <meta name="google-site-verification" content="G0IJlAyehsKTOUGWSc-1V2RMtYQLnqXs440NUSxbYgA" />'
+
+    . $meta . 
     
-    <!-- base -->
+    '<!-- base -->
     <base href="' . $config['web_root'] . '" />
     
     <!-- Boostrap -->

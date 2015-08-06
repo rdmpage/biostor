@@ -936,7 +936,8 @@ function display_search($q, $bookmark = '')
 		$author_search = true;
 		
 		// parse author name
-		$authorstring = preg_replace('/^author:/u', '', $q);
+		$authorstring = preg_replace('/^author:"/u', '', $q);
+		$authorstring = preg_replace('/"$/u', '', $authorstring);
 		$parts = parse_name($authorstring);
 		if (isset($parts['last']))
 		{
@@ -962,7 +963,7 @@ function display_search($q, $bookmark = '')
 				     html += \'<ul>\';
 				     for (var i in data.results) {
 				        var name = data.results[i].name;
-				        html += \'<li><a href="?q=author:\' + name + \'">\' + name + \'</a></li>\';
+				        html += \'<li><a href="?q=author:&quot;\' + name + \'&quot;">\' + name + \'</a></li>\';
 				     }
 				     html += \'</ul>\';
 				     $("#query_suggest").html(html);

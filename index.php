@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 
 require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/lib.php');
+require_once (dirname(__FILE__) . '/nameparse.php');
 require_once (dirname(__FILE__) . '/reference_code.php');
 
 //----------------------------------------------------------------------------------------
@@ -927,7 +928,53 @@ function display_search($q, $bookmark = '')
 	
 	$rows_per_page = 10;
 	
-	display_html_start('Search results');
+	// Author-specific stuff
+	$author_search = false;
+	$lastname = $firstname = '';
+	if (preg_match('/^author:/', $q))
+	{
+		$author_search = true;
+		
+		// parse author name
+		$authorstring = preg_replace('/^author:/u', '', $q);
+		$parts = parse_name($authorstring);
+		if (isset($parts['last']))
+		{
+			$lastname = $parts['last'];		
+		}
+		if (isset($parts['first']))
+		{
+			$firstname = $parts['first'];
+
+			if (array_key_exists('middle', $parts))
+			{
+				$firstname .= ' ' . $parts['middle'];
+			}
+		}	
+	}
+	
+	$script = '<script>
+		function show_similar_authors(lastname, firstname) {
+			$.getJSON("api_author.php?lastname=" + encodeURIComponent(lastname) + "&firstname=" + encodeURIComponent(firstname) + "&callback=?",
+				function(data){
+				  if (data.results.length > 0) {
+				     var html = \'<h4>Similar names</h4>\';
+				     html += \'<ul>\';
+				     for (var i in data.results) {
+				        var name = data.results[i].name;
+				        html += \'<li><a href="?q=author:\' + name + \'">\' + name + \'</a></li>\';
+				     }
+				     html += \'</ul>\';
+				     $("#query_suggest").html(html);
+				  }
+			});
+		}
+	</script>';
+	
+	
+	
+	
+	display_html_start('Search results', '', $script);
 	display_navbar(htmlentities($q));	
 	
 	echo '<h4>Search results for "' . htmlentities($q) . '"</h4>';
@@ -993,11 +1040,23 @@ function display_search($q, $bookmark = '')
 	// Put furthe rinfo about results here...
 	echo '	 <div class="col-md-4">' . "\n";
 	echo '.';
+	
+	//echo $firstname . '|' . $lastname . '<br />';
+	
+	echo '<div id="query_suggest"></div>' . "\n";
+	
 	echo '   </div>';
 	
 	
 	echo '  </div>';
 	echo '</div>';
+	
+	if ($author_search)
+	{
+		echo '<script>';
+		echo 'show_similar_authors("' . addcslashes($lastname, '"') . '","' . addcslashes($firstname, '"') . '");';
+		echo '</script>';
+	}
 	
 	display_html_end();	
 }

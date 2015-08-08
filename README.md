@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/rdmpage/biostor.png?label=ready&title=Ready)](https://waffle.io/rdmpage/biostor)
 # biostor
 
 

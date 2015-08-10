@@ -79,7 +79,7 @@
 		<xsl:text>height:</xsl:text><xsl:value-of select="$height * $scale" /><xsl:text>px;</xsl:text>
 		
 		<!-- make image grayscale -->
-		<xsl:text>-webkit-filter: grayscale(100%) contrast(300%);</xsl:text>
+		<xsl:text>-webkit-filter: grayscale(100%) contrast(130%);</xsl:text>
 		
 		<!-- prevent user dragging image -->
 		<xsl:text>-webkit-user-drag: none;-webkit-user-select: none;</xsl:text>

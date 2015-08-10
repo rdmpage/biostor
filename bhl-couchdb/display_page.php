@@ -19,7 +19,7 @@ if (isset($page->error))
 }
 else
 {
-	$imageUrl = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',400,400';
+	$imageUrl = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500';
 	
 	if (isset($page->xml))
 	{
@@ -44,7 +44,7 @@ else
 	}
 	else
 	{
-		$html = '<span style="background-color:orange;color-white;">Warning: no XML!</span><img style="border:1px solid rgb(228,228,228);-webkit-filter: grayscale(100%) contrast(200%);" src="' . $imageUrl . '" width="500" />';
+		$html = '<span style="background-color:orange;color-white;">Warning: no XML!</span><img style="border:1px solid rgb(228,228,228);-webkit-filter: grayscale(100%) contrast(130%);" src="' . $imageUrl . '" width="500" />';
 	}
 }
 

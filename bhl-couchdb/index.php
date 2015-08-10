@@ -82,7 +82,8 @@ foreach ($obj->groups as $group)
 		echo $row->id . ' [click to view page]';
 		echo '</span>';
 		
-		echo $row->doc->PageNumbers[0]->Number;
+		//echo $row->doc->PageNumbers[0]->Number; // udenfied for some pages, such as 32428215
+		
 		//echo '<img src="' . $row->doc->ThumbnailUrl . '" width="100" />';
 		foreach ($row->highlights->text as $highlight)
 		{

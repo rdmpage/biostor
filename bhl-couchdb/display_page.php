@@ -53,6 +53,7 @@ else
 $data = new stdclass;
 $data->html = $html;
 
+header("Content-type: text/plain");
 echo json_encode($data);
 
 

@@ -24,11 +24,6 @@ $parameters = array(
 		'group_field'		=> 'ItemID',
 		'counts'			=> '["ItemID"]'
 	);
-	
-if ($bookmark != '')
-{
-	$parameters['bookmark'] = $bookmark;
-}
 			
 $url = '/_design/search/_search/pages?' . http_build_query($parameters);
 

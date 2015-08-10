@@ -1085,6 +1085,7 @@ echo '<nav class="navbar navbar-default navbar-fixed-top">
         <li><a href="titles">Titles</a></li>
         <li><a href="images">Images</a></li>
         <li><a href="map">Map</a></li>
+        <li><a href="labs">Labs</a></li>
       </ul>
     </div>
   </div>
@@ -1320,6 +1321,30 @@ function display_map()
 }
 
 //----------------------------------------------------------------------------------------
+function display_labs()
+{
+	global $config;
+	global $couch;
+	
+	display_html_start('Labs');
+	display_navbar();
+	
+	echo '<div class="container-fluid">' . "\n";
+
+	echo '<h1>Experiments with BioStor and BHL content</h1>';
+	echo '<p>This is a playground for various ideas.</p>';
+	
+	echo '<ul>';
+	echo '<a href="bhl-couchdb/?q=Serinus mozambicus">BHL CouchDB full-text indexing</a></li>';
+	echo '</ul>';
+	echo '</div>';
+
+	
+	display_html_end();
+}
+
+
+//----------------------------------------------------------------------------------------
 // Main...
 function main()
 {	
@@ -1394,6 +1419,14 @@ function main()
 		display_map();
 		exit(0);
 	}
+	
+	// Show labs
+	if (isset($_GET['labs']))
+	{	
+		display_labs();
+		exit(0);
+	}
+	
 	
 	// Show journal (ISSN)
 	if (isset($_GET['issn']))

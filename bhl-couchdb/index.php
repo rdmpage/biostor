@@ -12,8 +12,16 @@ if (isset($_GET['q']))
 	$q = $_GET['q'];
 }
 
+$query = $q;
+
+//$query = preg_replace('/[^a-zA-Z0-9\s]/', '', $query);
+//$query = explode(' ', $query);
+//$query = join(' OR ', $query);
+
+
 $parameters = array(
-		'q'					=> 'text:"' . $q . '"',
+		//'q'					=> 'text:(' . $query . ')',
+		'q'					=> 'text:"' . $query . '"',
 		'highlight_fields' 	=> '["text"]',
 		'highlight_pre_tag' => '"<span style=\"color:white;background-color:green;\">"',
 		'highlight_post_tag'=> '"</span>"',
@@ -24,6 +32,8 @@ $parameters = array(
 		'group_field'		=> 'ItemID',
 		'counts'			=> '["ItemID"]'
 	);
+	
+//print_r($parameters);
 			
 $url = '/_design/search/_search/pages?' . http_build_query($parameters);
 

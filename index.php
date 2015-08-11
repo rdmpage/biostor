@@ -855,6 +855,7 @@ function display_record($id, $page = 0)
 			}
 			$PageID = $pages[$page - 1];
 			
+			// Source of image
 			if ($config['image_source'] == 'bhl')
 			{
 				$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500"';	
@@ -864,16 +865,30 @@ function display_record($id, $page = 0)
 				$image_url = 'http://direct.biostor.org/bhl_image.php?PageID=' . $PageID;
 			}
 
-			//$xml_url = 'http://biostor.org/bhl_page_xml.php?PageID=' . $PageID;
-
-			//$xml = get($xml_url);
+			// Do we have this page in the database, with XML?
 			$xml = '';
+			$couch_id = 'page/' . $PageID;	
+			$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
 
-			//echo $xml;
+			$page = json_decode($resp);
+			if (isset($page->error))
+			{
+				// we don't have this page
+			}
+			else
+			{
+				if (isset($page->xml))
+				{
+					$xml = $page->xml;
+				}
+			}
 
-			//$xml = file_get_contents('43642463.xml');
 
-			if (0)//$xml != '')
+			echo '<div class="col-md-2"></div>';
+			echo '<div class="col-md-8">';
+
+
+			if ($xml != '')
 			{
 					// Enable text selection	
 					$xp = new XsltProcessor();
@@ -884,23 +899,19 @@ function display_record($id, $page = 0)
 					$doc = new DOMDocument;
 					$doc->loadXML($xml);
 	
-					$xp->setParameter('', 'widthpx', '800');
+					$xp->setParameter('', 'widthpx', '700');
 					$xp->setParameter('', 'imageUrl', $image_url);
 	
 					$html = $xp->transformToXML($doc);
 					echo $html;
-
-
 			}
 			else
 			{
-				echo '<div class="col-md-2"></div>';
-				echo '<div class="col-md-8">';
 				echo '<img width="700" style="box-shadow:2px 2px 2px #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';
-				echo '</div>';
-				echo '<div class="col-md-2"></div>';
+				
 			}
-	
+			echo '</div>';
+			echo '<div class="col-md-2"></div>';
 	
 		echo '  </div>' . "\n";
 	

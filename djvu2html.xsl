@@ -12,14 +12,14 @@
 
 <xsl:template match="/">
 
-	<!--
+	
     <html>
     <head>
 	<meta charset="utf-8" />
-	<script src="js/jquery-1.4.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	</head>
 	<body>
-	-->
+	
 
 	<xsl:apply-templates select="//OBJECT" />
 	
@@ -32,25 +32,19 @@
     	
     	var parts = text.match(/(\w+) (\w+)/);
     	if (parts) {
-    		$('div[data-one-word="' + parts[1] + '"]').css("background-color","rgba(0,0,255,0.2)");
-    	    $('div[data-two-words="' + (parts[1] + parts[2]) + '"]').css("background-color","rgba(0,0,255,0.2)");
-    	    
-    	    // Handle genus abbreviation
-    	    var abbreviated = parts[1].charAt(0) + '.' + parts[2];
-    	    $('div[data-one-word="' + parts[1].charAt(0) + '.' + '"]').css("background-color","rgba(0,0,255,0.2)");
-    	    $('div[data-two-words="' + abbreviated + '"]').css("background-color","rgba(0,0,255,0.2)");
-
+    		$('div[data-one-word*="' + parts[1] + '"]').css("background-color","rgba(0,255,0,0.4)");
+    	    $('div[data-two-words*="' + (parts[1] + parts[2]) + '"]').css("background-color","rgba(0,255,0, 0.4)");
     	} else {
-    		$('div[data-one-word="' + text + '"]').css("background-color","rgba(0,128,255,0.2)");
+    		$('div[data-one-word*="' + text + '"]').css("background-color","rgba(0,128,255,0.4)");
     	}
     }
 
 	</script>
 	
-	<!--
+	
 	</body>
 	</html>
-	-->
+	
 </xsl:template>
 
 <xsl:template match="//OBJECT">
@@ -73,20 +67,21 @@
 
 
 	<xsl:comment>Scanned image</xsl:comment>
-	<img>
-		<xsl:attribute name="src">
-			<xsl:value-of select="$imageUrl" />
-		</xsl:attribute> 
-		<xsl:attribute name="style">
-			<xsl:variable name="height" select="@height" />
-			<xsl:variable name="width" select="@width" />
-			<xsl:text>margin:0px;padding:0px;</xsl:text>
-			<xsl:text>width:</xsl:text><xsl:value-of select="$width * $scale" /><xsl:text>px;</xsl:text>
-			<xsl:text>height:</xsl:text><xsl:value-of select="$height * $scale" /><xsl:text>px;</xsl:text>
-			<!-- prevent user being able to drag image -->
-			<xsl:text>-webkit-user-drag: none;-webkit-user-select: none;</xsl:text>
-		</xsl:attribute>
-	</img>
+<img>
+	<xsl:attribute name="src">
+		<xsl:value-of select="$imageUrl" />
+	</xsl:attribute> 
+	<xsl:attribute name="style">
+		<xsl:variable name="height" select="@height" />
+		<xsl:variable name="width" select="@width" />
+		<xsl:text>margin:0px;padding:0px;</xsl:text>
+		<xsl:text>width:</xsl:text><xsl:value-of select="$width * $scale" /><xsl:text>px;</xsl:text>
+		<xsl:text>height:</xsl:text><xsl:value-of select="$height * $scale" /><xsl:text>px;</xsl:text>
+		<xsl:text>box-shadow:2px 2px 2px #ccc;</xsl:text>
+		<!-- prevent user dragging image -->
+		<xsl:text>-webkit-user-drag: none;-webkit-user-select: none;</xsl:text>
+	</xsl:attribute>
+</img>
 
 		<xsl:apply-templates select="//WORD" />
 
@@ -105,8 +100,7 @@
 
 	<xsl:attribute name="style">
 		<xsl:text>position:absolute;</xsl:text>
-		<!-- debugging -->
-		<!-- <xsl:text>border:1px solid rgb(128,128,128);</xsl:text> -->
+		<!--<xsl:text>border:1px solid rgb(128,128,128);</xsl:text>-->
 		<xsl:variable name="coords" select="@coords" />
 		<xsl:variable name="minx" select="substring-before($coords,',')" />
 		<xsl:variable name="afterminx" select="substring-after($coords,',')" />
@@ -133,16 +127,17 @@
 		
 		<xsl:text>left:</xsl:text><xsl:value-of select="$minx * $scale" /><xsl:text>px;</xsl:text>
 		<xsl:text>width:</xsl:text><xsl:value-of select="($maxx - $minx) * $scale" /><xsl:text>px;</xsl:text>
-
-
-		<!-- text is invisible to user -->
+		<!--
+		<xsl:text>top:</xsl:text><xsl:value-of select="$miny * $scale" /><xsl:text>px;</xsl:text>
+		<xsl:text>height:</xsl:text><xsl:value-of select="($maxy - $miny) * $scale" /><xsl:text>px;</xsl:text> -->
+		
 		<!-- http://stackoverflow.com/a/10835846  -->
 		<xsl:text>color: rgba(0, 0, 0, 0);</xsl:text>
 	
 		<!-- ignore text which flows outside of box -->
-		<xsl:text>overflow:hidden;</xsl:text>
-
-
+		<xsl:text>overflow:hidden;</xsl:text> -->
+		
+		
 	</xsl:attribute>
 	
 	
@@ -158,10 +153,8 @@
 	</xsl:if>
 	
 	
-	
-	<!-- actual text -->	
 	<xsl:value-of select="." />
-	
+
 
 	</div>
 </xsl:template>

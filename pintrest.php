@@ -35,7 +35,7 @@ foreach ($itemCollection as $item)
 		$html = str_replace("\n", "", $html);
 		$html = str_replace("\r", "", $html);	
 		
-		if (preg_match('/<meta property="og:see_also"\s+name="og:see_also"\s+content="http:\/\/biostor.org\/reference\/(?<id>\d+)"/Uu', $html, $m))
+		if (preg_match('/<meta property="og:see_also"\s+name="og:see_also"\s+content="http:\/\/biostor.org\/reference\/(biostor\/)?(?<id>\d+)(\/page\/\d+)?"/Uu', $html, $m))
 		{
 			$obj->biostor = $m['id'];
 		}		

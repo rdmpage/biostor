@@ -1103,7 +1103,13 @@ function display_html_start($title = '', $meta = '', $script = '')
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->
-    <meta name="google-site-verification" content="G0IJlAyehsKTOUGWSc-1V2RMtYQLnqXs440NUSxbYgA" />'
+    
+    <!-- Google -->
+    <meta name="google-site-verification" content="G0IJlAyehsKTOUGWSc-1V2RMtYQLnqXs440NUSxbYgA" />
+    <!-- Twitter -->
+	<meta name="twitter:site" content="@biostor_org" />
+	<!-- Pintrest -->
+	<meta name="p:domain_verify" content="5f60c8da3099dba7fd452ca1b9668c0a"/>'
 
     . $meta . 
     

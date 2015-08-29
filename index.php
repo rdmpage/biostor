@@ -651,7 +651,16 @@ function display_record($id, $page = 0)
 		}
 	</script>';
 	
-	display_html_start($reference->title, reference_to_google_scholar($reference), $script);
+	$meta = reference_to_google_scholar($reference);
+	
+	$canonical_url = $config['web_server'] . $config['web_root'] . 'reference/' . str_replace('biostor/', '', $id);
+	if ($page != 0)
+	{
+		$canonical_url .= '/page/' . $page;
+	}
+	$meta .= '<link rel="canonical" href="' . $canonical_url . '" />';
+	
+	display_html_start($reference->title, $meta, $script);
 	display_navbar();	
 	
 	/*
@@ -757,7 +766,7 @@ function display_record($id, $page = 0)
 			}
 		
 			echo '<div style="position:relative;display:inline-block;padding:20px;">';			
-			echo '<a href="reference/' . $id . '/page/' . $page_count . '" >';
+			echo '<a href="reference/' . str_replace('biostor/', '', $id) . '/page/' . $page_count . '" >';
 			echo '<img style="box-shadow:2px 2px 2px #ccc;border:1px solid #ccc;" src="' . $image_url . '" alt="' . $label . '" />';
 			echo '<p style="text-align:center">' . $label . '</p>';
 			echo '</a>';
@@ -837,14 +846,14 @@ function display_record($id, $page = 0)
 			{
 				echo ' disabled';
 			}
-			echo '"><a href="reference/' . $id . '/page/' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';		
-			echo '<li><a href="reference/' . $id . '">Thumbnails</a></li>';
+			echo '"><a href="reference/' . str_replace('biostor/', '', $id) . '/page/' . ($page - 1) . '"><span aria-hidden="true">&larr;</span> Previous</a></li>';		
+			echo '<li><a href="reference/' . str_replace('biostor/', '', $id) . '">Thumbnails</a></li>';
 			echo '    <li class="next';
 			if ($page == $num_pages)
 			{
 				echo ' disabled';
 			}
-			echo '"><a href="reference/' . $id . '/page/' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
+			echo '"><a href="reference/' . str_replace('biostor/', '', $id) . '/page/' . ($page + 1) . '">Next <span aria-hidden="true">&rarr;</span></a></li>';
 			echo '  </ul>';
 			echo '</nav>';
 

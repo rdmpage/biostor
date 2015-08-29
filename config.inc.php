@@ -14,7 +14,7 @@ global $config;
 // Date timezone
 date_default_timezone_set('UTC');
 
-$site = 'local';
+//$site = 'local';
 //$site = 'biostor';
 $site = 'pagoda';
 
@@ -22,7 +22,8 @@ switch ($site)
 {
 	case 'pagoda':
 		// Server-------------------------------------------------------------------------
-		$config['web_server']	= 'http://biostor.gopagoda.io'; 
+		//$config['web_server']	= 'http://biostor.gopagoda.io'; 
+		$config['web_server']	= 'http://biostor.org'; 
 		$config['site_name']	= 'BioStor';
 
 		// Files--------------------------------------------------------------------------

@@ -1185,6 +1185,8 @@ function display_html_end()
 </script>\n";
 
 	echo '</body>
+	<!-- hypothes.is -->
+	<script defer async src="//hypothes.is/embed.js"></script>
 </html>';
 }
 

@@ -129,14 +129,14 @@
 		<xsl:text>width:</xsl:text><xsl:value-of select="($maxx - $minx) * $scale" /><xsl:text>px;</xsl:text>
 		<!--
 		<xsl:text>top:</xsl:text><xsl:value-of select="$miny * $scale" /><xsl:text>px;</xsl:text>
-		<xsl:text>height:</xsl:text><xsl:value-of select="($maxy - $miny) * $scale" /><xsl:text>px;</xsl:text> -->
+		<xsl:text>height:</xsl:text><xsl:value-of select="($maxy - $miny) * $scale" /><xsl:text>px;</xsl:text>
+		-->
 		
 		<!-- http://stackoverflow.com/a/10835846  -->
-		<xsl:text>color: rgba(0, 0, 0, 0);</xsl:text>
+		<xsl:text>color: rgba(0, 0, 0, 0);</xsl:text> 
 	
 		<!-- ignore text which flows outside of box -->
-		<xsl:text>overflow:hidden;</xsl:text> -->
-		
+		<xsl:text>overflow:hidden;</xsl:text>
 		
 	</xsl:attribute>
 	

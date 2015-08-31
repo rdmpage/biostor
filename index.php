@@ -522,7 +522,9 @@ function display_article_metadata($reference)
 			switch ($identifier->type)
 			{
 				case 'doi':
-					echo 'DOI: ' . $identifier->id . '<br />';
+					echo 'DOI: ';
+					echo ' <a href="http://dx.doi.org/' . $identifier->id . '" target="_new"></i>' . $identifier->id . ' <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>';
+					echo '<br />';
 					break;
 					
 				default:

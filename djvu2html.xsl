@@ -54,7 +54,7 @@
 	<div>
 	
 		<xsl:attribute name="class">
-			<xsl:text>ocrx_word</xsl:text><
+			<xsl:text>ocrx_word</xsl:text>
 		</xsl:attribute>
 		
 		<xsl:attribute name="id">

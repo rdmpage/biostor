@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 require_once (dirname(__FILE__) . '/api_utils.php');
 require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/reference_code.php');
@@ -100,6 +102,93 @@ function display_one ($id, $format= '', $callback = '')
 				$obj->status = 200;
 				break;
 		}
+	}
+	
+	api_output($obj, $callback);
+}
+
+//--------------------------------------------------------------------------------------------------
+// One BHL page
+function display_one_page ($PageID, $callback = '')
+{
+	global $config;
+	global $couch;
+	
+	// Do we have this page in the database
+	$couch_id = 'page/' . $PageID;	
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
+	
+	$page = json_decode($resp);
+	if (isset($page->error))
+	{
+		$obj->status = 404;
+	}
+	else
+	{
+		$obj = $page;
+		$obj->status = 200;
+	}
+	
+	api_output($obj, $callback);
+}
+
+//--------------------------------------------------------------------------------------------------
+// One BHL page as HTML
+function display_one_page_html ($PageID, $format =  'html', $callback = '')
+{
+	global $config;
+	global $couch;
+	
+	$obj = new stdclass;
+	$obj->html = '';
+	$obj->page = 'page/' . $PageID;	
+	$obj->status = 404;
+	
+	// Do we have this page in the database, with XML?
+	$xml = '';
+	$couch_id = 'page/' . $PageID;	
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
+
+	$page = json_decode($resp);
+	if (isset($page->error))
+	{
+		// we don't have this page
+	}
+	else
+	{
+		if (isset($page->xml))
+		{
+			$xml = $page->xml;
+		}
+	}
+	
+	if ($xml != '')
+	{
+		// Source of image
+		if ($config['image_source'] == 'bhl')
+		{
+			$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500"';	
+		}
+		else
+		{
+			$image_url = 'http://direct.biostor.org/bhl_image.php?PageID=' . $PageID;
+		}	
+	
+		// Enable text selection	
+		$xp = new XsltProcessor();
+		$xsl = new DomDocument;
+		$xsl->load(dirname(__FILE__) . '/djvu2html.xsl');
+		$xp->importStylesheet($xsl);
+
+		$doc = new DOMDocument;
+		$doc->loadXML($xml);
+
+		$xp->setParameter('', 'widthpx', '700');
+		$xp->setParameter('', 'imageUrl', $image_url);
+
+		$obj->html = $xp->transformToXML($doc);
+		
+		$obj->status =  200;
 	}
 	
 	api_output($obj, $callback);
@@ -214,6 +303,8 @@ function main()
 	$callback = '';
 	$handled = false;
 	
+	//print_r($_GET);
+	
 	// If no query parameters 
 	if (count($_GET) == 0)
 	{
@@ -282,6 +373,34 @@ function main()
 			$handled = true;
 		}
 	}
+	
+	if (!$handled)
+	{
+		if (isset($_GET['page']))
+		{
+			$PageID = $_GET['page'];
+			
+			$format = '';
+			
+			if (isset($_GET['format']))
+			{
+				$format = $_GET['format'];
+
+				if ($format == 'html')
+				{
+					display_one_page_html($PageID, $format, $callback);
+					$handled = true;
+				}
+			}
+			
+			if (!$handled)
+			{
+				display_one_page($PageID, $callback);
+				$handled = true;
+			}
+		}
+	}
+	
 	
 	if (!$handled)
 	{

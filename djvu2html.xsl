@@ -52,6 +52,11 @@
 
 <xsl:template match="//WORD">
 	<div>
+	
+		<xsl:attribute name="class">
+			<xsl:text>ocrx_word</xsl:text><
+		</xsl:attribute>
+		
 		<xsl:attribute name="id">
 			<xsl:value-of select="position()"/>
 		</xsl:attribute>

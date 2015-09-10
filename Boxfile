@@ -1,5 +1,6 @@
 web1:
   php_extensions:
     - curl
+    - memcache
     - xsl
     

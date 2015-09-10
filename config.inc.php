@@ -14,7 +14,7 @@ global $config;
 // Date timezone
 date_default_timezone_set('UTC');
 
-//$site = 'local';
+$site = 'local';
 //$site = 'biostor';
 $site = 'pagoda';
 
@@ -28,7 +28,15 @@ switch ($site)
 
 		// Files--------------------------------------------------------------------------
 		$config['web_dir']		= dirname(__FILE__);
-		$config['web_root']		= '/';	
+		$config['web_root']		= '/';
+		
+		// Memcache-----------------------------------------------------------------------
+		$config['use_memcache']	= true;
+		//$config['memcache_host']= $_SERVER['CACHE1_HOST'];
+		//$config['memcache_port']= $_SERVER['CACHE1_POST'];
+		$config['memcache_host']= '127.0.0.1';
+		$config['memcache_port']= 11211;
+
 		break;
 		
 	case 'biostor':
@@ -51,6 +59,7 @@ switch ($site)
 		// Files--------------------------------------------------------------------------
 		$config['web_dir']		= dirname(__FILE__);
 		$config['web_root']		= '/~rpage/biostor/';
+		
 		break;
 }
 
@@ -67,9 +76,15 @@ $config['proxy_port'] 	= '';
 $config['image_source']		= 'bhl'; // bhl to use remote images, biostor for local
 
 
+// Memcache-------------------------------------------------------------------------------
+if ($config['use_memcache'])
+{
+	$memcache = new Memcache;
+	$cacheAvailable = $memcache->connect($config['memcache_host'], $config['memcache_post']);
+}
+
+
 // CouchDB--------------------------------------------------------------------------------
-		
-		
 switch ($site)
 {
 	case 'pagoda':

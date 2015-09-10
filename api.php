@@ -76,31 +76,54 @@ function display_one ($id, $format= '', $callback = '')
 	global $config;
 	global $couch;
 	
-	$obj = new stdclass;
+	global $memcache;
+	global $cacheAvailable;
+
+	$obj = null;
 	
 	// grab JSON from CouchDB
 	$couch_id = $id;
 	
-	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
-	
-	$reference = json_decode($resp);
-	if (isset($reference->error))
+	if ($cacheAvailable == true)
 	{
-		$obj->status = 404;
+		$obj = $memcache->get($couch_id);
+	}
+	
+	if ($obj)
+	{
+		$obj->status = 200;
 	}
 	else
 	{
-		switch ($format)
+		// fetch from CouchDB
+		$obj = new stdclass;
+	
+		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
+	
+		$reference = json_decode($resp);
+		if (isset($reference->error))
 		{
-			case 'citeproc':
-				$obj = reference_to_citeprocjs($reference);
-				$obj['status'] = 200;
-				break;
+			$obj->status = 404;
+		}
+		else
+		{
+			switch ($format)
+			{
+				case 'citeproc':
+					$obj = reference_to_citeprocjs($reference);
+					$obj['status'] = 200;
+					break;
 		
-			default:
-				$obj = $reference;
-				$obj->status = 200;
-				break;
+				default:
+					$obj = $reference;
+					$obj->status = 200;
+					
+					if ($cacheAvailable == true)
+					{
+						$memcache->set($couch_id, $reference);
+					}
+					break;
+			}
 		}
 	}
 	

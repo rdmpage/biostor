@@ -33,7 +33,7 @@ switch ($site)
 		// Memcache-----------------------------------------------------------------------
 		$config['use_memcache']	= true;
 		$config['memcache_host']= $_SERVER['CACHE1_HOST'];
-		$config['memcache_port']= $_SERVER['CACHE1_POST'];
+		$config['memcache_port']= $_SERVER['CACHE1_PORT'];
 		break;
 		
 	case 'biostor':

@@ -76,7 +76,7 @@ function display_one ($id, $format= '', $callback = '')
 	global $config;
 	global $couch;
 	
-	$reference = null;
+	$obj = new stdclass;
 	
 	// grab JSON from CouchDB
 	$couch_id = $id;

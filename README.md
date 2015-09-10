@@ -16,7 +16,7 @@ I found that sometimes Pagodabox would expect the github SSH key, authorities th
 
 ## Pushing to Pagodabox
 
-    git push pagoda —all
+    git push pagoda --all
 
 ## Monitoring
 

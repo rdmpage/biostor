@@ -14,6 +14,10 @@ Can then paste this key into Pagodabox site.
 
 I found that sometimes Pagodabox would expect the github SSH key, authorities the one I’d generated for Pagodabox, so I pasted both keys into the Pagodabox admin panel.
 
+## Pushing to Pagodabox
+
+    git push pagoda —all
+
 ## Monitoring
 
 Added New Relic key, after a while New Relic shows data for the app https://rpm.newrelic.com/accounts/691868/applications/8332767

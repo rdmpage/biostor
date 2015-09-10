@@ -273,46 +273,67 @@ function display_images($callback = '')
 	global $config;
 	global $couch;
 	
-	$url = '_design/pintrest/_view/date_pin';	
+	global $memcache;
+	global $cacheAvailable;
+
+	$obj = null;
 	
-	/*
-	if ($config['stale'])
+	if ($cacheAvailable == true)
 	{
-		$url .= '&stale=ok';
-	}	
-	*/	
+		$obj = $memcache->get('pintrest');
+	}
 	
-	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
-	
-	$response_obj = json_decode($resp);
-	
-	$obj = new stdclass;
-	$obj->status = 404;
-	$obj->url = $url;
-	
-	if (isset($response_obj->error))
+	if ($obj)
 	{
-		$obj->error = $response_obj->error;
 	}
 	else
 	{
-		if (count($response_obj->rows) == 0)
+		// fetch
+		$obj = new stdclass;
+	
+		$url = '_design/pintrest/_view/date_pin';	
+	
+		/*
+		if ($config['stale'])
 		{
-			$obj->error = 'Not found';
+			$url .= '&stale=ok';
+		}	
+		*/	
+	
+		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+	
+		$response_obj = json_decode($resp);
+	
+		$obj = new stdclass;
+		$obj->status = 404;
+		$obj->url = $url;
+	
+		if (isset($response_obj->error))
+		{
+			$obj->error = $response_obj->error;
 		}
 		else
-		{	
-			$obj->status = 200;
-			
-			$obj->images = array();
-
-			foreach ($response_obj->rows as $row)
+		{
+			if (count($response_obj->rows) == 0)
 			{
-				$image = new stdclass;
-				$image->src = $row->value->thumbnail;
-				$image->biostor = $row->value->biostor;
+				$obj->error = 'Not found';
+			}
+			else
+			{	
+				$obj->status = 200;
+			
+				$obj->images = array();
+
+				foreach ($response_obj->rows as $row)
+				{
+					$image = new stdclass;
+					$image->src = $row->value->thumbnail;
+					$image->biostor = $row->value->biostor;
 				
-				$obj->images[] = $image;
+					$obj->images[] = $image;
+				}
+				
+				$memcache->set('pintrest', $obj);
 			}
 		}
 	}

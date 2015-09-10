@@ -631,19 +631,25 @@ function display_record($id, $page = 0)
 	
 	$reference = null;
 	
-	// grab JSON from CouchDB
-	$couch_id = $id;
+	// API call
+	$ok = false;
 	
-	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
+	$url = $config['web_server'] . $config['web_root'] . 'api.php?id=' . urlencode($id);
+	$json = get($url);
+			
+	if ($json != '')
+	{
+		$reference = json_decode($json);
+		$ok = $reference->status = 200;
+	}
 	
-	$reference = json_decode($resp);
-	if (isset($reference->error))
+	if (!$ok)
 	{
 		// bounce
 		header('Location: ' . $config['web_root'] . '?error=Record not found' . "\n\n");
 		exit(0);
 	}
-	
+		
 	$script = '<script>
 		function show_formatted_citation(format) {
 			$.get("api.php?id=' . $id . '&format=citationprocjs&style=" + format + "&callback=?",
@@ -877,50 +883,26 @@ function display_record($id, $page = 0)
 			}
 
 			// Do we have this page in the database, with XML?
-			$xml = '';
-			$couch_id = 'page/' . $PageID;	
-			$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
-
-			$page = json_decode($resp);
-			if (isset($page->error))
+			$html = '';
+			$url = $config['web_server'] . $config['web_root'] . 'api.php?page=' . $PageID . '&format=html';
+			$json = get($url);
+			
+			if ($json != '')
 			{
-				// we don't have this page
+				$page = json_decode($json);
+				$html = $page->html;
 			}
-			else
+			
+			if ($html == '')
 			{
-				if (isset($page->xml))
-				{
-					$xml = $page->xml;
-				}
+				$html = '<img width="700" style="box-shadow:2px 2px 2px #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';				
 			}
-
 
 			echo '<div class="col-md-2"></div>';
 			echo '<div class="col-md-8">';
 
+			echo $html;
 
-			if ($xml != '')
-			{
-					// Enable text selection	
-					$xp = new XsltProcessor();
-					$xsl = new DomDocument;
-					$xsl->load(dirname(__FILE__) . '/djvu2html.xsl');
-					$xp->importStylesheet($xsl);
-	
-					$doc = new DOMDocument;
-					$doc->loadXML($xml);
-	
-					$xp->setParameter('', 'widthpx', '700');
-					$xp->setParameter('', 'imageUrl', $image_url);
-	
-					$html = $xp->transformToXML($doc);
-					echo $html;
-			}
-			else
-			{
-				echo '<img width="700" style="box-shadow:2px 2px 2px #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';
-				
-			}
 			echo '</div>';
 			echo '<div class="col-md-2"></div>';
 	

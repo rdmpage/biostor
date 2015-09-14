@@ -28,12 +28,13 @@ function api_output($obj, $callback)
 	}
 	
 	header("Content-type: text/plain");
+	header("Cache-control: max-age=3600");
 	
 	if ($callback != '')
 	{
 		echo $callback . '(';
 	}
-	//echo json_encode($obj, JSON_PRETTY_PRINT);
+	//echo json_encode($obj, JSON_PRETTY_PRINT);	
 	echo json_format(json_encode($obj));
 	if ($callback != '')
 	{

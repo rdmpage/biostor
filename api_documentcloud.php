@@ -89,7 +89,17 @@ function display_documentcloud ($id, $callback = '')
 		$dc->annotations = array();
 	}	
 	
-	api_output($dc, $callback);
+	header("Content-type: text/plain");
+	
+	if ($callback != '')
+	{
+		echo $callback . '(';
+	}
+	echo json_format(json_encode($dc));
+	if ($callback != '')
+	{
+		echo ')';
+	}
 }
 
 //--------------------------------------------------------------------------------------------------

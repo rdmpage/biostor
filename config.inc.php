@@ -57,6 +57,11 @@ switch ($site)
 		$config['web_dir']		= dirname(__FILE__);
 		$config['web_root']		= '/~rpage/biostor/';
 		
+		// Memcache-----------------------------------------------------------------------
+		$config['use_memcache']	= false;
+		break;
+		
+		
 		break;
 }
 

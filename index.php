@@ -640,7 +640,7 @@ function display_record($id, $page = 0)
 	if ($json != '')
 	{
 		$reference = json_decode($json);
-		$ok = $reference->status = 200;
+		$ok = ($reference->status == 200);
 	}
 	
 	if (!$ok)

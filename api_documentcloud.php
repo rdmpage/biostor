@@ -85,8 +85,8 @@ function display_documentcloud ($id, $callback = '')
 		
 		$dc->resources = new stdclass;
 		$dc->resources->page = new stdclass;
-		//$dc->resources->page->text = '';
 		$dc->resources->page->image = $config['web_server'] . $config['web_root'] . 'documentcloud/' . $id . '/pages/{page}-{size}';		
+		$dc->resources->page->text  = $config['web_server'] . $config['web_root'] . 'documentcloud/' . $id . '/pages/{page}';		
 				
 		$dc->sections = array();
 		$dc->annotations = array();
@@ -174,6 +174,23 @@ function display_documentcloud_page ($id, $page, $size, $callback = '')
 					$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',800,800';
 					break;
 			}
+		}
+		else
+		{
+			// dummy text for now
+			$text = "[dummy text]";
+			
+			header('Content-type: text/plain');
+			if ($callback != '')
+			{
+				echo $callback .'(';
+			}
+			echo json_encode($text);
+			if ($callback != '')
+			{
+				echo ')';
+			}
+			
 		}
 	}
 	

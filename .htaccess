@@ -25,6 +25,9 @@ RewriteRule ^reference/(biostor/[0-9]+)$   index.php?id=$1 [NC,L]
 # Document cloud image
 RewriteRule ^documentcloud/biostor/([0-9]+)/pages/([0-9]+)-([a-z]+)$	api_documentcloud.php?id=biostor/$1&page=$2&size=$3		[NC,L]
 
+# Document cloud text
+RewriteRule ^documentcloud/biostor/([0-9]+)/pages/([0-9]+)$	api_documentcloud.php?id=biostor/$1&page=$2		[NC,L]
+
 # Document cloud description
 RewriteRule ^documentcloud/([0-9]+).json			api_documentcloud.php?id=biostor/$1						[QSA,L]
 RewriteRule ^documentcloud/biostor/([0-9]+).json	api_documentcloud.php?id=biostor/$1						[QSA,L]

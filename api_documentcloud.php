@@ -102,7 +102,7 @@ function display_documentcloud ($id, $callback = '')
 	{
 		echo $callback . '(';
 	}
-	echo json_format(json_encode($dc));
+	echo json_encode($dc);
 	if ($callback != '')
 	{
 		echo ')';

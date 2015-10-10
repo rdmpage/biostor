@@ -65,7 +65,6 @@ function display_documentcloud ($id, $callback = '')
 	}
 	
 	$dc = new stdclass;
-	$dc->status = 404;
 	
 	if ($obj)
 	{
@@ -74,8 +73,6 @@ function display_documentcloud ($id, $callback = '')
 		print_r($obj);
 		echo '</pre>';
 		*/
-		
-		$dc->status = $obj->status;
 		
 		$dc->title = $obj->title;
 		$dc->description = $obj->citation;

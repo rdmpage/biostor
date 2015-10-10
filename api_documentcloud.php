@@ -76,7 +76,7 @@ function display_documentcloud ($id, $callback = '')
 		
 		$dc->title = $obj->title;
 		$dc->description = $obj->citation;
-		$dc->id = $id;
+		$dc->id = str_replace('biostor/', '', $id);
 		$dc->canonical_url = $config['web_server'] . $config['web_root'] . 'reference/' . str_replace('biostor/', '', $id);
 		$dc->pages = count((array)$obj->bhl_pages);
 		

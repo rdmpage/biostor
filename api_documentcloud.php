@@ -82,8 +82,15 @@ function display_documentcloud ($id, $callback = '')
 		
 		$dc->resources = new stdclass;
 		$dc->resources->page = new stdclass;
+
 		$dc->resources->page->image = $config['web_server'] . $config['web_root'] . 'documentcloud/' . $id . '/pages/{page}-{size}';		
 		$dc->resources->page->text  = $config['web_server'] . $config['web_root'] . 'documentcloud/' . $id . '/pages/{page}';		
+				
+		// classic
+		$dc->resources->page->image = "http://direct.biostor.org/reference" . str_replace("biostor/", '', $id) . '/pages/{page}-{size}';		
+		$dc->resources->page->text  = "http://direct.biostor.org/reference" . str_replace("biostor/", '', $id) . '/pages/{page}';		
+
+		$dc->resources->search = "http://direct.biostor.org/dvs/100700/json?q={query}";			
 				
 		$dc->sections = array();
 		$dc->annotations = array();

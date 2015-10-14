@@ -180,12 +180,14 @@ function display_documentcloud_page ($id, $page, $size, $callback = '')
 			switch ($size)
 			{
 				case 'small':
-					$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',100,100';	
+					$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',100,100';
+					$image_url = 'http://exeg5le.cloudimg.io/s/height/100/http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',60,60';	
 					break;
 					
 				case 'normal':
 				default:
 					$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',800,800';
+					$image_url = 'http://exeg5le.cloudimg.io/s/width/700/http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500"';	
 					break;
 			}
 		}

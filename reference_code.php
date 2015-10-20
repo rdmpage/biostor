@@ -185,7 +185,7 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 					break;
 					
 				case 'biostor':
-					$url = 'http://biostor.org/' . $identifier->id;
+					$url = 'http://biostor.org/reference/' . $identifier->id;
 					break;
 					
 				case 'handle':

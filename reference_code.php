@@ -118,10 +118,22 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 	$citeproc_obj['id'] = $id;
 	$citeproc_obj['title'] = $reference->title;
 	
+	/*
 	if (isset($reference->journal))
 	{	
 		$citeproc_obj['type'] = 'article-journal';
 	}
+	*/
+	switch ($reference->type)
+	{
+		case 'article':
+			$citeproc_obj['type'] = 'article-journal';
+			break;
+			
+		default:
+			$citeproc_obj['type'] = $reference->type;
+			break;
+	}	
 	
 	$citeproc_obj['issued']['date-parts'][] = array($reference->year);
 	
@@ -152,6 +164,24 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 		}
 	}
 	
+	// Book
+	if (isset($reference->publisher))
+	{
+		if (isset($reference->publisher->name))
+		{
+			$citeproc_obj['publisher'] = $reference->publisher->name;
+		}
+		if (isset($reference->publisher->address))
+		{
+			$citeproc_obj['publisher-place'] = $reference->publisher->address;
+		}
+		if (isset($reference->page))
+		{
+			$citeproc_obj['page'] = str_replace('--', '-', $reference->journal->pages);
+		}
+	}
+		
+	// Article
 	if (isset($reference->journal))
 	{
 		$citeproc_obj['container-title'] = $reference->journal->name;
@@ -193,6 +223,11 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 					{
 						$url = 'http://hdl.handle.net/' . $identifier->id;
 					}
+					break;
+					
+				case 'isbn':
+				case 'isbn13':
+					$citeproc_obj['ISBN'] = $identifier->id;
 					break;
 					
 				case 'jstor':

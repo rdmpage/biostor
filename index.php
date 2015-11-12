@@ -312,11 +312,12 @@ function display_record_summary ($reference, $highlights = null)
 				switch ($identifier->type)
 				{
 					case 'bhl':
-						echo ' <a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></i>http://biodiversitylibrary.org/page/' . $identifier->id . '</a>';
+						//echo ' <a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></i>http://biodiversitylibrary.org/page/' . $identifier->id . '</a>'  . '<br />';
+						echo ' <a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new">http://biodiversitylibrary.org/page/' . $identifier->id . '</a>'  . '<br />';
 						break;
 						
 					case 'doi':
-						echo ' <span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>';
+						echo ' <span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
 						break;
 						
 						

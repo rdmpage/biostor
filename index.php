@@ -316,8 +316,16 @@ function display_record_summary ($reference, $highlights = null)
 						break;
 						
 					case 'doi':
+						echo ' <span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>';
+						break;
+						
+						
+					/*
+					case 'doi':
 						echo ' <a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></i>http://doi.dx.org/' . $identifier->id . '</a>';
 						break;
+					*/
+					
 					/*					
 					case 'biostor':
 						echo '<a href="http://biostor.org/reference/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>biostor.org/reference/' . $identifier->id . '</a>';
@@ -522,8 +530,12 @@ function display_article_metadata($reference)
 			switch ($identifier->type)
 			{
 				case 'doi':
+					/*
 					echo 'DOI: ';
 					echo ' <a href="http://dx.doi.org/' . $identifier->id . '" target="_new"></i>' . $identifier->id . ' <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>';
+					echo '<br />';
+					*/
+					echo '<span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a>>/span>';
 					echo '<br />';
 					break;
 					
@@ -1134,6 +1146,34 @@ function display_html_start($title = '', $meta = '', $script = '')
 	'	
 	. $script . '
 	<title>' . $title . '</title>
+	
+	<style>
+	span.doi {
+		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		color: white;
+		background: black;
+		font-size: 13px;
+		text-decoration: none;
+		padding: 2px 0px 2px 4px;
+		border-radius: 5px;
+		border-color: black;
+	}
+
+	span.doi:before {
+		content: "DOI";
+	}
+
+	span.doi a {
+		color: white;
+		background: #0099cc;
+		text-decoration: none;
+		text-transform: lowercase;
+		margin-left: 4px;
+		padding: 2px 5px 2px 4px;
+		border-radius: 0px 5px 5px 0px;
+	}
+	</style>	
+	
 	</head>
 <body style="padding-top:70px;padding-left:20px;padding-right:20px;padding-bottom:20px;">';
 

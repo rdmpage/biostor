@@ -1149,7 +1149,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 	
 	<style>
 	span.doi {
-		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		color: white;
 		background: black;
 		font-size: 13px;

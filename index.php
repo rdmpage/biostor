@@ -535,7 +535,7 @@ function display_article_metadata($reference)
 					echo ' <a href="http://dx.doi.org/' . $identifier->id . '" target="_new"></i>' . $identifier->id . ' <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>';
 					echo '<br />';
 					*/
-					echo '<span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a>>/span>';
+					echo '<span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
 					echo '<br />';
 					break;
 					

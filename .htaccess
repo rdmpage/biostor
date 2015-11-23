@@ -16,6 +16,11 @@ RewriteBase /
 # BioStor reference URL
 RewriteRule ^reference/([0-9]+)/page/([0-9]+)  index.php?id=biostor/$1&page=$2 [NC,L]
 RewriteRule ^reference/biostor/([0-9]+)/page/([0-9]+)  index.php?id=biostor/$1&page=$2 [NC,L]
+
+# Redirects for legacy URLs from old BioStor (these URLs may appear in Google search results)
+RewriteRule ^reference/([0-9]+).text$  index.php?id=biostor/$1 [NC,L]
+
+# Reference
 RewriteRule ^reference/([0-9]+)$  index.php?id=biostor/$1 [NC,L]
 RewriteRule ^reference/(biostor/[0-9]+)$   index.php?id=$1 [NC,L]
 

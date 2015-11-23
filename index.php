@@ -261,7 +261,10 @@ function display_record_summary ($reference, $highlights = null)
 		else
 		{
 			// not a journal...
-			echo ', on pages <b>' . str_replace('--', '-', $reference->pages) . '</b>';
+			if (isset($reference->pages))
+			{
+			  echo ', on pages <b>' . str_replace('--', '-', $reference->pages) . '</b>';
+			}
 		}		
 		echo '</div>';
 	

@@ -332,8 +332,10 @@ function display_images($callback = '')
 				
 					$obj->images[] = $image;
 				}
-				
-				$memcache->set('pintrest', $obj);
+				/* Notice: MemcachePool::set(): Server 192.168.0.3 (tcp 11211, udp 0) failed with: SERVER_ERROR object too large for cache
+ (3) in /data/api.php on line 336 */
+ 				// Comment out memcache as we get above notice in API output, breaking JSON
+				//$memcache->set('pintrest', $obj);
 			}
 		}
 	}

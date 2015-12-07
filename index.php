@@ -1034,14 +1034,16 @@ function display_search($q, $bookmark = '')
 			echo '</nav>';
 		}
 	
-		foreach ($obj->rows as $row)
+		if (isset($obj->rows))
 		{
-			$reference = $row->doc;
+			foreach ($obj->rows as $row)
+			{
+				$reference = $row->doc;
 			
-			display_record_summary($reference, $row->highlights);
-	
+				display_record_summary($reference, $row->highlights);	
+			}
 		}
-		
+				
 		if ($obj->total_rows > $rows_per_page)
 		{
 			echo '<nav>';
@@ -1528,7 +1530,7 @@ function main()
 	if (isset($_GET['q']))
 	{	
 		$query = $_GET['q'];
-		
+		$bookmark = '';
 		if (isset($_GET['bookmark']))
 		{
 			$bookmark = $_GET['bookmark'];

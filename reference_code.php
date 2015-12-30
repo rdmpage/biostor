@@ -594,10 +594,13 @@ function reference_to_google_scholar($reference)
 			$meta .= '<meta name="citation_issue" content="' . $reference->journal->issue . '" />' . "\n";
 		}
 	
-		if (preg_match('/^(?<spage>.*)-[-]?(?<epage>.*)$/', $reference->journal->pages, $m))
+		if (isset($reference->journal->pages))
 		{
-			$meta .= '<meta name="citation_firstpage" content="' . str_replace('-', '', $m['spage']) . '" />' . "\n";
-			$meta .= '<meta name="citation_lastpage" content="' . str_replace('-', '', $m['epage']) . '" />' . "\n";
+			if (preg_match('/^(?<spage>.*)-[-]?(?<epage>.*)$/', $reference->journal->pages, $m))
+			{
+				$meta .= '<meta name="citation_firstpage" content="' . str_replace('-', '', $m['spage']) . '" />' . "\n";
+				$meta .= '<meta name="citation_lastpage" content="' . str_replace('-', '', $m['epage']) . '" />' . "\n";
+			}
 		}
 	}
 

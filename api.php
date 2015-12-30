@@ -35,34 +35,40 @@ function display_formatted_citation($id, $style)
 	}
 	else
 	{
-		$citeproc_obj = reference_to_citeprocjs($reference);
-	
-		$json = json_encode($citeproc_obj);
-		$citeproc_obj = json_decode($json);
-		
-		//echo $json;
-		
-		$cslfilename = dirname(__FILE__) . '/style/';
-		switch ($style)
+		if ($style == 'ris')
 		{
-			case 'apa':
-			case 'bibtex':
-			case 'wikipedia':
-			case 'zookeys':
-			case 'zootaxa':
-				$cslfilename .= $style . '.csl';
-				break;
-				
-			default:
-				$cslfilename .= 'apa.csl';
-				break;
+			$html = '<pre>' . reference_to_ris($reference) . '</pre>';
 		}
+		else
+		{
+			$citeproc_obj = reference_to_citeprocjs($reference);
 	
-		$csl = file_get_contents($cslfilename);
+			$json = json_encode($citeproc_obj);
+			$citeproc_obj = json_decode($json);
 		
-		$citeproc = new citeproc($csl);
-		$html = $citeproc->render($citeproc_obj, 'bibliography');
+			//echo $json;
 		
+			$cslfilename = dirname(__FILE__) . '/style/';
+			switch ($style)
+			{
+				case 'apa':
+				case 'bibtex':
+				case 'wikipedia':
+				case 'zookeys':
+				case 'zootaxa':
+					$cslfilename .= $style . '.csl';
+					break;
+				
+				default:
+					$cslfilename .= 'apa.csl';
+					break;
+			}
+	
+			$csl = file_get_contents($cslfilename);
+		
+			$citeproc = new citeproc($csl);
+			$html = $citeproc->render($citeproc_obj, 'bibliography');
+		}		
 	}
 	
 	echo $html;

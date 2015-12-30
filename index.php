@@ -810,6 +810,7 @@ function display_record($id, $page = 0)
 			<option label="Citation format" disabled="disabled" selected="selected"></option>
 			<option label="APA" value="apa"></option>
 			<option label="BibTeX" value="bibtex"></option>
+			<option label="RIS" value="ris"></option>
 			<option label="Wikipedia" value="wikipedia">
 			<option label="ZooKeys" value="zookeys">
 			<option label="Zootaxa" value="zootaxa"></option>

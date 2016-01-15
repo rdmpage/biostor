@@ -1193,7 +1193,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 	span.lsid {
 		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		color: white;
-		background: #9cd9f7;
+		background: rgb(255,113,72);
 		font-size: 13px;
 		text-decoration: none;
 		padding: 2px 0px 2px 4px;
@@ -1207,7 +1207,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 
 	span.lsid a {
 		color: black;
-		background: white; 
+		background: #f5f5f5; /* white disappears */
 		text-decoration: none;
 		text-transform: lowercase;
 		margin-left: 4px;

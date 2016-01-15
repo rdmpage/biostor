@@ -547,6 +547,7 @@ function display_article_metadata($reference)
 					echo '<br />';
 					break;
 
+				case 'lsid':
 					echo '<span class="lsid"><a href="http://lsid.tdwg.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
 					echo '<br />';
 					break;

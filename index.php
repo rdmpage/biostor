@@ -322,6 +322,10 @@ function display_record_summary ($reference, $highlights = null)
 					case 'doi':
 						echo ' <span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
 						break;
+
+					case 'lsid':
+						echo ' <span class="lsid"><a href="http://lsid.tdwg.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
+						break;
 						
 						
 					/*
@@ -540,6 +544,10 @@ function display_article_metadata($reference)
 					echo '<br />';
 					*/
 					echo '<span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
+					echo '<br />';
+					break;
+
+					echo '<span class="lsid"><a href="http://lsid.tdwg.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
 					echo '<br />';
 					break;
 					
@@ -1155,6 +1163,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 	<title>' . $title . '</title>
 	
 	<style>
+	/* Zenodo-style DOI */
 	span.doi {
 		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		color: white;
@@ -1179,6 +1188,33 @@ function display_html_start($title = '', $meta = '', $script = '')
 		padding: 2px 5px 2px 4px;
 		border-radius: 0px 5px 5px 0px;
 	}
+	
+	/* ZooBank-style LSID */
+	span.lsid {
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		color: white;
+		background: #9cd9f7;
+		font-size: 13px;
+		text-decoration: none;
+		padding: 2px 0px 2px 4px;
+		border-radius: 5px;
+		border-color: black;
+	}
+
+	span.lsid:before {
+		content: "LSID";
+	}
+
+	span.lsid a {
+		color: black;
+		background: white; 
+		text-decoration: none;
+		text-transform: lowercase;
+		margin-left: 4px;
+		padding: 2px 5px 2px 4px;
+		border-radius: 0px 5px 5px 0px;
+	}
+	
 	</style>	
 	
 	</head>

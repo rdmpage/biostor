@@ -141,8 +141,9 @@ function head($url, $userAgent = '', $content_type = '')
 
 	$ch = curl_init(); 
 	curl_setopt ($ch, CURLOPT_URL, $url); 
-	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1); 
-	curl_setopt ($ch, CURLOPT_FOLLOWLOCATION,	1); 
+	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true); 
+	curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt ($ch, CURLOPT_HEADER,		  true);   
 	
 	if ($userAgent != '')
 	{
@@ -159,7 +160,8 @@ function head($url, $userAgent = '', $content_type = '')
 		curl_setopt ($ch, CURLOPT_HTTPHEADER, array ("Accept: " . $content_type));
     }
     
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'HEAD');
+    //curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'HEAD');
+    curl_setopt($ch, CURLOPT_NOBODY, true);
 	
 	$curl_result = curl_exec ($ch); 
 	

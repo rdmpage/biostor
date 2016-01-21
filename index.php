@@ -812,6 +812,15 @@ function display_record($id, $page = 0)
 
 		// tools, linked stuff, etc.
 		echo '	<div class="col-md-4">' . "\n";
+		
+		// PDF
+		$pdf_url = 'https://archive.org/download/' . str_replace('biostor/', 'biostor-', $id) . '/' . str_replace('biostor/', 'biostor-', $id) . '.pdf';
+		if (head($pdf_url))
+		{
+			echo '<div class="row">';
+			echo '<a class="btn btn-info" href="' . $pdf_url . '">Download PDF</a>';
+			echo '<div class="row">';
+		}
 			
 		// citation formatter
 		echo '<div class="row">';

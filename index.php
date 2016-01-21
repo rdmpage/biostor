@@ -818,8 +818,8 @@ function display_record($id, $page = 0)
 		if (head($pdf_url))
 		{
 			echo '<div class="row">';
-			echo '<a class="btn btn-info" href="' . $pdf_url . '">Download PDF</a>';
-			echo '<div class="row">';
+			echo '<a class="btn btn-info" href="' . $pdf_url . '" onClick="_gaq.push([\'_trackEvent\', \'Export\', \'pdf\', \'' . str_replace('biostor/', 'biostor-', $id) . '\', 0]);">Download PDF</a>';
+			echo '</div>';
 		}
 			
 		// citation formatter

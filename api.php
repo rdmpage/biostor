@@ -113,26 +113,31 @@ function display_one ($id, $format= '', $callback = '')
 		}
 		else
 		{
-			switch ($format)
+			$obj = $reference;
+			$obj->status = 200;
+			
+			if ($cacheAvailable == true)
 			{
-				case 'citeproc':
-					$obj = reference_to_citeprocjs($reference);
-					$obj['status'] = 200;
-					break;
-		
-				default:
-					$obj = $reference;
-					$obj->status = 200;
-					
-					if ($cacheAvailable == true)
-					{
-						$memcache->set($couch_id, $reference);
-					}
-					break;
+				$memcache->set($couch_id, $reference);
 			}
 		}
 	}
 	
+	// Format object (if needed)
+	if ($obj->status == 200)
+	{
+		switch ($format)
+		{
+			case 'citeproc':
+				$obj = reference_to_citeprocjs($obj);
+				$obj['status'] = 200;
+				break;
+
+			default:
+				break;
+		}
+	}
+		
 	api_output($obj, $callback);
 }
 

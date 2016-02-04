@@ -199,7 +199,10 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 	// Chapter
 	if (isset($reference->book))
 	{
-		$citeproc_obj['container-title'] = $reference->book->name;
+		if (isset($reference->book->title))
+		{
+			$citeproc_obj['container-title'] = $reference->book->title;
+		}
 		if (isset($reference->pages))
 		{
 			$citeproc_obj['page'] = str_replace('--', '-', $reference->pages);

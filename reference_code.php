@@ -196,6 +196,16 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 		$citeproc_obj['page'] = str_replace('--', '-', $reference->journal->pages);
 	}
 	
+	// Chapter
+	if (isset($reference->book))
+	{
+		$citeproc_obj['container-title'] = $reference->book->name;
+		if (isset($reference->pages))
+		{
+			$citeproc_obj['page'] = str_replace('--', '-', $reference->pages);
+		}
+	}
+	
 	$url = '';
 	
 	if (isset($reference->identifier))

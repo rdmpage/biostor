@@ -5,7 +5,27 @@ require_once(dirname(__FILE__) . '/lib.php');
 //--------------------------------------------------------------------------------------------------
 function api_output($obj, $callback)
 {
-	switch ($obj->status)
+	$status = 404;
+	
+	// $obj may be array (e.g., for citeproc)
+	if (is_array($obj))
+	{
+		if (isset($obj['status']))
+		{
+			$status = $obj['status'];
+		}
+	}
+	
+	// $obj may be object
+	if (is_object($obj))
+	{
+		if (isset($obj->status))
+		{
+			$status = $obj->status;
+		}
+	}
+
+	switch ($status)
 	{
 		case 303:
 			header('HTTP/1.1 404 See Other');

@@ -791,7 +791,12 @@ function display_record($id, $page = 0)
 		{
 			if ($config['image_source'] == 'bhl')
 			{
-				$image_url = 'http://exeg5le.cloudimg.io/s/height/100/http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',60,60';	
+				$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',60,60';	
+				
+				if ($config['use_cloudimage'])
+				{
+					$image_url = 'http://exeg5le.cloudimg.io/s/height/100/' . $image_url;
+				}		
 			}
 			else
 			{
@@ -929,8 +934,13 @@ function display_record($id, $page = 0)
 			
 			// Source of image
 			if ($config['image_source'] == 'bhl')
-			{
-				$image_url = 'http://exeg5le.cloudimg.io/s/width/700/http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500"';	
+			{				
+				$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500"';	
+				
+				if ($config['use_cloudimage'])
+				{
+					$image_url = 'http://exeg5le.cloudimg.io/s/width/700/' . $image_url;
+				}
 			}
 			else
 			{

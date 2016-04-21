@@ -74,8 +74,11 @@ $config['proxy_port'] 	= '';
 //$config['proxy_port'] 	= '8080';
 
 // Image source---------------------------------------------------------------------------
-//$config['image_source']		= 'biostor'; // bhl to use remote images, biostor for local
+//$config['image_source']	= 'biostor'; // bhl to use remote images, biostor for local
 $config['image_source']		= 'bhl'; // bhl to use remote images, biostor for local
+
+// Image caching--------------------------------------------------------------------------
+$config['use_cloudimage']	= false; // if true use https://cloudimage.io/
 
 
 // Memcache-------------------------------------------------------------------------------

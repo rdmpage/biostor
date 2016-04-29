@@ -805,7 +805,7 @@ function display_record($id, $page = 0)
 		
 			echo '<div style="position:relative;display:inline-block;padding:20px;">';			
 			echo '<a href="reference/' . str_replace('biostor/', '', $id) . '/page/' . $page_count . '" >';
-			echo '<img style="box-shadow:2px 2px 2px #ccc;border:1px solid #ccc;" src="' . $image_url . '" alt="' . $label . '" />';
+			echo '<img style="box-shadow:2px 2px 2px #ccc;border:1px solid #ccc;" src="' . $image_url . '" alt="' . $label . '" width="100" />';
 			echo '<p style="text-align:center">' . $label . '</p>';
 			echo '</a>';
 			echo '</div>';					

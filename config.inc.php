@@ -82,15 +82,16 @@ $config['use_cloudimage']	= false; // if true use https://cloudimage.io/
 
 
 // Memcache-------------------------------------------------------------------------------
+$memcache = false;
+$cacheAvailable = false;
+
 if ($config['use_memcache'])
 {
-	$memcache = new Memcache;
-	$cacheAvailable = $memcache->connect($config['memcache_host'], $config['memcache_port']);
-}
-else
-{
-	$memcache = false;
-	$cacheAvailable = false;
+	if (class_exists('Memcache'))
+	{
+		$memcache = new Memcache;
+		$cacheAvailable = $memcache->connect($config['memcache_host'], $config['memcache_port']);
+	}	
 }
 
 // CouchDB--------------------------------------------------------------------------------

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+   <ShortName>BioStor Search</ShortName>
+   <Description>Search BioStor for open access articles</Description>
+   <Tags></Tags>
+   <Contact>rdmpage@gmail.com</Contact>
+   <Url type="type="text/html"" 
+        template="http://biostor.org/?q={searchTerms}"/>
+ </OpenSearchDescription>

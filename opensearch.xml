@@ -2,7 +2,7 @@
  <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
    <ShortName>BioStor Search</ShortName>
    <Description>Search BioStor for open access articles</Description>
-   <Tags></Tags>
+   <Tags>biodiversity articles</Tags>
    <Contact>rdmpage@gmail.com</Contact>
    <Url type="type="text/html"" 
         template="http://biostor.org/?q={searchTerms}"/>

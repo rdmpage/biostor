@@ -1182,7 +1182,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 	<!-- Pintrest -->
 	<meta name="p:domain_verify" content="5f60c8da3099dba7fd452ca1b9668c0a"/>
 	<!-- OpenSearch -->
-	<link href="' . $config['web_root'] . '/opensearch.xml" rel="search" title="BioStor Search" type="application/opensearchdescription+xml">';
+	<link href="' . $config['web_root'] . '/opensearch.xml" rel="search" title="BioStor Search" type="application/opensearchdescription+xml">'
 
     . $meta . 
     

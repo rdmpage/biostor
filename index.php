@@ -22,7 +22,7 @@ function default_display($error_msg = '')
 		echo '<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' . $error_msg . '</div>';
 	}
 	
-	echo '<div class="alert alert-warning" role="alert"><strong>Heads up!</strong> BioStor is evolving, so things will look different and some things may be missing.</div>';
+	//echo '<div class="alert alert-warning" role="alert"><strong>Heads up!</strong> BioStor is evolving, so things will look different and some things may be missing.</div>';
 	
 	echo '<div class="jumbotron" style="text-align:center">
         <h1>BioStor</h1>

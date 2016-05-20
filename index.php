@@ -469,11 +469,16 @@ function display_journal($namespace = 'issn', $identifier)
 			
 	echo '      <div class="col-md-10">' . "\n";
 	
-	echo        'Info on journal';
+	echo        '<div id="journal_info"></div>';
 	
 	echo '      </div>' . "\n";
 	echo '   </div>' . "\n";
 	echo '</div>' . "\n";
+	
+	echo '<script>' . "\n";
+	echo '   wikidata("' . $identifier . '");' . "\n";
+	echo '</script>' . "\n";
+	
 	
 	display_html_end();
 }
@@ -1200,6 +1205,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 	<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
  	<script src="http://www.google.com/jsapi"></script>
  	<script src="js/map.js"></script>
+ 	<script src="js/wikidata.js"></script>
 	'	
 	. $script . '
 	<title>' . $title . '</title>

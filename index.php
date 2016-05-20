@@ -1204,8 +1204,8 @@ function display_html_start($title = '', $meta = '', $script = '')
 	<!-- altmetric -->
 	<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
  	<script src="http://www.google.com/jsapi"></script>
- 	<script src="js/map.js"></script>
- 	<script src="js/wikidata.js"></script>
+ 	<script type="text/javascript" src="js/map.js"></script>
+ 	<script type="text/javascript" src="js/wikidata.js"></script>
 	'	
 	. $script . '
 	<title>' . $title . '</title>

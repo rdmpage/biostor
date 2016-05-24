@@ -1277,7 +1277,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 	span.jstor {
 		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		color: white;
-		background: black;
+		background: rgb(149,38,55);
 		font-size: 13px;
 		text-decoration: none;
 		padding: 2px 0px 2px 4px;
@@ -1290,8 +1290,8 @@ function display_html_start($title = '', $meta = '', $script = '')
 	}
 
 	span.jstor a {
-		color: white;
-		background: rgb(149,38,55); 
+		color: black;
+		background: #f5f5f5; /* white disappears */
 		text-decoration: none;
 		text-transform: lowercase;
 		margin-left: 4px;

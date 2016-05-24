@@ -323,9 +323,14 @@ function display_record_summary ($reference, $highlights = null)
 						echo ' <span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
 						break;
 
+					case 'jstor':
+						echo ' <span class="jstor"><a href="http://www.jstor.org/stable/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
+						break;
+						
 					case 'lsid':
 						echo ' <span class="lsid"><a href="http://lsid.tdwg.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
 						break;
+						
 						
 						
 					/*
@@ -551,6 +556,11 @@ function display_article_metadata($reference)
 					echo '<span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
 					echo '<br />';
 					break;
+					
+				case 'jstor':
+					echo ' <span class="jstor"><a href="http://www.jstor.org/stable/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>';
+					echo '<br />';
+					break;					
 
 				case 'lsid':
 					echo '<span class="lsid"><a href="http://lsid.tdwg.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
@@ -1256,6 +1266,32 @@ function display_html_start($title = '', $meta = '', $script = '')
 	span.lsid a {
 		color: black;
 		background: #f5f5f5; /* white disappears */
+		text-decoration: none;
+		text-transform: lowercase;
+		margin-left: 4px;
+		padding: 2px 5px 2px 4px;
+		border-radius: 0px 5px 5px 0px;
+	}
+	
+	/* JSTOR */
+	span.jstor {
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		color: white;
+		background: black;
+		font-size: 13px;
+		text-decoration: none;
+		padding: 2px 0px 2px 4px;
+		border-radius: 5px;
+		border-color: black;
+	}
+
+	span.jstor:before {
+		content: "JSTOR";
+	}
+
+	span.jstor a {
+		color: white;
+		background: rgb(149,38,55); 
 		text-decoration: none;
 		text-transform: lowercase;
 		margin-left: 4px;

@@ -384,6 +384,7 @@ function parse_openurl($params, &$context_object)
 					$context_object->referent->journal = new stdclass;
 				}
 				$context_object->referent->journal->pages = $value[0];
+				$context_object->referent->journal->pages = preg_replace('/–/u', '--', $context_object->referent->journal->pages);
 				break;
 				
 			default:
@@ -394,6 +395,8 @@ function parse_openurl($params, &$context_object)
 	}
 	
 	// Clean
+	
+	//print_r($context_object);
 	
 	
 	// Dates
@@ -412,22 +415,14 @@ function parse_openurl($params, &$context_object)
 	}	
 	
 	// Zotero
-	if (isset($context_object->referent->pages))
-	{
-		// Note "u" option in regular expression, so that we match UTF-8 characters such as –
-		if (preg_match('/(?<spage>[0-9]+)[\-|–](?<epage>[0-9]+)/u', $context_object->referent->pages, $match))
-		{
-			$context_object->referent->spage = $match['spage'];
-			$context_object->referent->epage = $match['epage'];
-			unset($context_object->referent->pages);
-		}
-	}
-	
+	/*
 	// Endnote epage may have leading "-" as it splits spage-epage to generate OpenURL
+	// would need  to fix mode, as here we don't have epage
 	if (isset($context_object->referent->epage))
 	{
 		$context_object->referent->epage = preg_replace('/^\-/', '', $context_object->referent->epage);
 	}
+	*/
 	
 	// Journal titles with series numbers are split into title,series fields
 	if (preg_match('/(?<title>.*),?\s+series\s+(?<series>[0-9]+)$/i', $context_object->referent->journal->name, $match))

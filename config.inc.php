@@ -108,7 +108,8 @@ switch ($site)
 		break;
 		
 	case 'local':
-	default:		
+	default:	
+		/*
 		// local
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
@@ -116,6 +117,16 @@ switch ($site)
 				'port' => 5984,
 				'prefix' => 'http://'
 				);		
+		*/
+	
+		// Cloudant
+		$config['couchdb_options'] = array(
+				'database' => 'biostor',
+				'host' => 'rdmpage:peacrab280398@rdmpage.cloudant.com',
+				'port' => 5984,
+				'prefix' => 'http://'
+				);	
+		
 		break;
 }	
 		

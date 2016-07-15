@@ -74,4 +74,11 @@ RewriteRule ^labs   ?labs [NC,L]
 RewriteRule ^search/(.*)/bookmark/(.*)   ?q=$1&bookmark=$2  [NC,L]
 RewriteRule ^search/(.*)   ?q=$1   [NC,L]
 
+#-----------------------------------------------------------------------------------------
+# OpenURL
+RewriteRule ^openurl/(.*)   api_openurl.php$1   [NC, L]
+
+
+
+
 

@@ -1213,8 +1213,32 @@ function display_html_start($title = '', $meta = '', $script = '')
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<!-- altmetric -->
 	<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+	
+	<!-- Google maps 
  	<script src="http://www.google.com/jsapi"></script>
  	<script type="text/javascript" src="js/map.js"></script>
+ 	-->
+ 	
+ 	<!-- Leaflet -->
+    <link 
+        rel="stylesheet" 
+        href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+    />
+    <link 
+        rel="stylesheet" 
+        href="vendor/leaflet.draw/leaflet.draw.css"
+    />
+    <script
+        src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+    <script
+        src="vendor/leaflet.draw/leaflet.draw.js">
+    </script>
+
+	<!-- Wicket -->
+    <script src="vendor/Wicket/wicket.js"></script>
+ 	
+ 	
  	<script type="text/javascript" src="js/wikidata.js"></script>
 	'	
 	. $script . '
@@ -1309,7 +1333,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 //----------------------------------------------------------------------------------------
 function display_html_end()
 {
-	echo '<div class="panel panel-default">
+	echo '<div class="panel panel-default" id="footer">
   <div class="panel-body">
     <p style="vertical-align: top">BioStor is built by <a href="https://twitter.com/rdmpage">@rdmpage</a>, code on <a href="https://github.com/rdmpage/biostor">github</a>. 
     Page images from the <a href="http://biodiversitylibrary.org">Biodiversity Heritage Library</a>.';
@@ -1483,6 +1507,7 @@ function display_map()
 	display_html_start('Map');
 	display_navbar();
 	
+	/*
 	echo '<div class="container-fluid">' . "\n";
 	echo '  <div class="row">' . "\n";
 	echo '	  <div class="col-md-8">' . "\n";
@@ -1493,6 +1518,27 @@ function display_map()
 	echo '    </div>';
 	echo '  </div>';
 	echo '</div>';
+	*/
+	
+	
+	echo '<div class="container-fluid">' . "\n";
+	echo '  <div class="row">' . "\n";
+	echo '      <div style="width:100%;height:500px;" id="map" ></div>';
+	echo '  </div>';
+	echo '</div>';
+	
+	echo '<script src="js/leaflet_map.js"></script>';
+	
+	/*
+	echo '<script>';
+	echo "	// http://stackoverflow.com/questions/6762564/setting-div-width-according-to-the-screen-size-of-user 
+	$(window).resize(function() { 
+			var windowWidth = $(window).width() - 40;
+			var windowHeight =$(window).height() -  $('#map').offset().top - $('#footer').height();
+			$('#map').css({'height':windowHeight, 'width':windowWidth });
+	});	";
+	echo '</script>';
+	*/
 
 	
 	

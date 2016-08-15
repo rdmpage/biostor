@@ -78,7 +78,9 @@ RewriteRule ^search/(.*)   ?q=$1   [NC,L]
 # OpenURL
 #RewriteRule ^openurl/(.*)   api_openurl.php$1   [NC, L]
 
-
+#-----------------------------------------------------------------------------------------
+# API
+RewriteRule ^reconcile(.*)	api_reconciliation.php$1
 
 
 

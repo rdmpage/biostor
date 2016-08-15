@@ -110,7 +110,7 @@ class ReconciliationService
 	function StoreHit($query_key, $hit)
 	{
 		$hit->type[] = $this->defaultTypes[0];
-		$this->result->${query_key}->result[] = $hit;	
+		$this->result->{$query_key}->result[] = $hit;	
 	}
 
 	//----------------------------------------------------------------------------------------------
@@ -144,8 +144,8 @@ class ReconciliationService
 			{
 				$limit = $query->limit;
 			}				
-			$this->result->${query_key} = new stdclass;
-			$this->result->${query_key}->result = array();
+			$this->result->{$query_key} = new stdclass;
+			$this->result->{$query_key}->result = array();
 			
 			$properties = null;
 			if (isset($query->properties))
@@ -155,9 +155,9 @@ class ReconciliationService
 			
 			$this->OneQuery($query_key, $text, $limit, $properties);
 
-			if (count($this->result->${query_key}->result) == 0)
+			if (count($this->result->{$query_key}->result) == 0)
 			{
-				unset($this->result->${query_key}->result);
+				unset($this->result->{$query_key}->result);
 			}
 
 

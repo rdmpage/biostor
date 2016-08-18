@@ -132,9 +132,8 @@ class ReconciliationService
 		if (0)
 		{
 			file_put_contents('tmp/q.txt', "Return: \n" . $queries . "\n" . print_r($q, true), FILE_APPEND);
-		}			
-		
-		
+		}		
+				
 		foreach ($q	as $query_key => $query)
 		{
 			$text = $query->query;
@@ -159,7 +158,6 @@ class ReconciliationService
 			{
 				unset($this->result->{$query_key}->result);
 			}
-
 
 		}
 		

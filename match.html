@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Match references</title>
+	
+	<style>
+	body {
+		font-family:sans-serif;
+		padding:20px;
+	}
+	td {
+		border:1px solid rgb(192,192,192);
+	}
+	
+	</style>
+	
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-1.12.3.js"></script>
+	
+	<script>
+		/*
+		// A single query
+		function reconcile_one() {
+			var string = $('#query').val();
+			
+			var query = {};
+			query['q0'] = {};
+			query['q0'].query = string;
+			query['q0'].limit = 3;
+			
+			$('#result').html('');
+			
+			
+			//alert(JSON.stringify(query));
+			
+			$.getJSON('http://localhost/~rpage/kg/reconciliation/reconciliation_crossref.php?queries=' 
+				+ encodeURIComponent(JSON.stringify(query)) + '&callback?',
+				function(data) {
+					if (data['q0']) {
+						var html = '';
+						if (!data['q0'].result) {
+							html += '<span style="background-color:orange;color:white;">Not found</span>';
+						} else {
+							for (var i in data['q0'].result) {
+								html += data['q0'].result[i].id + ' ' + data['q0'].result[i].score + '<br />';
+							}
+						}
+						$('#result').html(html);
+					}
+				}
+			);
+		}
+		*/
+		
+		function reconcile_many() {
+			var string = $('#multiple').val();
+			
+			string = string.replace(/\s+$/, '');
+			string = string.replace(/\t/g, '');
+			
+			var rows = string.split("\n");
+			
+			var query = {};
+			
+			var html = '';
+			html += '<table>';
+			html += '<tr><th>Query</th><th>Matched</th><th>Identifier</th><th>Score</th></tr>';
+			
+			for (var i in rows) {
+				var key = 'q' + i;
+				query[key] = {};
+				
+				var text = rows[i];
+				text = text.replace(/:/g, '');
+				text = text.replace(/"/g, '');
+				
+				query[key].query = text;
+				query[key].limit = 3;
+				
+				html += '<tr>';
+				
+				html += '<td id="' + key + '" width="50%">' + rows[i] + '</td>';
+				html += '<td id="' + key + '_name"></td>';
+				html += '<td id="' + key + '_id"></td>';
+				html += '<td id="' + key + '_score"></td>';
+
+				html += '</tr>';
+			}
+			
+			html += '</table>';
+			
+			$('#results').html(html);
+			
+			$('#json_query').text(JSON.stringify(query, null, 2));
+			$('#json_result').text('working...');
+			
+			
+			
+//			$.getJSON('http://localhost/~rpage/kg/reconciliation/reconciliation_crossref.php?queries=' 
+//			$.getJSON('http://localhost/~rpage/biostor/api_reconciliation.php?queries='			
+//			$.getJSON('http://bionames.org/api/api_reconciliation.php?queries='			
+//				+ encodeURIComponent(JSON.stringify(query)) + '&callback?',
+				
+			var url = '';
+			
+			//url = 	'http://localhost/~rpage/biostor/api_reconciliation.php?queries='	
+			//url = 	'http://localhost/~rpage/biostor/reconcile?queries='	
+			url = 	'reconcile?queries='	
+			//url = 	'http://direct.bionames.org/api/api_reconciliation.php?queries='	
+			//url = 'http://localhost/~rpage/kg/reconciliation/reconciliation_crossref.php?queries=' 
+			  + encodeURIComponent(JSON.stringify(query)) + '&callback?';
+
+			/*
+			url = 	'http://bionames.org/api/api_reconciliation.php?queries='	
+			  + encodeURIComponent(JSON.stringify(query)) + '&callback?';
+			*/
+
+			$.getJSON(url + encodeURIComponent(url),				
+				
+			//$.getJSON('http://localhost/~rpage/proxy.php?url=' + encodeURIComponent(url),				
+			//$.getJSON('https://crossorigin.me/' + encodeURIComponent(url),				
+				function(data) {
+					$('#json_result').text(JSON.stringify(data,null,2));
+				
+									
+					for (var i in data) {
+						if (data[i].result) {
+							
+					   		for (var j in data[i].result) {
+					   			$('#' + i + '_name').html(data[i].result[j].name);
+					   			$('#' + i + '_id').html('<a href="reference/' + data[i].result[j].id + '" target="_new">' +  data[i].result[j].id + '</a>');
+					   			$('#' + i + '_score').html(data[i].result[j].score);
+					   		}
+					   } else {
+					   	// not found
+					   	$('#' + i + '_id').html('-');
+						}
+					}
+				}
+			);
+			
+			
+		
+		
+		}
+		
+	
+	
+	</script>
+</head>
+<body>
+	<h1>Match references using reconciliation service</h1>
+	<p>Tool to explore BioStor's <a href="reconcile">reconciliation service</a>. This service is based on the Freebase 
+	reconciliation service used by tool such as OpenRefine, see <a href="https://github.com/OpenRefine/OpenRefine/wiki/Reconciliation-Service-API">Reconciliation Service API</a>.
+	To use this tool, paste references, one per line into the box below, click "Reconcile" and 
+	the service will attempt to match those references to records in BioStor.</p>
+	
+	<!--
+	<div>
+		<h2>Single query</h2>
+		<input type="text" id="query" value="Romero et al. 2009. The hypogean fihes of China. Environmental Biology of Fishes 86:211-278" placeholder="string" style="width:80%;font-size:1.5em;">
+		<button onclick="reconcile_one();"></button>	
+		
+		<div id="result"></div>
+	</div>
+	-->
+	
+	<div>
+		<h2>Enter references, one per line</h2>
+		<textarea  id="multiple" rows="10" style="width:100%;font-size:1em;">
+Strand, E. 1912. Ein neueres Werk über afrikanische Bienen kritisch besprochen. Archiv für Naturgeschichte 78: 126-144
+Strand, E. 1913. Bestimmungstabelle nebst weiteren Beiträgen zur Kenntnis afrikanischer Nomia-Arten. Archiv für Naturgeschichte A79: 121-144
+Michener, C.D. 1978. The parasitic groups of Halictidae (Hymenoptera, Apoidea). The University of Kansas Science Bulletin 51: 291-339
+Michener, C.D. and T.L. Griswold. 1994. The classification of Old World Anthidiini (Hymenoptera, Megachilidae). The University of Kansas Science Bulletin 55: 299-327
+		</textarea>
+		<br />
+		<button style="font-size:1.5em;" onclick="reconcile_many();">Match</button>	
+		<hr />
+		<div>
+			<div id="json_query" style="background:rgb(64,64,64);color:rgb(200,200,200);width:48%;float:left;font-size:12px;height:200px;overflow:auto;white-space:pre;border: 1px solid rgb(192,192,192)"></div>
+		
+			<div id="json_result" style="background:rgb(64,64,64);color:rgb(200,200,200);width:48%;float:right;font-size:12px;height:200px;overflow:auto;white-space:pre;border: 1px solid rgb(192,192,192)"></div>
+		</div>
+		<div style="clear:both;"></div>
+		<div id="results"></div>
+	
+	</div>
+	
+	
+</body>
+</html>

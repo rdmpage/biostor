@@ -1561,7 +1561,8 @@ function display_labs()
 	echo '<p>This is a playground for various ideas.</p>';
 	
 	echo '<ul>';
-	echo '<a href="bhl-couchdb/?q=Serinus mozambicus">BHL CouchDB full-text indexing</a></li>';
+	echo '<li><a href="bhl-couchdb/?q=Serinus mozambicus">BHL CouchDB full-text indexing</a></li>';
+	echo '<li><a href="match.html">Match references using reconcile service</a></li>';
 	echo '</ul>';
 	echo '</div>';
 

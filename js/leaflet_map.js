@@ -1,3 +1,4 @@
+        /*
         var map = L.map('map').setView([0, 0], 2);
         mapLink = 
             '<a href="http://openstreetmap.org">OpenStreetMap</a>';
@@ -6,6 +7,21 @@
             attribution: '&copy; ' + mapLink + ' Contributors',
             maxZoom: 20,
             }).addTo(map);
+        */
+        
+    	var biostorAttrib='BioStor';
+		var biostor = new L.TileLayer('api_tile.php?x={x}&y={y}&z={z}', 
+		{minZoom: 0, maxZoom: 14, attribution: biostorAttrib});
+        
+        
+		var minimal = new L.StamenTileLayer("terrain");
+    
+    	var map = L.map('map', {
+			center: [0, 0],
+			zoom: 1,
+			maxZoom: 20,
+			layers: [minimal,biostor]
+		});
             
             
  

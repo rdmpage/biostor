@@ -201,11 +201,43 @@ function display_articles_year ($namespace, $value, $year, $callback = '')
 		else
 		{	
 			$obj->status = 200;
+			
+			$keys_volume = array();
+			$keys_page = array();
+			
 			$obj->articles = array();
 			foreach ($response_obj->rows as $row)
 			{
 				$obj->articles[] = $row->doc;
-			}	
+				
+				// volume
+				$volume = 0;
+				if (isset($row->doc->journal->volume))
+				{
+					$volume = $row->doc->journal->volume;
+				}
+				$keys_volume[] = $volume;
+				
+				// spage
+				$spage = 0;
+				if (isset($row->doc->journal->pages))
+				{
+					if (preg_match('/^(?<spage>.*)--(?<epage>.*)/', $row->doc->journal->pages, $m))
+					{
+						$spage = $m['spage'];
+					}
+					else
+					{
+						$spage = $row->doc->journal->pages;
+					}
+				}
+				$keys_page[] = $spage;
+			}
+			
+			// sort 
+			array_multisort($obj->articles, 
+				SORT_ASC, SORT_NUMERIC, $keys_volume,
+				SORT_ASC, SORT_NUMERIC, $keys_page);
 		}
 	}
 	

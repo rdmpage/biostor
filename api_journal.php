@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 // journal
 
 require_once (dirname(__FILE__) . '/couchsimple.php');
@@ -146,6 +148,77 @@ function display_decade_volumes ($namespace, $value, $callback = '')
 	api_output($obj, $callback);
 }
 
+//----------------------------------------------------------------------------------------
+function cmp($a, $b)
+{
+	$result = 0;
+	
+	$volume_a = 0;
+	$volume_b = 0;
+	
+	if (isset($a->journal->volume))
+	{
+		$volume_a = $a->journal->volume;
+	}
+
+	if (isset($b->journal->volume))
+	{
+		$volume_b = $b->journal->volume;
+	}
+	
+	if ($volume_a == $volume_b)
+	{
+		$result = 0;
+	}
+	else
+	{
+		$result = ($volume_a < $volume_b) ? -1 : 1;
+	}
+	
+	if ($result == 0)
+	{			
+		// spage
+		$spage_a = 0;
+		$spage_b = 0;
+		
+		if (isset($a->journal->pages))
+		{
+			if (preg_match('/^(?<spage>.*)--(?<epage>.*)/', $a->journal->pages, $m))
+			{
+				$spage_a = $m['spage'];
+			}
+			else
+			{
+				$spage_a = $a->journal->pages;
+			}
+		}
+
+		if (isset($b->journal->pages))
+		{
+			if (preg_match('/^(?<spage>.*)--(?<epage>.*)/', $b->journal->pages, $m))
+			{
+				$spage_b = $m['spage'];
+			}
+			else
+			{
+				$spage_b = $b->journal->pages;
+			}
+		}
+		
+		if ($spage_a == $spage_b)
+		{
+			$result = 0;
+		}
+		else
+		{
+			$result = ($spage_a < $spage_b) ? -1 : 1;
+		}
+		
+	}
+	
+	return $result;
+}
+
 
 //--------------------------------------------------------------------------------------------------
 // Journal articles for a given journal and year
@@ -202,42 +275,14 @@ function display_articles_year ($namespace, $value, $year, $callback = '')
 		{	
 			$obj->status = 200;
 			
-			$keys_volume = array();
-			$keys_page = array();
-			
 			$obj->articles = array();
 			foreach ($response_obj->rows as $row)
 			{
 				$obj->articles[] = $row->doc;
-				
-				// volume
-				$volume = 0;
-				if (isset($row->doc->journal->volume))
-				{
-					$volume = $row->doc->journal->volume;
-				}
-				$keys_volume[] = $volume;
-				
-				// spage
-				$spage = 0;
-				if (isset($row->doc->journal->pages))
-				{
-					if (preg_match('/^(?<spage>.*)--(?<epage>.*)/', $row->doc->journal->pages, $m))
-					{
-						$spage = $m['spage'];
-					}
-					else
-					{
-						$spage = $row->doc->journal->pages;
-					}
-				}
-				$keys_page[] = $spage;
 			}
 			
 			// sort 
-			array_multisort($obj->articles, 
-				SORT_ASC, SORT_NUMERIC, $keys_volume,
-				SORT_ASC, SORT_NUMERIC, $keys_page);
+			usort($obj->articles, "cmp");
 		}
 	}
 	

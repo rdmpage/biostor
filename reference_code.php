@@ -566,6 +566,8 @@ function reference_to_ris($reference)
 function reference_to_google_scholar($reference)
 {
 	$meta = '';
+	
+	$dc_meta = '';
 
 	// Google Scholar
 	$meta .= "\n<!-- Google Scholar metadata -->\n";
@@ -625,6 +627,9 @@ function reference_to_google_scholar($reference)
 			{
 				case 'doi':
 					$meta .= '<meta name="citation_doi" content="' . $identifier->id . '" />' . "\n";
+
+					// Dublin Core
+					$dc_meta .= '<meta name="dc.identifier" content="' . $identifier->id . '" />' . "\n";
 					break;
 				
 				default:
@@ -655,6 +660,12 @@ function reference_to_google_scholar($reference)
 	//$meta .= '<meta name="citation_abstract_html_url" content="http://bionames.org/references/' . $doc->_id . '" />' . "\n";
 	//$meta .= '<meta name="citation_fulltext_html_url" content="' . $config['web_root'] . 'reference/' . $reference->reference_id . '" />' . "\n";
 	//$meta .= '<meta name="citation_pdf_url" content="' . $config['web_root'] . 'reference/' . $reference->reference_id . '.pdf" />' . "\n";
+	
+	// Dublin Core
+	$dc_meta .= '<meta name="dc.identifier" content="http://biostor.org/reference/' . str_replace('biostor/', '', $reference->_id) . '" />' . "\n";
+	
+	
+	$meta .= "\n" . $dc_meta;
 
 	return $meta;
 }

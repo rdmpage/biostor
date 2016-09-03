@@ -31,7 +31,7 @@
 		<xsl:comment>Scanned image</xsl:comment>
 		<img>
 			<xsl:attribute name="src">
-				<xsl:value-of select="$imageUrl" />
+				<xsl:value-of select="$imageUrl"></xsl:value-of>
 			</xsl:attribute> 
 			<xsl:attribute name="style">
 				<xsl:variable name="height" select="@height" />

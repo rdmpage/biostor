@@ -812,6 +812,14 @@ function display_record($id, $page = 0)
 				{
 					$image_url = 'http://exeg5le.cloudimg.io/s/height/100/' . $image_url;
 				}		
+
+				if ($config['use_weserv'])
+				{
+					$image_url = 'https://images.weserv.nl/?url=' . str_replace('http://', '', $image_url);
+				}		
+				
+				$config['']		= false; // if true use https://images.weserv.nl/
+
 			}
 			else
 			{
@@ -956,6 +964,12 @@ function display_record($id, $page = 0)
 				{
 					$image_url = 'http://exeg5le.cloudimg.io/s/width/700/' . $image_url;
 				}
+				
+				if ($config['use_weserv'])
+				{
+					$image_url = 'https://images.weserv.nl/?url=' . str_replace('http://', '', $image_url);
+				}		
+				
 			}
 			else
 			{

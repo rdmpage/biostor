@@ -202,6 +202,17 @@ function display_one_page_html ($PageID, $format =  'html', $callback = '')
 		if ($config['image_source'] == 'bhl')
 		{
 			$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500"';	
+			
+			if ($config['use_cloudimage'])
+			{
+				$image_url = 'http://exeg5le.cloudimg.io/s/width/700/' . $image_url;
+			}
+			
+			if ($config['use_weserv'])
+			{
+				$image_url = 'https://images.weserv.nl/?url=' . str_replace('http://', '', $image_url);
+			}		
+			
 		}
 		else
 		{

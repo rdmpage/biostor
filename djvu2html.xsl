@@ -40,6 +40,7 @@
 				<xsl:text>width:</xsl:text><xsl:value-of select="$width * $scale" /><xsl:text>px;</xsl:text>
 				<xsl:text>height:</xsl:text><xsl:value-of select="$height * $scale" /><xsl:text>px;</xsl:text>
 				<xsl:text>box-shadow:2px 2px 2px #ccc;</xsl:text>
+				<xsl:text>border:1px solid #ccc;</xsl:text>
 				<!-- prevent user dragging image -->
 				<xsl:text>-webkit-user-drag: none;-webkit-user-select: none;</xsl:text>
 			</xsl:attribute>

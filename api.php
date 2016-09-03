@@ -211,7 +211,6 @@ function display_one_page_html ($PageID, $format =  'html', $callback = '')
 			if ($config['use_weserv'])
 			{
 				$image_url = 'https://images.weserv.nl/?url=' . str_replace('http://', '', $image_url);
-				$image_url = preg_replace('/\s+$/', '', $image_url);
 			}		
 			
 		}

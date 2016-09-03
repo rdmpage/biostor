@@ -983,6 +983,9 @@ function display_record($id, $page = 0)
 			{
 				$page = json_decode($json);
 				$html = $page->html;
+				
+				// wierd bug with DjVu XML and image cache
+				$html = preg_replace('/,500,500%20"/u', ',500,500"', $html);
 			}
 			
 			if ($html == '')

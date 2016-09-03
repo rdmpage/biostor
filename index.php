@@ -817,8 +817,6 @@ function display_record($id, $page = 0)
 				{
 					$image_url = 'https://images.weserv.nl/?url=' . str_replace('http://', '', $image_url);
 				}		
-				
-				$config['']		= false; // if true use https://images.weserv.nl/
 
 			}
 			else
@@ -989,7 +987,7 @@ function display_record($id, $page = 0)
 			
 			if ($html == '')
 			{
-				$html = '<img width="700" style="box-shadow:2px 2px 2px #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';				
+				$html = '<img width="700" style="box-shadow:2px 2px 2px #ccc;border:1px solid #ccc;-webkit-user-drag: none;-webkit-user-select: none;" src="' . $image_url . '" />';				
 			}
 
 			echo '<div class="col-md-2"></div>';

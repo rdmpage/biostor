@@ -820,7 +820,7 @@ function display_record($id, $page = 0)
 
 				if ($config['use_image_proxy'])
 				{
-					$image_url = 'http://biostor/page/image/' . $PageID . '-small.jpg';
+					$image_url = $config['web_root'] . 'page/image/' . $PageID . '-small.jpg';
 				}		
 			}
 			else
@@ -974,7 +974,7 @@ function display_record($id, $page = 0)
 				
 				if ($config['use_image_proxy'])
 				{
-					$image_url = 'http://biostor/page/image/' . $PageID . '-normal.jpg';
+					$image_url = $config['web_root'] . 'page/image/'  . $PageID . '-normal.jpg';
 				}				
 				
 			}

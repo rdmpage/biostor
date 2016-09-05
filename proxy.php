@@ -2,7 +2,10 @@
 
 error_reporting(E_ALL);
 
-
+/*
+Based on https://github.com/andrieslouw/imagesweserv, enables images to be treated as static
+files and hence get cached by CloudFlare.
+*/
 
 $img_data = '';
 
@@ -77,6 +80,8 @@ function create_image($path){
 				case IMAGETYPE_JPEG:
 					$img_data['exif'] = @exif_read_data($fname);
 					$gd_stream = imagecreatefromjpeg($fname);
+					// make progressive
+					imageinterlace($gd_stream, true);
 				break;
 				
 				case IMAGETYPE_GIF:

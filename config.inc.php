@@ -14,7 +14,7 @@ global $config;
 // Date timezone
 date_default_timezone_set('UTC');
 
-//$site = 'local';
+$site = 'local';
 //$site = 'biostor';
 $site = 'pagoda';
 

@@ -818,6 +818,10 @@ function display_record($id, $page = 0)
 					$image_url = 'https://images.weserv.nl/?url=' . str_replace('http://', '', $image_url);
 				}		
 
+				if ($config['use_image_proxy'])
+				{
+					$image_url = 'http://biostor/page/image/' . $PageID . '-small.jpg';
+				}		
 			}
 			else
 			{
@@ -966,7 +970,12 @@ function display_record($id, $page = 0)
 				if ($config['use_weserv'])
 				{
 					$image_url = 'https://images.weserv.nl/?url=' . str_replace('http://', '', $image_url);
-				}		
+				}
+				
+				if ($config['use_image_proxy'])
+				{
+					$image_url = 'http://biostor/page/image/' . $PageID . '-normal.jpg';
+				}				
 				
 			}
 			else

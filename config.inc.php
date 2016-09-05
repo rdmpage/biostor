@@ -80,6 +80,7 @@ $config['image_source']		= 'bhl'; // bhl to use remote images, biostor for local
 // Image caching--------------------------------------------------------------------------
 $config['use_cloudimage']	= false; // if true use https://cloudimage.io/
 $config['use_weserv']		= false; // if true use https://images.weserv.nl/
+$config['use_image_proxy']	= true; // if true use https://images.weserv.nl/
 
 
 // Memcache-------------------------------------------------------------------------------

@@ -1,5 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/rdmpage/biostor.png?label=ready&title=Ready)](https://waffle.io/rdmpage/biostor)
 # biostor
+
+[![Stories in Ready](https://badge.waffle.io/rdmpage/biostor.png?label=ready&title=Ready)](https://waffle.io/rdmpage/biostor)
+
+[![Throughput Graph](https://graphs.waffle.io/rdmpage/biostor/throughput.svg)](https://waffle.io/rdmpage/biostor/metrics/throughput)
 
 [![Join the chat at https://gitter.im/biostor/Lobby](https://badges.gitter.im/biostor/Lobby.svg)](https://gitter.im/biostor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 

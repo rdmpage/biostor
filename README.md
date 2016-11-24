@@ -37,3 +37,4 @@ curl http://localhost:5984/_replicate -H ‘Content-Type: application/json’ -d
 ## Image proxy
 
 BioStor uses CloudFlare http://cloudflare.com to provide caching, and by default CloudFlare doesn’t cache images that with dynamic URLs (i.e., it expects a URL to have a file extension). I’ve borrowed heavily from https://github.com/andrieslouw/imagesweserv to create an image proxy that fetches images from BHL, then outputs them such that CloudFlare will treat them as static images and cache them.
+

@@ -100,6 +100,45 @@ function bhl_item_from_ia($ia)
 }
 
 //----------------------------------------------------------------------------------------
+function bhl_item_from_pageid($PageID)
+{
+	$ItemID = 0;
+	
+	$parameters = array(
+		'op' => 'GetPageMetadata',
+		'pageid' => $PageID,
+		'ocr' => 'false',
+		'names' => 'false',
+		'format' => 'json',
+		'apikey' => '0d4f0303-712e-49e0-92c5-2113a5959159'
+	);
+
+	$url = 'http://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
+	
+	//echo $url . "\n";
+	
+	$json = get($url);
+	
+	//echo $json;
+
+	if ($json != '')
+	{
+		$obj = json_decode($json);
+		
+		//print_r($obj);
+			
+		if ($obj->Status == 'ok')
+		{
+			$ItemID = $obj->Result->ItemID;
+		}
+	}	
+	
+	//echo "ItemID=$ItemID\n";
+
+	return $ItemID;
+}
+
+//----------------------------------------------------------------------------------------
 // Get BHL PageID from a IA URL
 // e.g. $url = 'http://www.archive.org/stream/deutscheentomolo121899gese#page/218/mode/2up'
 // Note that if IA URL has a mode such as 2up, the target may be either the left or right page,
@@ -161,15 +200,31 @@ function bhl_page_from_bhl_url($url)
 		$page_number = $m['page'];
 	}
 
+	// Link to BHL item with page offset
 	if (preg_match('/http:\/\/(www\.)?biodiversitylibrary.org\/item\/(?<item>\d+)#(?<page>\d+)/', $url, $m))
 	{
 		//print_r($m);
 		$ItemID = $m['item'];
-		$page_number = $m['page'] + 1;
+		$page_number = $m['page'];
+	}
+
+	// Link to BHL page with page offset
+	// http://www.biodiversitylibrary.org/page/15733891%23page/417/mode/1up
+	if (preg_match('/http:\/\/(www\.)?biodiversitylibrary.org\/page\/(?<pageid>\d+)#page\/(?<page>\d+)(\/mode\/\d+up)?/', $url, $m))
+	{
+		//print_r($m);
+		$ItemID = bhl_item_from_pageid($m['pageid']);
+		
+		if ($ItemID != 0)
+		{
+			$page_number = $m['page'] + 1;
+		}
 	}
 	
+	
+	
 	// Link to BHL page using PageID, just extract the PageID
-	if (preg_match('/http:\/\/(www\.)?biodiversitylibrary.org\/page\/(?<page>\d+)/', $url, $m))
+	if (preg_match('/http:\/\/(www\.)?biodiversitylibrary.org\/page\/(?<page>\d+)$/', $url, $m))
 	{
 		$PageID = $m['page'];
 	}

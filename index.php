@@ -1196,6 +1196,7 @@ echo '<nav class="navbar navbar-default navbar-fixed-top">
         <li><a href="images">Images</a></li>
         <li><a href="map">Map</a></li>
         <li><a href="labs">Labs</a></li>
+        <li><a href="https://github.com/rdmpage/biostor/blob/master/api-doc.md">API</a></li>
       </ul>
     </div>
   </div>

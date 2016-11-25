@@ -86,6 +86,10 @@ RewriteRule ^reconcile(.*)	api_reconciliation.php$1
 # Image caching
 RewriteRule ^page/image/(\d+)-(.*).jpg	proxy.php?PageID=$1&size=$2
 
+#-----------------------------------------------------------------------------------------
+# PDF caching and viewing
+RewriteRule ^pdf/(.*)	pdfproxy.php?url=$1
+
 
 
 

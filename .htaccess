@@ -88,7 +88,9 @@ RewriteRule ^page/image/(\d+)-(.*).jpg	proxy.php?PageID=$1&size=$2
 
 #-----------------------------------------------------------------------------------------
 # PDF caching and viewing
-RewriteRule ^pdf/(.*)	pdfproxy.php?url=$1
+# Mod rewrite seems to strip one of the forward slashes after the http[s] protocol, so
+# we put it back here.
+RewriteRule ^pdf/(http[s]?:)(.*)	pdfproxy.php?url=$1/$2
 
 
 

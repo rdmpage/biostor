@@ -847,8 +847,15 @@ function display_record($id, $page = 0)
 		$pdf_url = 'https://archive.org/download/' . str_replace('biostor/', 'biostor-', $id) . '/' . str_replace('biostor/', 'biostor-', $id) . '.pdf';
 		if (head($pdf_url))
 		{
+			$cached_pdf_url = $config['web_server'] . $config['web_root']. 'pdf/' . $pdf_url;
+			
+			$pdf_viewer_url = 'vendor/pdf.js-hypothes.is/viewer/web/viewer.html?file=' . urlencode($cached_pdf_url);
+		
+		
 			echo '<div class="row">';
 			echo '<a class="btn btn-info" href="' . $pdf_url . '" onClick="_gaq.push([\'_trackEvent\', \'Export\', \'pdf\', \'' . str_replace('biostor/', 'biostor-', $id) . '\', 0]);">Download PDF</a>';
+			echo '<br />';
+			echo '<a class="btn btn-warning" href="' . $pdf_viewer_url . '" onClick="_gaq.push([\'_trackEvent\', \'View\', \'pdf\', \'' . str_replace('biostor/', 'biostor-', $id) . '\', 0]);">View PDF</a>';
 			echo '</div>';
 		}
 			

@@ -40,6 +40,7 @@ function download_file($path,$fname){
 			header('X-Robots-Tag: none');
 			header('X-Gone-Reason: Hostname not in DNS or blocked by policy');
 			echo 'Error 410: Server could parse the ?url= that you were looking for "' . $path . '", because the hostname of the origin is unresolvable (DNS) or blocked by policy.';
+			echo 'Error: $error';
 			die;
 		}
 		

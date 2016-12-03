@@ -269,6 +269,7 @@ function display_search ($q, $bookmark = '', $callback = '')
 				'highlight_post_tag'=> '"</span>"',
 				'highlight_number'	=> 5,
 				'include_docs' 		=> 'true',
+				'counts' 			=> '["publication","year","author","type"]',
 				'limit' 			=> $rows_per_page
 			);
 			

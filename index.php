@@ -1043,17 +1043,55 @@ function display_search($q, $bookmark = '')
 	
 	$rows_per_page = 10;
 	
-	// Author-specific stuff
-	$author_search = false;
-	$lastname = $firstname = '';
-	if (preg_match('/^author:/', $q))
+	
+	// Parse query
+	
+	$query = array();
+	$query['q'] = $q;
+	
+	$matched = false;
+	
+	if (!$matched)
 	{
-		$author_search = true;
+		if (preg_match('/(?<q>author:"(?<author>.*)")\s+AND\s+year:"(?<year>[0-9]{4})"/u', $q, $m))
+		{
+			$query['q'] = $m['q'];
+			$query['author'] = $m['author'];
+			$query['year'] = $m['year'];
+			$matched = true;
+		}
+	}
+
+	if (!$matched)
+	{
+		if (preg_match('/(?<q>author:"(?<author>.*)")/u', $q, $m))
+		{
+			$query['q'] = $m['q'];
+			$query['author'] = $m['author'];
+			$matched = true;
+		}
+	}
+	
+	if (!$matched)
+	{
+		if (preg_match('/(?<q>.*)\s+AND\s+year:"(?<year>[0-9]{4})"/u', $q, $m))
+		{
+			$query['q'] = $m['q'];
+			$query['year'] = $m['year'];
+			$matched = true;
+		}
+	}
+	
+	
+	//print_r($query);
+	
+	// Author-specific stuff
+	if (isset($query['author']))
+	{
+		$lastname = $firstname = '';
 		
 		// parse author name
-		$authorstring = preg_replace('/^author:"/u', '', $q);
-		$authorstring = preg_replace('/"$/u', '', $authorstring);
-		$parts = parse_name($authorstring);
+		$parts = parse_name($query['author']);
 		if (isset($parts['last']))
 		{
 			$lastname = $parts['last'];		
@@ -1086,9 +1124,6 @@ function display_search($q, $bookmark = '')
 			});
 		}
 	</script>';
-	
-	
-	
 	
 	display_html_start('Search results', '', $script);
 	display_navbar(htmlentities($q));	
@@ -1157,11 +1192,39 @@ function display_search($q, $bookmark = '')
 	
 	// Put furthe rinfo about results here...
 	echo '	 <div class="col-md-4">' . "\n";
-	echo '.';
+	echo '      <div id="query_suggest"></div>' . "\n";	
 	
-	//echo $firstname . '|' . $lastname . '<br />';
-	
-	echo '<div id="query_suggest"></div>' . "\n";
+	if (isset($obj->counts))
+	{
+		if (isset($obj->counts->year))
+		{
+			echo 	'<h4>Year</h4>';
+			echo '<ul class="nav nav-list">';
+			
+			foreach ($obj->counts->year as $year => $count)
+			{
+				echo '<li>';
+				
+				if (isset($query['year']) && ($query['year'] == $year))
+				{
+					echo '<a href="search/' . urlencode($query['q']) . '">';
+					echo '<i class="glyphicon glyphicon-check"></i>';				
+				}
+				else
+				{
+					echo '<a style="padding:2px;" href="search/' . urlencode($query['q'] . ' AND year:"' . $year . '"') . '">';
+					echo '<i class="glyphicon glyphicon-unchecked"></i>';
+				}
+				
+//				echo  $year . ' (' . $count . ')';
+				echo  $year . ' <span class="badge">' . $count . '</span>';
+				echo '</a>';
+				echo '</li>';
+			}
+			
+			echo '</ul>';	
+		}
+	}
 	
 	echo '   </div>';
 	
@@ -1169,7 +1232,7 @@ function display_search($q, $bookmark = '')
 	echo '  </div>';
 	echo '</div>';
 	
-	if ($author_search)
+	if (isset($query['author']))
 	{
 		echo '<script>';
 		echo 'show_similar_authors("' . addcslashes($lastname, '"') . '","' . addcslashes($firstname, '"') . '");';

@@ -1658,6 +1658,7 @@ function display_labs()
 	echo '<ul>';
 	echo '<li><a href="bhl-couchdb/?q=Serinus mozambicus">BHL CouchDB full-text indexing</a></li>';
 	echo '<li><a href="match.html">Match references using reconcile service</a></li>';
+	echo '<li><a href="timeline.php?q=Aspidoscelis costata, Cnemidophorus costatus">Timeline of name in BHL</a></li>';
 	echo '</ul>';
 	echo '</div>';
 

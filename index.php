@@ -669,16 +669,14 @@ function display_record($id, $page = 0)
 	global $config;
 	global $couch;
 	
-	/*
 	echo '<pre>';
 	print_r($_SERVER);
 	echo '</pre>';
-	*/
 	
 	if ($page == 0)
 	{
 		$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'], json_encode($_SERVER));	
-		$response_obj = json_decode($resp);
+		var_dump($resp);
 	}
 	
 	$reference = null;

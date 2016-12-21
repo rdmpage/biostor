@@ -669,6 +669,21 @@ function display_record($id, $page = 0)
 	global $config;
 	global $couch;
 	
+	echo '<pre>';
+	print_r($_SERVER);
+	echo '</pre>';
+	
+	if ($page == 0)
+	{
+		// Remove any extraneous keys inserted by hosting environment
+		if (isset($_SERVER['_']))
+		{
+			unset($_SERVER['_']);
+		}
+		$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'], json_encode($_SERVER));	
+		var_dump($resp);
+	}
+	
 	$reference = null;
 	
 	// API call
@@ -1658,6 +1673,7 @@ function display_labs()
 	echo '<ul>';
 	echo '<li><a href="bhl-couchdb/?q=Serinus mozambicus">BHL CouchDB full-text indexing</a></li>';
 	echo '<li><a href="match.html">Match references using reconcile service</a></li>';
+	echo '<li><a href="timeline.php?q=Aspidoscelis costata, Cnemidophorus costatus">Timeline of name in BHL</a></li>';
 	echo '</ul>';
 	echo '</div>';
 

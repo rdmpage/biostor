@@ -683,7 +683,8 @@ function display_record($id, $page = 0)
 		{
 			unset($_SERVER['_']);
 		}
-		$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'], json_encode($_SERVER));	
+		// comment out to stop logging
+		//$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'], json_encode($_SERVER));	
 		//var_dump($resp);
 	}
 	

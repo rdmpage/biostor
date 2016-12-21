@@ -14,7 +14,7 @@ global $config;
 // Date timezone
 date_default_timezone_set('UTC');
 
-$site = 'local';
+//$site = 'local';
 //$site = 'biostor';
 $site = 'pagoda';
 
@@ -110,17 +110,16 @@ switch ($site)
 		break;
 		
 	case 'local':
-	default:	
-		/*
 		// local
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
 				'host' => 'localhost',
 				'port' => 5984,
 				'prefix' => 'http://'
-				);		
-		*/
-	
+				);			
+		break;
+		
+	default:
 		// Cloudant
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',

@@ -32,7 +32,9 @@ function display_view_counter($id, $callback = '')
 	$startkey = array($id);
 	$endkey = array($id, 'z'); //mb_convert_encoding('&#xfff0;', 'UTF-8', 'HTML-ENTITIES'));
 
-	$url = '_design/counter/_view/views?startkey=' . json_encode($startkey) . '&endkey=' . json_encode($endkey);// . '&group_level=2';	
+	// We count the number of distinct IP addresses that have visited this page
+
+	$url = '_design/counter/_view/views?startkey=' . json_encode($startkey) . '&endkey=' . json_encode($endkey) . '&group_level=2';	
 	
 	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
 	
@@ -62,10 +64,7 @@ function display_view_counter($id, $callback = '')
 			
 			$obj->results = array();
 			
-			foreach ($response_obj->rows as $row)
-			{
-				$obj->results[] = $row->value;
-			}	
+			$obj->results[] = count($response_obj->rows);
 		}
 	}
 	

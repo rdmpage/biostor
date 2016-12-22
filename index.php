@@ -684,7 +684,7 @@ function display_record($id, $page = 0)
 			unset($_SERVER['_']);
 		}
 		// comment out to stop logging
-		//$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'], json_encode($_SERVER));	
+		$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'], json_encode($_SERVER));	
 		//var_dump($resp);
 	}
 	
@@ -894,7 +894,13 @@ function display_record($id, $page = 0)
 		echo '</div>';
 	
 		/* echo '<textarea id="citation" style="font-size:10px;" rows="6" readonly></textarea>'; */
-			
+		
+		
+		// view counts
+		echo '<div class="row">';
+		echo '<div id="view_counter"></div>';
+		echo '</div>';
+		
 		echo '<div class="row">';
 		// altmetric badge
 		$data_string = altmetric_data_string($reference);
@@ -1046,9 +1052,19 @@ function display_record($id, $page = 0)
 	echo '</div>'; // row
 	echo '</div>'; // container
 	
-
-	
-	
+	$script .= '<script>
+		function show_view_count() {
+			$.getJSON("api_counter.php?id=' . $id . '&callback=?",
+				function(data){
+				  if (data.results) {
+				    var html = \'Views <span class="badge badge-important">\' + data.results[0] + \'</span>\';
+					$("#view_counter").html(html);
+				}
+			});
+		}
+		show_view_count();
+	</script>';	
+	echo $script;
 	
 	display_html_end();	
 }

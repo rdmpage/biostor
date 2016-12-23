@@ -676,18 +676,21 @@ function display_record($id, $page = 0)
 		echo '</pre>';
 	}
 	
-	if ($page == 0)
+	if ($config['use_view_counter'])
 	{
-		// Remove any extraneous keys inserted by hosting environment
-		if (isset($_SERVER['_']))
+		if ($page == 0)
 		{
-			unset($_SERVER['_']);
+			// Remove any extraneous keys inserted by hosting environment
+			if (isset($_SERVER['_']))
+			{
+				unset($_SERVER['_']);
+			}
+			// comment out to stop logging
+			$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'], json_encode($_SERVER));	
+			//var_dump($resp);
 		}
-		// comment out to stop logging
-		$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'], json_encode($_SERVER));	
-		//var_dump($resp);
 	}
-	
+		
 	$reference = null;
 	
 	// API call
@@ -897,10 +900,13 @@ function display_record($id, $page = 0)
 		
 		
 		// view counts
-		echo '<div class="row">';
-		echo '<div id="view_counter"></div>';
-		echo '</div>';
-		
+		if ($config['use_view_counter'])
+		{
+			echo '<div class="row">';
+			echo '<div id="view_counter"></div>';
+			echo '</div>';
+		}
+				
 		echo '<div class="row">';
 		// altmetric badge
 		$data_string = altmetric_data_string($reference);
@@ -951,7 +957,24 @@ function display_record($id, $page = 0)
 		echo '</div>';
 	
 		echo '</div>' . "\n"; // <div class="col-md-4">
-
+		
+		if ($config['use_view_counter'])
+		{
+			$script .= '<script>
+				function show_view_count() {
+					$.getJSON("api_counter.php?id=' . $id . '&callback=?",
+						function(data){
+						  if (data.results) {
+							var html = \'Views <span class="badge badge-important">\' + data.results[0] + \'</span>\';
+							$("#view_counter").html(html);
+						}
+					});
+				}
+				show_view_count();
+			</script>';	
+			echo $script;
+		}
+		
 	}
 	else
 	{
@@ -1052,19 +1075,6 @@ function display_record($id, $page = 0)
 	echo '</div>'; // row
 	echo '</div>'; // container
 	
-	$script .= '<script>
-		function show_view_count() {
-			$.getJSON("api_counter.php?id=' . $id . '&callback=?",
-				function(data){
-				  if (data.results) {
-				    var html = \'Views <span class="badge badge-important">\' + data.results[0] + \'</span>\';
-					$("#view_counter").html(html);
-				}
-			});
-		}
-		show_view_count();
-	</script>';	
-	echo $script;
 	
 	display_html_end();	
 }

@@ -82,6 +82,8 @@ $config['use_cloudimage']	= false; // if true use https://cloudimage.io/
 $config['use_weserv']		= false; // if true use https://images.weserv.nl/
 $config['use_image_proxy']	= true; // if true use https://images.weserv.nl/
 
+// View logging (requires writing to CouchDB and POSTs are expensive)
+$config['use_view_counter']	= false; // if true record and display number of article views
 
 // Memcache-------------------------------------------------------------------------------
 $memcache = false;

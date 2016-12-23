@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 
 require_once(dirname(__FILE__) . '/lib.php');
 
@@ -31,16 +33,83 @@ foreach ($queries as $q)
 	$url = 'http://direct.biostor.org/bhlapi_names.php?q=' . urlencode($q);
 	
 	$json = get($url);
-	if ($url != '')
+	if ($json != '')
 	{
 		$data[] = json_decode($json);
 	}
 }
 
+//print_r($data);
 
+$have_hits = true;
 
+if (count($data) == 0)
+{
+	$have_hits = false;
+}
+else
+{
+	$hit_count = 0;
+	foreach ($data as $d)
+	{
+		$hit_count += count($d->hits);
+	}
+	if ($hit_count == 0)
+	{
+		$have_hits = false;
+	}	
+}
 
+// Any hits?
+if (!$have_hits)
+{
+	// Nope
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <!-- base -->
+    <base href="<?php echo $config['web_root']; ?>" /><!--[if IE]></base><![endif]-->
+    <!-- favicon -->
+	<link href="static/biostor-shadow32x32.png" rel="icon" type="image/png">    
+    <!-- Boostrap -->
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+	<title>BHL timeline</title>
+	</head>
+<body>
+	<div class="container-fluid">
+	<div class="row">
+	<div class="col-md-12">
+  	<h1>BHL timeline</h1>
+  	
+<form class="form-inline">
+  <input type="text" placeholder="scientific name, scientific name" name="q" style="width:300px;" value="<?php echo join(", ", $queries); ?>">
+  <button type="submit" class="btn">Search BHL</button>
+  <span class="help-block">Enter one or more scientific names, separated by commas.</span>
+</form> 
+
+<div class="alert alert-error">
+<strong>No hits!</strong> Couldn't find names in BHL, please try another search.
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html> 	
+
+<?php
+	exit();
+}	
 
 $years = array();
 

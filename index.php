@@ -1170,6 +1170,59 @@ function display_search($q, $bookmark = '')
 		}
 	</script>';
 	
+	$sparql = 'SELECT *
+WHERE
+{
+  ?item rdfs:label "' . $query['author'] . '"@en .
+  ?article schema:about ?item .
+  ?article schema:isPartOf <https://species.wikimedia.org/> .
+  OPTIONAL {
+   ?item wdt:P213 ?isni .
+    }
+  OPTIONAL {
+   ?item wdt:P214 ?viaf .
+    }    
+  OPTIONAL {
+   ?item wdt:P18 ?image .
+    } 
+}';
+
+ $sparql = str_replace("\n", " ", $sparql);
+	
+	$script .= '<script>
+		function show_wikidata() {
+			$.getJSON("https://query.wikidata.org/bigdata/namespace/wdq/sparql?query=" + encodeURIComponent(\'' . $sparql . '\') + "",
+				function(data){
+				  if (data.results.bindings.length > 0) {
+				     var html = \'<h4>Wikidata</h4>\';
+				     
+				     if (data.results.bindings[0].item) {
+				       html += \'<a href="\' + data.results.bindings[0].item.value + \'" target="_new">Wikidata</a><br />\';
+				     }
+
+				     if (data.results.bindings[0].article) {
+				       html += \'<a href="\' + data.results.bindings[0].article.value + \'" target="_new">Wikispecies</a><br />\';
+				     }
+				     
+				     if (data.results.bindings[0].isni) {
+				       html += \'<a href="http://isni.org/?id=\' + data.results.bindings[0].isni.value.replace(/ /g, \'+\') + \'" target="_new">ISNI: \' + data.results.bindings[0].isni.value + \'</a><br />\';
+				     }
+				     if (data.results.bindings[0].viaf) {
+				       html += \'<a href="http://viaf.org/viaf/\' + data.results.bindings[0].viaf.value + \'" target="_new">VIAF: \' + data.results.bindings[0].viaf.value + \'</a><br />\';
+				     }
+				     
+				     
+				     if (data.results.bindings[0].image) {
+				       html += \'<img src="\' + data.results.bindings[0].image.value + \'" width="48" />\';
+				     }
+				     
+				     $("#wikidata").html(html);
+				  }
+			});
+		}
+	</script>';
+	
+	
 	display_html_start('Search results', '', $script);
 	display_navbar(htmlentities($q));	
 	
@@ -1235,9 +1288,10 @@ function display_search($q, $bookmark = '')
 	
 	echo '   </div>';
 	
-	// Put furthe rinfo about results here...
+	// Put further info about results here...
 	echo '	 <div class="col-md-4">' . "\n";
 	echo '      <div id="query_suggest"></div>' . "\n";	
+	echo '      <div id="wikidata"></div>' . "\n";	
 	
 	if (isset($obj->counts))
 	{
@@ -1281,6 +1335,7 @@ function display_search($q, $bookmark = '')
 	{
 		echo '<script>';
 		echo 'show_similar_authors("' . addcslashes($lastname, '"') . '","' . addcslashes($firstname, '"') . '");';
+		echo 'show_wikidata();';
 		echo '</script>';
 	}
 	
@@ -1473,6 +1528,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 //----------------------------------------------------------------------------------------
 function display_html_end()
 {
+	echo '<p/>'; // hack to put some space between content and footer
 	echo '<div class="panel panel-default" id="footer">
   <div class="panel-body">
     <p style="vertical-align: top">BioStor is built by <a href="https://twitter.com/rdmpage">@rdmpage</a>, code on <a href="https://github.com/rdmpage/biostor">github</a>. 

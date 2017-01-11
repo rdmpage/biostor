@@ -1186,6 +1186,15 @@ function display_search($q, $bookmark = '')
 	  OPTIONAL {
 	   ?item wdt:P18 ?image .
 		} 
+	  OPTIONAL {
+	   ?item wdt:P496 ?orcid .
+		} 		
+	  OPTIONAL {
+	   ?item wdt:P586 ?ipni .
+		} 
+	  OPTIONAL {
+	   ?item wdt:P2006 ?zoobank .
+		} 		
 	}';
 
 	 $sparql = str_replace("\n", " ", $sparql);
@@ -1211,10 +1220,23 @@ function display_search($q, $bookmark = '')
 						 if (data.results.bindings[0].viaf) {
 						   html += \'<a href="http://viaf.org/viaf/\' + data.results.bindings[0].viaf.value + \'" target="_new">VIAF: \' + data.results.bindings[0].viaf.value + \'</a><br />\';
 						 }
+						 
+						 if (data.results.bindings[0].orcid) {
+						   html += \'<a href="http://orcid.org/\' + data.results.bindings[0].orcid.value + \'" target="_new">ORCID: \' + data.results.bindings[0].orcid.value + \'</a><br />\';
+						 }
+						 
+						 
+						 
+						 if (data.results.bindings[0].ipni) {
+						   html += \'<a href="http://www.ipni.org/ipni/idAuthorSearch.do?id=\' + data.results.bindings[0].ipni.value + \'" target="_new">IPNI: \' + data.results.bindings[0].ipni.value + \'</a><br />\';
+						 }
+						 if (data.results.bindings[0].zoobank) {
+						   html += \'<a href="http://zoobank.org/Authors/\' + data.results.bindings[0].zoobank.value + \'" target="_new">ZooBank: \' + data.results.bindings[0].zoobank.value + \'</a><br />\';
+						 }
 					 
 					 
 						 if (data.results.bindings[0].image) {
-						   html += \'<img src="\' + data.results.bindings[0].image.value + \'" width="48" />\';
+						   html += \'<img src="\' + data.results.bindings[0].image.value + \'" width="64" />\';
 						 }
 					 
 						 $("#wikidata").html(html);

@@ -1130,6 +1130,8 @@ function display_search($q, $bookmark = '')
 	
 	//print_r($query);
 	
+	$script = '';
+	
 	// Author-specific stuff
 	if (isset($query['author']))
 	{
@@ -1150,78 +1152,77 @@ function display_search($q, $bookmark = '')
 				$firstname .= ' ' . $parts['middle'];
 			}
 		}	
+	
+		$script = '<script>
+			function show_similar_authors(lastname, firstname) {
+				$.getJSON("api_author.php?lastname=" + encodeURIComponent(lastname) + "&firstname=" + encodeURIComponent(firstname) + "&callback=?",
+					function(data){
+					  if (data.results.length > 0) {
+						 var html = \'<h4>Similar names</h4>\';
+						 html += \'<ul>\';
+						 for (var i in data.results) {
+							var name = data.results[i].name;
+							html += \'<li><a href="?q=author:&quot;\' + name + \'&quot;">\' + name + \'</a></li>\';
+						 }
+						 html += \'</ul>\';
+						 $("#query_suggest").html(html);
+					  }
+				});
+			}
+		</script>';
+	
+		$sparql = 'SELECT *
+	WHERE
+	{
+	  ?item rdfs:label "' . $query['author'] . '"@en .
+	  ?article schema:about ?item .
+	  ?article schema:isPartOf <https://species.wikimedia.org/> .
+	  OPTIONAL {
+	   ?item wdt:P213 ?isni .
+		}
+	  OPTIONAL {
+	   ?item wdt:P214 ?viaf .
+		}    
+	  OPTIONAL {
+	   ?item wdt:P18 ?image .
+		} 
+	}';
+
+	 $sparql = str_replace("\n", " ", $sparql);
+	
+		$script .= '<script>
+			function show_wikidata() {
+				$.getJSON("https://query.wikidata.org/bigdata/namespace/wdq/sparql?query=" + encodeURIComponent(\'' . $sparql . '\') + "",
+					function(data){
+					  if (data.results.bindings.length > 0) {
+						 var html = \'<h4>Wikidata</h4>\';
+					 
+						 if (data.results.bindings[0].item) {
+						   html += \'<a href="\' + data.results.bindings[0].item.value + \'" target="_new">Wikidata: \' + data.results.bindings[0].item.value.replace(/http:\/\/www.wikidata.org\/entity\//, "") + \'</a><br />\';
+						 }
+
+						 if (data.results.bindings[0].article) {
+						   html += \'<a href="\' + data.results.bindings[0].article.value + \'" target="_new">Wikispecies</a><br />\';
+						 }
+					 
+						 if (data.results.bindings[0].isni) {
+						   html += \'<a href="http://isni.org/isni/\' + data.results.bindings[0].isni.value.replace(/ /g, \'\') + \'" target="_new">ISNI: \' + data.results.bindings[0].isni.value + \'</a><br />\';
+						 }
+						 if (data.results.bindings[0].viaf) {
+						   html += \'<a href="http://viaf.org/viaf/\' + data.results.bindings[0].viaf.value + \'" target="_new">VIAF: \' + data.results.bindings[0].viaf.value + \'</a><br />\';
+						 }
+					 
+					 
+						 if (data.results.bindings[0].image) {
+						   html += \'<img src="\' + data.results.bindings[0].image.value + \'" width="48" />\';
+						 }
+					 
+						 $("#wikidata").html(html);
+					  }
+				});
+			}
+		</script>';
 	}
-	
-	$script = '<script>
-		function show_similar_authors(lastname, firstname) {
-			$.getJSON("api_author.php?lastname=" + encodeURIComponent(lastname) + "&firstname=" + encodeURIComponent(firstname) + "&callback=?",
-				function(data){
-				  if (data.results.length > 0) {
-				     var html = \'<h4>Similar names</h4>\';
-				     html += \'<ul>\';
-				     for (var i in data.results) {
-				        var name = data.results[i].name;
-				        html += \'<li><a href="?q=author:&quot;\' + name + \'&quot;">\' + name + \'</a></li>\';
-				     }
-				     html += \'</ul>\';
-				     $("#query_suggest").html(html);
-				  }
-			});
-		}
-	</script>';
-	
-	$sparql = 'SELECT *
-WHERE
-{
-  ?item rdfs:label "' . $query['author'] . '"@en .
-  ?article schema:about ?item .
-  ?article schema:isPartOf <https://species.wikimedia.org/> .
-  OPTIONAL {
-   ?item wdt:P213 ?isni .
-    }
-  OPTIONAL {
-   ?item wdt:P214 ?viaf .
-    }    
-  OPTIONAL {
-   ?item wdt:P18 ?image .
-    } 
-}';
-
- $sparql = str_replace("\n", " ", $sparql);
-	
-	$script .= '<script>
-		function show_wikidata() {
-			$.getJSON("https://query.wikidata.org/bigdata/namespace/wdq/sparql?query=" + encodeURIComponent(\'' . $sparql . '\') + "",
-				function(data){
-				  if (data.results.bindings.length > 0) {
-				     var html = \'<h4>Wikidata</h4>\';
-				     
-				     if (data.results.bindings[0].item) {
-				       html += \'<a href="\' + data.results.bindings[0].item.value + \'" target="_new">Wikidata</a><br />\';
-				     }
-
-				     if (data.results.bindings[0].article) {
-				       html += \'<a href="\' + data.results.bindings[0].article.value + \'" target="_new">Wikispecies</a><br />\';
-				     }
-				     
-				     if (data.results.bindings[0].isni) {
-				       html += \'<a href="http://isni.org/?id=\' + data.results.bindings[0].isni.value.replace(/ /g, \'+\') + \'" target="_new">ISNI: \' + data.results.bindings[0].isni.value + \'</a><br />\';
-				     }
-				     if (data.results.bindings[0].viaf) {
-				       html += \'<a href="http://viaf.org/viaf/\' + data.results.bindings[0].viaf.value + \'" target="_new">VIAF: \' + data.results.bindings[0].viaf.value + \'</a><br />\';
-				     }
-				     
-				     
-				     if (data.results.bindings[0].image) {
-				       html += \'<img src="\' + data.results.bindings[0].image.value + \'" width="48" />\';
-				     }
-				     
-				     $("#wikidata").html(html);
-				  }
-			});
-		}
-	</script>';
-	
 	
 	display_html_start('Search results', '', $script);
 	display_navbar(htmlentities($q));	

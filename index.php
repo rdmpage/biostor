@@ -1425,8 +1425,22 @@ function display_html_start($title = '', $meta = '', $script = '')
 	
 	echo '<!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="utf-8">
+<head>';
+
+	if ($config['show_ads'])
+	{
+		echo "\n";
+		echo '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-7354682617866492",
+    enable_page_level_ads: true
+  });
+</script>';
+		echo "\n";
+	}
+
+	echo '<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->
     
@@ -1570,7 +1584,7 @@ function display_html_start($title = '', $meta = '', $script = '')
 
 if ($config['show_ads'])
 {
-echo '<div class="row" style="border:1px solid rgb(228,228,228)">';
+echo '<div class="row">';
 echo '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- biostor-leaderboard -->
 <ins class="adsbygoogle"

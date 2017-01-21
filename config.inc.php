@@ -82,8 +82,15 @@ $config['use_cloudimage']	= false; // if true use https://cloudimage.io/
 $config['use_weserv']		= false; // if true use https://images.weserv.nl/
 $config['use_image_proxy']	= true; // if true use https://images.weserv.nl/
 
+// Logging--------------------------------------------------------------------------------
 // View logging (requires writing to CouchDB and POSTs are expensive)
 $config['use_view_counter']	= false; // if true record and display number of article views
+
+// Hypothesis--------------------------------------------------------------------------------
+$config['use_hypothesis'] = false; // if true display hypothesis annotation tools
+
+// Ads------------------------------------------------------------------------------------
+$config['show_ads']	= true; // if true display Google ads
 
 // Memcache-------------------------------------------------------------------------------
 $memcache = false;

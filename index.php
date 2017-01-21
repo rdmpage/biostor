@@ -880,6 +880,25 @@ function display_record($id, $page = 0)
 			echo '<a class="btn btn-warning" style="width:100%" href="' . $pdf_viewer_url . '" onClick="_gaq.push([\'_trackEvent\', \'View\', \'pdf\', \'' . str_replace('biostor/', 'biostor-', $id) . '\', 0]);">View PDF</a>';
 			echo '</div>';
 		}
+		
+		// ads
+		/*
+		if ($config['show_ads'])
+		{
+			echo '<div class="row" style="border:1px solid rgb(228,228,228)">';
+			echo '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- biostor-side-panel -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-7354682617866492"
+     data-ad-slot="4714332968"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>';
+			echo '</div>';
+		}
+		*/
+		
 			
 		// citation formatter
 		echo '<div class="row">';
@@ -895,6 +914,7 @@ function display_record($id, $page = 0)
 	
 		echo '<div id="citation" style=font-size:11px;"width:300px;height:100px;border:1px solid black;"><br/><br/><br/><br/><br/><br/></div>';
 		echo '</div>';
+		
 	
 		/* echo '<textarea id="citation" style="font-size:10px;" rows="6" readonly></textarea>'; */
 		
@@ -906,6 +926,8 @@ function display_record($id, $page = 0)
 			echo '<div id="view_counter"></div>';
 			echo '</div>';
 		}
+				
+				
 				
 		echo '<div class="row">';
 		// altmetric badge
@@ -1546,11 +1568,28 @@ function display_html_start($title = '', $meta = '', $script = '')
 	</head>
 <body style="padding-top:70px;padding-left:20px;padding-right:20px;padding-bottom:20px;">';
 
+if ($config['show_ads'])
+{
+echo '<div class="row" style="border:1px solid rgb(228,228,228)">';
+echo '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- biostor-leaderboard -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7354682617866492"
+     data-ad-slot="4574732162"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>';
+}
+echo '</div>';
+
 }
 
 //----------------------------------------------------------------------------------------
 function display_html_end()
 {
+	global $config;
+	
 	echo '<p/>'; // hack to put some space between content and footer
 	echo '<div class="panel panel-default" id="footer">
   <div class="panel-body">
@@ -1578,10 +1617,14 @@ function display_html_end()
 
 </script>\n";
 
-	echo '</body>
-	<!-- hypothes.is -->
-	<script defer async src="//hypothes.is/embed.js"></script>
-</html>';
+	echo '</body>';
+	
+	if ($config['use_hypothesis'])
+	{
+		echo '<!-- hypothes.is -->
+	<script defer async src="//hypothes.is/embed.js"></script>';
+	}
+echo '</html>';
 }
 
 

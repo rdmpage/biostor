@@ -90,7 +90,7 @@ $config['use_view_counter']	= false; // if true record and display number of art
 $config['use_hypothesis'] = false; // if true display hypothesis annotation tools
 
 // Ads------------------------------------------------------------------------------------
-$config['show_ads']	= true; // if true display Google ads
+$config['show_ads']	= false; // if true display Google ads
 
 // Memcache-------------------------------------------------------------------------------
 $memcache = false;

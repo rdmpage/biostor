@@ -1,6 +1,6 @@
 # BioStor API
 
-BioStor has a simple API which underpins the site. All results are returned in JSON format, with an HTTP status code in the field **status**. A value of 200 means the call returns a result, 404 means their are no results that match the query.
+BioStor has a simple API which underpins the site. By default results are returned in JSON format, with an HTTP status code in the field **status**. A value of 200 means the call returns a result, 404 means there are no results that match the query. Some calls may return plain text, TSV, or other formats.
 
 ## Individual records
 
@@ -80,3 +80,9 @@ BioStor supports the [Reconciliation Service API](https://github.com/OpenRefine/
 }
 ```
 A web interface to this service is available at http://biostor.org/match.html.
+
+## Article boundaries for BHL item
+
+Given an **ItemID** in BHL this API analyses the page numbering and suggests article boundaries. It returns a list of starting page, ending page, and BHL **PageID** for each article.
+
+The web interface is http://biostor.org/api_bhl/php?item=.

@@ -366,6 +366,59 @@ function display_images($callback = '')
 	api_output($obj, $callback);
 }
 
+
+//--------------------------------------------------------------------------------------------------
+// Citations extracted from OCR text
+function display_cites ($id, $callback = '')
+{
+	global $config;
+	global $couch;
+	
+	$url = '_design/jats/_view/cites?key=' . urlencode('"' . $id . '"');	
+
+	if ($config['stale'])
+	{
+		$url .= '&stale=ok';
+	}	
+	
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+	$response_obj = json_decode($resp);	
+	
+	$obj = new stdclass;
+	$obj->status = 404;
+	$obj->url = $url;
+	
+	if (isset($response_obj->error))
+	{
+		$obj->error = $response_obj->error;
+	}
+	else
+	{
+		if (count($response_obj->rows) == 0)
+		{
+			$obj->error = 'Not found';
+		}
+		else
+		{	
+			$obj->status = 200;
+			
+			// citations
+			$obj->cites = array();
+			foreach ($response_obj->rows as $row)
+			{
+				$obj->cites[(Integer)$row->value[0]] = $row->value[1];
+			}	
+			
+			// sort
+			ksort($obj->cites);
+			
+		}
+	}
+	
+	api_output($obj, $callback);	
+}
+
+
 //--------------------------------------------------------------------------------------------------
 function main()
 {
@@ -406,6 +459,14 @@ function main()
 					$handled = true;
 				}
 			}
+			
+			
+			if (isset($_GET['cites']))
+			{
+				display_cites($id, $callback);
+				$handled = true;
+			}
+			
 			
 			if (!$handled)
 			{

@@ -721,6 +721,26 @@ function display_record($id, $page = 0)
 		}
 	</script>';
 	
+	$script .= '<script>
+				function show_cites(id) {
+					$.getJSON("api.php?id=" + encodeURIComponent(id) + "&cites&callback=?",
+						function(data){
+						  if (data.cites) {
+							var html = "";
+							html += "<h4>Cites</h4>";
+							html += "<p>References automatically extracted from OCR text</p>"
+							html += "<ol>";
+							for (var i in data.cites) {
+								html += "<li>" + data.cites[i] + "</li>";
+							}
+							html += "</ol>";
+							$("#cites").html(html);
+						}
+					});
+				}
+				
+			</script>';	
+	
 	$meta = reference_to_google_scholar($reference);
 	
 	$canonical_url = $config['web_server'] . $config['web_root'] . 'reference/' . str_replace('biostor/', '', $id);
@@ -860,6 +880,11 @@ function display_record($id, $page = 0)
 		} 
 
 		echo '</div>';  
+		
+		// cites
+		echo '<div id="cites">';
+		echo '</div>';
+		
 		echo '</div>'; // <div class="col-md-8">
 
 		// tools, linked stuff, etc.
@@ -996,6 +1021,13 @@ function display_record($id, $page = 0)
 			</script>';	
 			echo $script;
 		}
+		
+		
+	
+		echo '<script>';
+		echo 'show_cites("' . $id . '");';
+		echo '</script>';
+		
 		
 	}
 	else

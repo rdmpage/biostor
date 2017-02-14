@@ -85,4 +85,4 @@ A web interface to this service is available at http://biostor.org/match.html.
 
 Given an **ItemID** in BHL this API analyses the page numbering and suggests article boundaries. It returns a list of starting page, ending page, and BHL **PageID** for each article.
 
-The web interface is http://biostor.org/api_bhl/php?item=.
+The web interface is http://biostor.org/api_bhl.php?item=.

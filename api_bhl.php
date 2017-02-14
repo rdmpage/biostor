@@ -13,6 +13,8 @@
 // So we can guess the page boundaries of an article
 // 
 
+error_reporting(E_ALL);
+
 require_once(dirname(__FILE__) . '/lib.php');
 
 //----------------------------------------------------------------------------------------
@@ -46,8 +48,11 @@ function display_article_breaks($ItemID)
 		$s = new stdclass;
 		$s->PageID =  $page->PageID;
 		$s->name =  $page->PageTypes[0]->PageTypeName;
-		$s->number = $page->PageNumbers[0]->Number;
-	
+		if (isset($page->PageNumbers[0]))
+		{
+			$s->number = $page->PageNumbers[0]->Number;
+		}
+
 		$pages[] = $s;
 	}
 
@@ -66,16 +71,26 @@ function display_article_breaks($ItemID)
 	$n = count($pages);
 	for ($i = 0; $i < $n; $i++)
 	{
-		//echo "$i $last_page_type " . $pages[$i]->number . "\n";
+		/*
+		echo "$i $last_page_type";
+		if (isset($pages[$i]->number))
+		{
+			echo $pages[$i]->number;
+		}
+		echo "<br />";
+		*/
 
-		if (preg_match('/^\d+$/', $pages[$i]->number))
+		if (isset($pages[$i]->number) && preg_match('/^\d+$/', $pages[$i]->number))
 		{
 			if ($last_page_type == 'text')
 			{
 				$location = $i;
 				$location -= ($pages[$i]->number - 1);
-		
-				$articles[$article_count] = $pages[$location]->PageID;
+				
+				if ($location > 0)
+				{
+					$articles[$article_count] = $pages[$location]->PageID;
+				}
 			
 				$spages[$article_count] = 1;
 			}
@@ -106,7 +121,10 @@ function display_article_breaks($ItemID)
 	header("Content-type: text/plain\n\n");
 	for ($i = $article_counter_start; $i <= $article_count; $i++)
 	{
-		echo $spages[$i] . "\t" . $epages[$i] . "\t" . $articles[$i] . "\n";
+		if (isset($spages[$i]) && isset($epages[$i]) && isset($articles[$i]))
+		{
+			echo $spages[$i] . "\t" . $epages[$i] . "\t" . $articles[$i] . "\n";
+		}
 	}
 }
 

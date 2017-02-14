@@ -432,12 +432,15 @@ function parse_openurl($params, &$context_object)
 	}		
 
 	// Volume might have series information
-	if (preg_match('/^series\s+(?<series>[0-9]+),\s*(?<volume>[0-9]+)$/i', $context_object->referent->journal->volume, $match))
+	if (isset($context_object->referent->journal->volume))
 	{
-		$context_object->referent->journal->volume= $match['volume'];
-		$context_object->referent->journal->series= $match['series'];
-	}		
-	
+		if (preg_match('/^series\s+(?<series>[0-9]+),\s*(?<volume>[0-9]+)$/i', $context_object->referent->journal->volume, $match))
+		{
+			$context_object->referent->journal->volume= $match['volume'];
+			$context_object->referent->journal->series= $match['series'];
+		}		
+	}
+		
 	// Author array might not be populated, in which case add author from aulast and aufirst fields
 	if (isset($context_object->referent->author))
 	{

@@ -18,6 +18,8 @@ require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/nameparse.php');
 require_once (dirname(__FILE__) . '/reference_code.php');
 
+require_once (dirname(__FILE__) . '/find.php');
+
 require_once (dirname(__FILE__) . '/api_utils.php');
 
 $debug_openurl = true;
@@ -809,8 +811,6 @@ function main()
 		}
 	}
 	
-	/*
-	
 	// full text search
 	if (count($openurl_result->results) == 0)
 	{			
@@ -819,12 +819,7 @@ function main()
 		{
 			find_citation($context_object->referent->dat, $openurl_result, 0.7);
 		}
-		else
-		{
-			find_citation(reference_to_citation_string($context_object->referent), $openurl_result, 0.7);
-		}
 	}	
-	*/
 	
 	// ok, if we have one or more results we return these and let user/agent decide what to do
 	

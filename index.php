@@ -722,6 +722,26 @@ function display_record($id, $page = 0)
 	</script>';
 	
 	$script .= '<script>
+		function openurl(id, q) {
+		       //$("#biblink" + id).html("Searching...");
+				$.getJSON("api_openurl.php?dat=" + encodeURIComponent(q) + "&redirect=false&callback=?",
+				function(data){
+					if (data.results.length > 0) {
+						if (data.results.length == 1) {
+							html = "[<a href=\"reference/" + data.results[0].id + "\">BioStor</a>]";
+							$("#biblink" + id).html(html);
+						} else {
+						    //$("#biblink" + id).html("");
+						}
+					} else {
+					 //$("#biblink" + id).html("");
+					}
+				}
+			);
+		}
+	</script>';	
+	
+	$script .= '<script>
 				function show_cites(id) {
 					$.getJSON("api.php?id=" + encodeURIComponent(id) + "&cites&callback=?",
 						function(data){
@@ -731,7 +751,16 @@ function display_record($id, $page = 0)
 							html += "<p>References automatically extracted from OCR text</p>"
 							html += "<ol>";
 							for (var i in data.cites) {
-								html += "<li>" + data.cites[i] + "</li>";
+								html += "<li><a name=\"bib" + i + "\"/>";
+								html += data.cites[i];
+								
+								var q = data.cites[i];
+								q = q.replace(/\\\'/, "");
+								
+								html += "<a class=\"btn\" onclick=\"openurl(\'" + i + "\',\'" + q + "\')\"><i class=\"glyphicon glyphicon-search\"></i></a>";
+								html += "<span id=\"biblink" + i + "\"/>";
+								
+								html += "</li>";
 							}
 							html += "</ol>";
 							$("#cites").html(html);

@@ -426,23 +426,26 @@ function parse_openurl($params, &$context_object)
 	}
 	*/
 	
-	// Journal titles with series numbers are split into title,series fields
-	if (preg_match('/(?<title>.*),?\s+series\s+(?<series>[0-9]+)$/i', $context_object->referent->journal->name, $match))
+	if (isset($context_object->referent->journal))
 	{
-		$context_object->referent->journal->name= $match['title'];
-		$context_object->referent->journal->series= $match['series'];
-	}		
-
-	// Volume might have series information
-	if (isset($context_object->referent->journal->volume))
-	{
-		if (preg_match('/^series\s+(?<series>[0-9]+),\s*(?<volume>[0-9]+)$/i', $context_object->referent->journal->volume, $match))
+		// Journal titles with series numbers are split into title,series fields
+		if (preg_match('/(?<title>.*),?\s+series\s+(?<series>[0-9]+)$/i', $context_object->referent->journal->name, $match))
 		{
-			$context_object->referent->journal->volume= $match['volume'];
+			$context_object->referent->journal->name= $match['title'];
 			$context_object->referent->journal->series= $match['series'];
 		}		
+
+		// Volume might have series information
+		if (isset($context_object->referent->journal->volume))
+		{
+			if (preg_match('/^series\s+(?<series>[0-9]+),\s*(?<volume>[0-9]+)$/i', $context_object->referent->journal->volume, $match))
+			{
+				$context_object->referent->journal->volume= $match['volume'];
+				$context_object->referent->journal->series= $match['series'];
+			}		
+		}
 	}
-		
+			
 	// Author array might not be populated, in which case add author from aulast and aufirst fields
 	if (isset($context_object->referent->author))
 	{

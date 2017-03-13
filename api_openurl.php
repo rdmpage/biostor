@@ -852,6 +852,17 @@ function main()
 			if (!isset($reference->error))
 			{
 				$openurl_result->results[$i]->reference = $reference;
+				
+				// unset large fields
+				if (isset($openurl_result->results[$i]->reference->text))
+				{
+					unset($openurl_result->results[$i]->reference->text);
+				}
+				if (isset($openurl_result->results[$i]->reference->names))
+				{
+					unset($openurl_result->results[$i]->reference->names);
+				}
+				
 			}
 		}
 		api_output($openurl_result, $callback);

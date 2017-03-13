@@ -283,6 +283,24 @@ function display_search ($q, $bookmark = '', $callback = '')
 		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
 		$obj = json_decode($resp);
 		
+		// delete large fields from results, such as OCR text and list of names extracted
+		if (isset($obj->rows))
+		{
+			$n = count($obj->rows);
+			for ($i = 0; $i < $n; $i++)
+			{
+				if (isset($obj->rows[$i]->doc->text))
+				{
+					unset($obj->rows[$i]->doc->text);
+				}
+				if (isset($obj->rows[$i]->doc->names))
+				{
+					unset($obj->rows[$i]->doc->names);
+				}
+				
+			}
+		}
+		
 		// Add status
 		$obj->status = 200;
 	}

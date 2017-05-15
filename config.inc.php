@@ -31,9 +31,10 @@ switch ($site)
 		$config['web_root']		= '/';
 		
 		// Memcache-----------------------------------------------------------------------
-		$config['use_memcache']	= true;
-		$config['memcache_host']= $_SERVER['CACHE1_HOST'];
-		$config['memcache_port']= $_SERVER['CACHE1_PORT'];
+		$config['use_memcache']	= false;
+		// $config['use_memcache']	= true;
+		// $config['memcache_host']= $_SERVER['CACHE1_HOST'];
+		// $config['memcache_port']= $_SERVER['CACHE1_PORT'];
 		break;
 		
 	case 'biostor':

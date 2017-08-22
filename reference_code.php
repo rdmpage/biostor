@@ -116,6 +116,8 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 {
 	$citeproc_obj = array();
 	$citeproc_obj['id'] = $id;
+	$citeproc_obj['source'] = 'BioStor';	
+	
 	$citeproc_obj['title'] = $reference->title;
 	
 	$citeproc_obj['alternative-id'] = array();

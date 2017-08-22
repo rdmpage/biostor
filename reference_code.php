@@ -137,7 +137,10 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 			break;
 	}	
 	
-	$citeproc_obj['issued']['date-parts'][] = array((Integer)$reference->year);
+	if (isset($reference->year))
+	{
+		$citeproc_obj['issued']['date-parts'][] = array((Integer)$reference->year);
+	}
 	
 	if (isset($reference->author))
 	{
@@ -200,7 +203,10 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 		{
 			$citeproc_obj['issue'] = $reference->journal->issue;
 		}
-		$citeproc_obj['page'] = str_replace('--', '-', $reference->journal->pages);
+		if (isset($reference->journal->pages))
+		{
+			$citeproc_obj['page'] = str_replace('--', '-', $reference->journal->pages);
+		}
 		
 		if (isset($reference->journal->identifier))
 		{

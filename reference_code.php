@@ -118,6 +118,8 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 	$citeproc_obj['id'] = $id;
 	$citeproc_obj['title'] = $reference->title;
 	
+	$citeproc_obj['alternative-id'] = array();
+	
 	/*
 	if (isset($reference->journal))
 	{	
@@ -135,7 +137,7 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 			break;
 	}	
 	
-	$citeproc_obj['issued']['date-parts'][] = array($reference->year);
+	$citeproc_obj['issued']['date-parts'][] = array((Integer)$reference->year);
 	
 	if (isset($reference->author))
 	{
@@ -147,13 +149,13 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 			// hack while we work with old BioStor BibJSON
 			if (isset($author->forename))
 			{
-				$author->firstname = $author->forename;
+				$author->firstname = trim($author->forename);
 			}
 			
 			
 			if (isset($author->firstname))
 			{
-				$a->given = $author->firstname;
+				$a->given = trim($author->firstname);
 				$a->family = $author->lastname;
 			}
 			else
@@ -185,6 +187,11 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 	if (isset($reference->journal))
 	{
 		$citeproc_obj['container-title'] = $reference->journal->name;
+		if (isset($reference->journal->series))
+		{
+			$citeproc_obj['collection-title'] = $reference->journal->series;
+		}
+		
 		if (isset($reference->journal->volume))
 		{
 			$citeproc_obj['volume'] = $reference->journal->volume;
@@ -194,6 +201,19 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 			$citeproc_obj['issue'] = $reference->journal->issue;
 		}
 		$citeproc_obj['page'] = str_replace('--', '-', $reference->journal->pages);
+		
+		if (isset($reference->journal->identifier))
+		{
+			foreach ($reference->journal->identifier as $identifier)
+			{
+				if ($identifier->type == 'issn')
+				{
+					$citeproc_obj['ISSN'] = array();
+					$citeproc_obj['ISSN'][] = $identifier->id;
+				}
+			}
+		}
+		
 	}
 	
 	// Chapter
@@ -220,15 +240,21 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 				// DOI
 				case 'doi':
 					$citeproc_obj['DOI'] = $identifier->id;
+					
+					$citeproc_obj['alternative-id'][] = $identifier->id;
 					break;
 					
 				// Convert identifiers to URLs
 				case 'ark':
 					$url = 'http://gallica.bnf.fr/ark:/' . $identifier->id;
+					
+					$citeproc_obj['alternative-id'][] = $identifier->id;
 					break;
 					
 				case 'biostor':
 					$url = 'http://biostor.org/reference/' . $identifier->id;
+					$citeproc_obj['alternative-id'][] = $url;
+					$citeproc_obj['BIOSTOR'] = $identifier->id;
 					break;
 					
 				case 'handle':
@@ -236,6 +262,8 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 					{
 						$url = 'http://hdl.handle.net/' . $identifier->id;
 					}
+					$citeproc_obj['HANDLE'] = $identifier->id;
+					$citeproc_obj['alternative-id'][] = $identifier->id;
 					break;
 					
 				case 'isbn':
@@ -245,6 +273,8 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 					
 				case 'jstor':
 					$url = 'http://www.jstor.org/' . $identifier->id;
+					$citeproc_obj['alternative-id'][] = $url;
+					$citeproc_obj['JSTOR'] = $identifier->id;
 					break;
 					
 				default:
@@ -275,6 +305,22 @@ function reference_to_citeprocjs($reference, $id = 'ITEM-1')
 	if ($url != '')
 	{
 		$citeproc_obj['URL'] = $url;
+	}
+	
+	// scanned images
+	if ($reference->bhl_pages)
+	{
+		$citeproc_obj['bhl_pages'] = $reference->bhl_pages;
+	}
+	
+	if (isset($reference->text))
+	{
+		$citeproc_obj['text_pages'] = $reference->text;
+	}
+	
+	if (count($citeproc_obj['alternative-id']) == 0)
+	{
+		unset($citeproc_obj['alternative-id']);
 	}
 	
 	return $citeproc_obj;

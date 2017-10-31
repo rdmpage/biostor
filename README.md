@@ -21,7 +21,17 @@ I found that sometimes Pagodabox would expect the github SSH key, authorities th
 
 ## Pushing to Pagodabox
 
-    git push pagoda --all
+You need to add Pagoda as a remote repository:
+
+```
+git remote add pagoda git@git.pagodabox.io:apps/biostor.git
+```
+
+Then push the changes
+
+```
+git push pagoda --all
+```
 
 ## Monitoring
 

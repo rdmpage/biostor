@@ -36,7 +36,7 @@ Butler AG (1882) Description of New Species of Lepidoptera chiefly from Duke of 
 has a link to a two-page display where the left page is 148, and the right page is 149. To get the PageID of page 149 we use the following API call: 
 
 http://biostor.org/api_url.php?url=
-http://www.archive.org/stream/annalsmagazineof5101882lond%23page/148/mode/2up&page=149
+http%3A%2F%2Fwww.archive.org%2Fstream%2Fannalsmagazineof5101882lond%2523page%2F148%2Fmode%2F2up%26page%3D149
 
 which returns:
 

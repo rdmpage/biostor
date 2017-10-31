@@ -74,7 +74,7 @@ function bhl_item_from_ia($ia)
 		'apikey' => '0d4f0303-712e-49e0-92c5-2113a5959159'
 	);
 
-	$url = 'http://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
+	$url = 'https://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
 	
 	//echo $url . "\n";
 	
@@ -113,7 +113,7 @@ function bhl_item_from_pageid($PageID)
 		'apikey' => '0d4f0303-712e-49e0-92c5-2113a5959159'
 	);
 
-	$url = 'http://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
+	$url = 'https://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
 	
 	//echo $url . "\n";
 	
@@ -186,14 +186,13 @@ function bhl_page_from_ia_url($url, $target_page = '')
 // e.g. http://www.biodiversitylibrary.org/item/96891#page/697/mode/1up
 function bhl_page_from_bhl_url($url)
 {
-
 	$PageiD = 0;
 	
 	$ItemID = 0;
 	$PageID = 0;
 	
 	// Link to page URL shown in web browser when visiting BHL
-	if (preg_match('/http:\/\/(www\.)?biodiversitylibrary.org\/item\/(?<item>\d+)#page\/(?<page>\d+)(\/mode\/\d+up)?/', $url, $m))
+	if (preg_match('/http[s]?:\/\/(www\.)?biodiversitylibrary.org\/item\/(?<item>\d+)#page\/(?<page>\d+)(\/mode\/\d+up)?/', $url, $m))
 	{
 		//print_r($m);
 		$ItemID = $m['item'];
@@ -201,7 +200,7 @@ function bhl_page_from_bhl_url($url)
 	}
 
 	// Link to BHL item with page offset
-	if (preg_match('/http:\/\/(www\.)?biodiversitylibrary.org\/item\/(?<item>\d+)#(?<page>\d+)/', $url, $m))
+	if (preg_match('/http[s]?:\/\/(www\.)?biodiversitylibrary.org\/item\/(?<item>\d+)#(?<page>\d+)/', $url, $m))
 	{
 		//print_r($m);
 		$ItemID = $m['item'];
@@ -210,7 +209,7 @@ function bhl_page_from_bhl_url($url)
 
 	// Link to BHL page with page offset
 	// http://www.biodiversitylibrary.org/page/15733891%23page/417/mode/1up
-	if (preg_match('/http:\/\/(www\.)?biodiversitylibrary.org\/page\/(?<pageid>\d+)#page\/(?<page>\d+)(\/mode\/\d+up)?/', $url, $m))
+	if (preg_match('/http[s]?:\/\/(www\.)?biodiversitylibrary.org\/page\/(?<pageid>\d+)#page\/(?<page>\d+)(\/mode\/\d+up)?/', $url, $m))
 	{
 		//print_r($m);
 		$ItemID = bhl_item_from_pageid($m['pageid']);
@@ -224,7 +223,7 @@ function bhl_page_from_bhl_url($url)
 	
 	
 	// Link to BHL page using PageID, just extract the PageID
-	if (preg_match('/http:\/\/(www\.)?biodiversitylibrary.org\/page\/(?<page>\d+)$/', $url, $m))
+	if (preg_match('/http[s]?:\/\/(www\.)?biodiversitylibrary.org\/page\/(?<page>\d+)$/', $url, $m))
 	{
 		$PageID = $m['page'];
 	}
@@ -254,7 +253,7 @@ function bhl_pages_with_number($ItemID, $target_page)
 		'apikey' => '0d4f0303-712e-49e0-92c5-2113a5959159'
 	);
 
-	$url = 'http://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
+	$url = 'https://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
 
 	$json = get($url);
 
@@ -293,7 +292,7 @@ function bhl_ith_page_item($ItemID, $page_number)
 		'apikey' => '0d4f0303-712e-49e0-92c5-2113a5959159'
 	);
 
-	$url = 'http://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
+	$url = 'https://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
 
 	$json = get($url);
 

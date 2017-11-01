@@ -926,7 +926,7 @@ function display_record($id, $page = 0)
 			// Need to urlencode URL we pass to viewer, which means PDF URL is double URL encoded
 			$cached_pdf_url = $config['web_server'] . $config['web_root']. 'pdfproxy.php?url=' . urlencode($pdf_url);
 			
-			$pdf_viewer_url = 'vendor/pdf.js-hypothes.is/viewer/web/viewer.html?file=' . urlencode($cached_pdf_url);
+			$pdf_viewer_url = 'external/pdf.js-hypothes.is/viewer/web/viewer.html?file=' . urlencode($cached_pdf_url);
 		
 			echo '<div class="row">';
 			echo '<a class="btn btn-info" style="width:100%" href="' . $pdf_url . '" onClick="_gaq.push([\'_trackEvent\', \'Export\', \'pdf\', \'' . str_replace('biostor/', 'biostor-', $id) . '\', 0]);">Download PDF</a>';

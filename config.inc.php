@@ -129,7 +129,7 @@ switch ($site)
 				'database' => 'biostor',
 				'host' => 'rdmpage:peacrab280398@rdmpage.cloudant.com',
 				'port' => 5984,
-				'prefix' => 'https://'
+				'prefix' => 'http://'
 				);	
 		break;
 		

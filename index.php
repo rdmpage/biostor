@@ -1537,14 +1537,14 @@ function display_html_start($title = '', $meta = '', $script = '')
  	<!-- Leaflet -->
     <link 
         rel="stylesheet" 
-        href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+        href="https://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
     />
     <link 
         rel="stylesheet" 
         href="external/leaflet.draw/leaflet.draw.css"
     />
     <script
-        src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+        src="https://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
     </script>
     <script
         src="external/leaflet.draw/leaflet.draw.js">

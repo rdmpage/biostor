@@ -17,9 +17,22 @@ date_default_timezone_set('UTC');
 $site = 'local';
 //$site = 'biostor';
 $site = 'pagoda';
+$site = 'heroku';
 
 switch ($site)
 {
+	case 'heroku':
+		// Server-------------------------------------------------------------------------
+		$config['web_server']	= 'https://biostor.herokuapp.com'; 
+		//$config['web_server']	= 'http://biostor.org'; 
+		$config['site_name']	= 'BioStor';
+
+		// Files--------------------------------------------------------------------------
+		$config['web_dir']		= dirname(__FILE__);
+		$config['web_root']		= '/';		
+		break;
+
+
 	case 'pagoda':
 		// Server-------------------------------------------------------------------------
 		//$config['web_server']	= 'http://biostor.gopagoda.io'; 
@@ -81,7 +94,7 @@ $config['image_source']		= 'bhl'; // bhl to use remote images, biostor for local
 // Image caching--------------------------------------------------------------------------
 $config['use_cloudimage']	= false; // if true use https://cloudimage.io/
 $config['use_weserv']		= false; // if true use https://images.weserv.nl/
-$config['use_image_proxy']	= true; // if true use https://images.weserv.nl/
+$config['use_image_proxy']	= false; // if true use local proxy to trigger caching
 
 // Logging--------------------------------------------------------------------------------
 // View logging (requires writing to CouchDB and POSTs are expensive)
@@ -110,12 +123,13 @@ if ($config['use_memcache'])
 switch ($site)
 {
 	case 'pagoda':
+	case 'heroku':
 		// Cloudant
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
 				'host' => 'rdmpage:peacrab280398@rdmpage.cloudant.com',
 				'port' => 5984,
-				'prefix' => 'http://'
+				'prefix' => 'https://'
 				);	
 		break;
 		

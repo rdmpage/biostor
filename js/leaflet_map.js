@@ -9,18 +9,25 @@
             }).addTo(map);
         */
         
+        
+        
     	var biostorAttrib='BioStor';
 		var biostor = new L.TileLayer('api_tile.php?x={x}&y={y}&z={z}', 
 		{minZoom: 0, maxZoom: 14, attribution: biostorAttrib});
         
         
-		var minimal = new L.StamenTileLayer("terrain");
+		//var minimal = new L.StamenTileLayer("terrain");
+		
+		var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+		var osm1 = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 12, attribution: osmAttrib});		
+		
     
     	var map = L.map('map', {
 			center: [0, 0],
 			zoom: 1,
 			maxZoom: 20,
-			layers: [minimal,biostor]
+			layers: [osm1,biostor]
 		});
             
             

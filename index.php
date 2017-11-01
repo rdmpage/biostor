@@ -1860,7 +1860,7 @@ function display_map()
 	echo '  </div>';
 	echo '</div>';
 	
-	echo '<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>';
+	// echo '<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>'; 
 	echo '<script src="js/leaflet_map.js"></script>';
 	
 	/*

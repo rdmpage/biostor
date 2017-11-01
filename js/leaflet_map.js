@@ -152,7 +152,7 @@
 							feature.properties.popupContent = id;							
 							
 							if (data.rows[i].doc.title) {
-								feature.properties.popupContent = '<a href="http://biostor.org/reference/' + id + '" target="_new">' + data.rows[i].doc.title + '</a>' + '<br />';
+								feature.properties.popupContent = '<a href="/reference/' + id + '" target="_new">' + data.rows[i].doc.title + '</a>' + '<br />';
 							}
 							x.features.push(feature);	
 													

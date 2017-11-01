@@ -1541,17 +1541,17 @@ function display_html_start($title = '', $meta = '', $script = '')
     />
     <link 
         rel="stylesheet" 
-        href="vendor/leaflet.draw/leaflet.draw.css"
+        href="external/leaflet.draw/leaflet.draw.css"
     />
     <script
         src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
     </script>
     <script
-        src="vendor/leaflet.draw/leaflet.draw.js">
+        src="external/leaflet.draw/leaflet.draw.js">
     </script>
 
 	<!-- Wicket -->
-    <script src="vendor/Wicket/wicket.js"></script>
+    <script src="external/Wicket/wicket.js"></script>
  	
  	
  	<script type="text/javascript" src="js/wikidata.js"></script>

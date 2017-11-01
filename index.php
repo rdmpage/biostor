@@ -316,7 +316,7 @@ function display_record_summary ($reference, $highlights = null)
 				{
 					case 'bhl':
 						//echo ' <a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></i>http://biodiversitylibrary.org/page/' . $identifier->id . '</a>'  . '<br />';
-						echo ' <a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new">http://biodiversitylibrary.org/page/' . $identifier->id . '</a>'  . '<br />';
+						echo ' <a href="https://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new">http://biodiversitylibrary.org/page/' . $identifier->id . '</a>'  . '<br />';
 						break;
 						
 					case 'doi':
@@ -877,7 +877,7 @@ function display_record($id, $page = 0)
 		{
 			if ($config['image_source'] == 'bhl')
 			{
-				$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',60,60';	
+				$image_url = 'https://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',60,60';	
 				
 				if ($config['use_cloudimage'])
 				{
@@ -1098,7 +1098,7 @@ function display_record($id, $page = 0)
 			// Source of image
 			if ($config['image_source'] == 'bhl')
 			{				
-				$image_url = 'http://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500"';	
+				$image_url = 'https://www.biodiversitylibrary.org/pagethumb/' .  $PageID . ',500,500"';	
 				
 				if ($config['use_cloudimage'])
 				{
@@ -1669,7 +1669,7 @@ function display_html_end()
 	echo '<div class="panel panel-default" id="footer">
   <div class="panel-body">
     <p style="vertical-align: top">BioStor is built by <a href="https://twitter.com/rdmpage">@rdmpage</a>, code on <a href="https://github.com/rdmpage/biostor">github</a>. 
-    Page images from the <a href="http://biodiversitylibrary.org">Biodiversity Heritage Library</a>.';
+    Page images from the <a href="https://biodiversitylibrary.org">Biodiversity Heritage Library</a>.';
     /*
     echo "<a href=\"https://twitter.com/biostor_org\" class=\"twitter-follow-button\" data-show-count=\"false\">Follow @biostor_org</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>"; */
     echo '

@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 
-
+require_once(dirname(__FILE__) . '/config.inc.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
 $debug = false;
@@ -479,7 +479,7 @@ for ($year = $min; $year <= $max; $year++)
 					{
   						echo '<div class="media" style="padding-bottom:5px;">';
   						echo '  <div class="media-left media-top" style="padding:10px;">';
-					    echo '<a href="http://biodiversitylibrary.org/page/' . $hit->PageID . '" target="_new">';
+					    echo '  <a href="https://biodiversitylibrary.org/page/' . $hit->PageID . '" target="_new">';
     					echo '  <img style="box-shadow:2px 2px 2px #ccc;width:32px;" src="http://biostor.org/page/image/' . $hit->PageID . '-small.jpg" />';	
   						echo '  </a>';
   						echo '  </div>';
@@ -487,10 +487,10 @@ for ($year = $min; $year <= $max; $year++)
     					echo '     <h4 class="media-heading">';
     					echo $hit->title;
     					echo '</h4>';
-    					echo ' <span class="bhl"><a href="http://biodiversitylibrary.org/page/' . $hit->PageID . '" target="_new">' . $hit->PageID . '</a></span>';
+    					echo ' <span class="bhl"><a href="https://biodiversitylibrary.org/page/' . $hit->PageID . '" target="_new">' . $hit->PageID . '</a></span>';
 						if (isset($hit->biostor))
 						{
-							echo '&nbsp;<span class="biostor"><a href="http://biostor.org/reference/' . $hit->biostor . '" target="_new">' . $hit->biostor . '</a></span>';							
+							echo '&nbsp;<span class="biostor"><a href="' . $config['web_server'] . $config['web_root'] . 'reference/' . $hit->biostor . '" target="_new">' . $hit->biostor . '</a></span>';							
 						}
 
     					echo  '  </div>';

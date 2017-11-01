@@ -27,6 +27,9 @@ switch ($site)
 		//$config['web_server']	= 'http://biostor.org'; 
 		$config['site_name']	= 'BioStor';
 
+		// Memcache-----------------------------------------------------------------------
+		$config['use_memcache']	= false;
+
 		// Files--------------------------------------------------------------------------
 		$config['web_dir']		= dirname(__FILE__);
 		$config['web_root']		= '/';		

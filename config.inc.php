@@ -23,8 +23,8 @@ switch ($site)
 {
 	case 'heroku':
 		// Server-------------------------------------------------------------------------
-		$config['web_server']	= 'https://biostor.herokuapp.com'; 
-		//$config['web_server']	= 'http://biostor.org'; 
+		//$config['web_server']	= 'https://biostor.herokuapp.com'; 
+		$config['web_server']	= 'http://biostor.org'; 
 		$config['site_name']	= 'BioStor';
 
 		// Memcache-----------------------------------------------------------------------

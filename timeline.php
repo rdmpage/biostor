@@ -480,7 +480,7 @@ for ($year = $min; $year <= $max; $year++)
   						echo '<div class="media" style="padding-bottom:5px;">';
   						echo '  <div class="media-left media-top" style="padding:10px;">';
 					    echo '  <a href="https://biodiversitylibrary.org/page/' . $hit->PageID . '" target="_new">';
-    					echo '  <img style="box-shadow:2px 2px 2px #ccc;width:32px;" src="http://biostor.org/page/image/' . $hit->PageID . '-small.jpg" />';	
+    					echo '  <img style="box-shadow:2px 2px 2px #ccc;width:32px;" src="https://www.biodiversitylibrary.org/pagethumb/' .  $hit->PageID . ',60,60" />';	
   						echo '  </a>';
   						echo '  </div>';
   						echo '  <div class="media-body" style="padding:10px;">';

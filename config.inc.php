@@ -17,7 +17,7 @@ date_default_timezone_set('UTC');
 $site = 'local';
 //$site = 'biostor';
 $site = 'pagoda';
-$site = 'heroku';
+//$site = 'heroku';
 
 switch ($site)
 {

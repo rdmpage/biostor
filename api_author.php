@@ -25,8 +25,8 @@ function display_author_lastname_prefix($lastname, $firstname, $callback = '')
 	$first_letter = mb_substr($firstname, 0, 1);
 
 	$startkey = array($lastname, $first_letter);
-	//$endkey = array($lastname, $first_letter . mb_convert_encoding('&#xfff0;', 'UTF-8', 'HTML-ENTITIES'));
-	$endkey = array($lastname, $first_letter . 'zzz');
+	$endkey = array($lastname, $first_letter . mb_convert_encoding('&#xfff0;', 'UTF-8', 'HTML-ENTITIES'));
+	//$endkey = array($lastname, $first_letter . 'zzz');
 
 	$url = '_design/author/_view/lastname_firstname?startkey=' . json_encode($startkey) . '&endkey=' . json_encode($endkey) . '&group_level=2';	
 	

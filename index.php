@@ -1535,20 +1535,16 @@ function display_html_start($title = '', $meta = '', $script = '')
  	-->
  	
  	<!-- Leaflet -->
-    <link 
-        rel="stylesheet" 
-        href="https://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
-    />
-    <link 
-        rel="stylesheet" 
-        href="external/leaflet.draw/leaflet.draw.css"
-    />
-    <script
-        src="https://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
-    </script>
-    <script
-        src="external/leaflet.draw/leaflet.draw.js">
-    </script>
+	<!--    <link rel="stylesheet" href="https://cdn.leafletjs.com/leaflet-0.7/leaflet.css" /> -->
+    <link rel="stylesheet" href="external/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="external/leaflet.draw/leaflet.draw.css" />
+    
+    <!-- <script src="https://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script> -->
+    <script src="external/leaflet-0.7.3/leaflet.js"></script>
+    <script src="external/leaflet.draw/leaflet.draw.js"></script>
+    
+    <script src="external/Wicket/wicket.js"></script>
+     
 
 	<!-- Wicket -->
     <script src="external/Wicket/wicket.js"></script>

@@ -16,7 +16,7 @@ date_default_timezone_set('UTC');
 
 $site = 'local';
 //$site = 'biostor';
-$site = 'pagoda';
+//$site = 'pagoda';
 //$site = 'heroku';
 
 switch ($site)
@@ -130,7 +130,7 @@ switch ($site)
 		// Cloudant
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
-				'host' => 'rdmpage:peacrab280398@rdmpage.cloudant.com',
+				'host' => 'rdmpage:GGu-h5x-dLw-vYTcloudant@rdmpage.cloudant.com',
 				'port' => 5984,
 				'prefix' => 'http://'
 				);	
@@ -151,7 +151,7 @@ switch ($site)
 		// Cloudant
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
-				'host' => 'rdmpage:peacrab280398@rdmpage.cloudant.com',
+				'host' => 'rdmpage:GGu-h5x-dLw-vYTcloudant@rdmpage.cloudant.com',
 				'port' => 5984,
 				'prefix' => 'http://'
 				);	

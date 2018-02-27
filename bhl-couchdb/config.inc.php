@@ -33,9 +33,9 @@ if (1)
 		// Cloudant
 		$config['couchdb_options'] = array(
 				'database' => 'bhl',
-				'host' => 'rdmpage:peacrab280398@rdmpage.cloudant.com',
-				'port' => 5984,
-				'prefix' => 'http://'
+				'host' => 'rdmpage:GGu-h5x-dLw-vYTcloudant@rdmpage.cloudant.com',
+				'port' => 443,
+				'prefix' => 'https://'
 				);	
 }
 else

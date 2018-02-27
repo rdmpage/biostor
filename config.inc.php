@@ -20,11 +20,26 @@ $site = 'pagoda';
 //$site = 'heroku';
 
 $site = 'nanobox';
+$site = 'nanobox-local';
 
 switch ($site)
 {
 
 	case 'nanobox':
+		// Server-------------------------------------------------------------------------
+		$config['web_server']	= 'http://happy-hog.nanoapp.io'; 
+		$config['site_name']	= 'BioStor';
+
+		// Memcache-----------------------------------------------------------------------
+		$config['use_memcache']	= false;
+
+		// Files--------------------------------------------------------------------------
+		$config['web_dir']		= dirname(__FILE__);
+		$config['web_root']		= '/';		
+		break;
+
+
+	case 'nanobox-local':
 		// Server-------------------------------------------------------------------------
 		$config['web_server']	= 'http://172.21.0.5'; 
 		$config['site_name']	= 'BioStor';
@@ -141,14 +156,16 @@ if ($config['use_memcache'])
 // CouchDB--------------------------------------------------------------------------------
 switch ($site)
 {
+	case 'nanobox-local':
+	case 'nanobox':
 	case 'pagoda':
 	case 'heroku':
 		// Cloudant
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
 				'host' => 'rdmpage:GGu-h5x-dLw-vYTcloudant@rdmpage.cloudant.com',
-				'port' => 5984,
-				'prefix' => 'http://'
+				'port' => 443,
+				'prefix' => 'https://'
 				);	
 		break;
 		

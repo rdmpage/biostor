@@ -18,19 +18,20 @@ class CouchSimple
 	//----------------------------------------------------------------------------------------------
      function send($method, $url, $post_data = NULL)
      {
+     	global $config;
+     	
 		$ch = curl_init(); 
 		
 		$url = $this->prefix . $this->host . ':' . $this->port . $url;
-		
-		//echo $url . "\n";
 		
 		//echo $url;
 		
 		curl_setopt ($ch, CURLOPT_URL, $url); 
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1); 
 		
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, false);
-
+		//curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, true);
+		//curl_setopt ($ch, CURLOPT_CAINFO, dirname(__FILE__) . "/cacert.pem");
+		
 		// Set HTTP headers
 		$headers = array();
 		$headers[] = 'Content-type: application/json'; // we are sending JSON

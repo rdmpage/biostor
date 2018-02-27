@@ -19,8 +19,24 @@ $site = 'local';
 $site = 'pagoda';
 //$site = 'heroku';
 
+$site = 'nanobox';
+
 switch ($site)
 {
+
+	case 'nanobox':
+		// Server-------------------------------------------------------------------------
+		$config['web_server']	= 'http://172.21.0.5'; 
+		$config['site_name']	= 'BioStor';
+
+		// Memcache-----------------------------------------------------------------------
+		$config['use_memcache']	= false;
+
+		// Files--------------------------------------------------------------------------
+		$config['web_dir']		= dirname(__FILE__);
+		$config['web_root']		= '/';		
+		break;
+
 	case 'heroku':
 		// Server-------------------------------------------------------------------------
 		//$config['web_server']	= 'https://biostor.herokuapp.com'; 

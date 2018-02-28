@@ -20,7 +20,7 @@ $site = 'pagoda';
 //$site = 'heroku';
 
 $site = 'nanobox';
-$site = 'nanobox-local';
+//$site = 'nanobox-local';
 
 switch ($site)
 {
@@ -28,6 +28,7 @@ switch ($site)
 	case 'nanobox':
 		// Server-------------------------------------------------------------------------
 		$config['web_server']	= 'http://happy-hog.nanoapp.io'; 
+		$config['web_server']	= 'http://biostor.org'; 
 		$config['site_name']	= 'BioStor';
 
 		// Memcache-----------------------------------------------------------------------

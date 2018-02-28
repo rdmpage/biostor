@@ -33,6 +33,60 @@ Then push the changes
 git push pagoda --all
 ```
 
+## Nanobox
+
+[Nanobox](https://nanobox.io) is the replacement to Pagodabox. It requires a different boxfile. Note that this file needs specify some additional PHP extensions that others depend upon, for example, just adding xsl by itself generated linking errors until dom was also added.
+
+```
+run.config:
+  # install php and associated runtimes
+  engine: php
+  # php engine configuration (php version, extensions, etc)
+  engine.config:
+    # sets the php version to 5.6
+    runtime: php-5.6
+    extensions:
+      - curl
+      - exif
+      - gd
+      - mbstring
+      - dom # need this for xsl to work
+      - xml # need this for utf8_decode
+      - xsl
+      
+web.main:
+
+  start:
+    php: start-php
+    apache: start-apache
+    
+  # the path to a logfile you want streamed to the nanobox dashboard
+  log_watch:
+    apache[access]: /data/var/log/apache/access.log
+    apache[error]: /data/var/log/apache/error.log
+    php[error]: /data/var/log/php/php_error.log
+    php[fpm]: /data/var/log/php/php_fpm.log
+        
+```
+
+To make a local version of BioStor, type:
+
+```
+nanobox deploy dry-run
+```
+
+To deploy to nanobox add a remote, e.g.:
+
+```
+nanobox remote add happy-hog
+```
+
+Then deploy:
+
+```
+nanobox deploy
+```
+
 ## Monitoring
 
 Added New Relic key, after a while New Relic shows data for the app https://rpm.newrelic.com/accounts/691868/applications/8332767
@@ -53,6 +107,5 @@ BioStor uses CloudFlare http://cloudflare.com to provide caching, and by default
 ### Interfaces
 
 For a very different interface to historical texts see the [UK Medical Heritage Library](https://ukmhl.historicaltexts.jisc.ac.uk/home).
-
 
 

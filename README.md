@@ -87,6 +87,16 @@ Then deploy:
 nanobox deploy
 ```
 
+### Things to remember
+
+- Make sure that your DNS for your website points to the IP address (A-Record) of the nanobox app (find the A-Record in the “Network” tab).
+
+- Add New Relic key to the “CONFIG” tab.
+
+### Nanobox resources required
+
+Initially ran on Google Cloud using f1-micro (1 vCPU, 0.6 GB memory), which Google Cloud reported was overused. Can add more resources via nanobox “scale” which sets up a new server. Need to explore why we need more resources. 
+
 ## Monitoring
 
 Added New Relic key, after a while New Relic shows data for the app https://rpm.newrelic.com/accounts/691868/applications/8332767

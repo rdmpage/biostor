@@ -930,8 +930,8 @@ function display_record($id, $page = 0)
 		
 			echo '<div class="row">';
 			echo '<a class="btn btn-info" style="width:100%" href="' . $pdf_url . '" onClick="_gaq.push([\'_trackEvent\', \'Export\', \'pdf\', \'' . str_replace('biostor/', 'biostor-', $id) . '\', 0]);">Download PDF</a>';
-			echo '<br />';
-			echo '<a class="btn btn-warning" style="width:100%" href="' . $pdf_viewer_url . '" onClick="_gaq.push([\'_trackEvent\', \'View\', \'pdf\', \'' . str_replace('biostor/', 'biostor-', $id) . '\', 0]);">View PDF</a>';
+			//echo '<br />';
+			//echo '<a class="btn btn-warning" style="width:100%" href="' . $pdf_viewer_url . '" onClick="_gaq.push([\'_trackEvent\', \'View\', \'pdf\', \'' . str_replace('biostor/', 'biostor-', $id) . '\', 0]);">View PDF</a>';
 			echo '</div>';
 		}
 		

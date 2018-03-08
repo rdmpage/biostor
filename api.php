@@ -334,12 +334,11 @@ function display_images($callback = '')
 	
 		$url = '_design/pintrest/_view/date_pin';	
 	
-		/*
+		
 		if ($config['stale'])
 		{
 			$url .= '&stale=ok';
 		}	
-		*/	
 	
 		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
 	

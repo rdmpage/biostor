@@ -97,6 +97,36 @@ nanobox deploy
 
 Initially ran on Google Cloud using f1-micro (1 vCPU, 0.6 GB memory), which Google Cloud reported was overused. Can add more resources via nanobox “scale” which sets up a new server. Need to explore why we need more resources. 
 
+## CouchDB on Bitnami
+
+Create an instance at https://google.bitnami.com/vms
+
+Note that you need to follow the steps here https://docs.bitnami.com/google/infrastructure/couchdb/#how-to-connect-to-couchdb-from-a-different-machine in order to be able to connect. Click on “Launch ssh console” and edit the local.ini file:
+
+```
+sudo nano /opt/bitnami/couchdb/etc/local.ini
+```
+
+ Change the bind_address from 127.0.0.1 to 0.0.0.0:
+```
+[chttpd]
+port = 5984
+bind_address = 0.0.0.0
+...
+
+[httpd]
+bind_address = 0.0.0.0
+...
+```
+
+Reboot the VM.
+
+### Replicate
+
+```
+curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '{ "source": "biostor", "target": "http://admin:<password>@IP-SERVER:5984/biostor"}'
+```
+
 ## Monitoring
 
 Added New Relic key, after a while New Relic shows data for the app https://rpm.newrelic.com/accounts/691868/applications/8332767
@@ -104,9 +134,17 @@ Added New Relic key, after a while New Relic shows data for the app https://rpm.
 ## Replication
 
 Launch this from local machine to replicate CouchDB with Cloudant.
-````
-curl http://localhost:5984/_replicate -H ‘Content-Type: application/json’ -d ‘{ “source”: “biostor”, “target”: “https://<username>:<password>@rdmpage.cloudant.com/biostor”, “continuous”:true }’
-````
+```
+curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '{ "source": "biostor", "target": "https://<username>:<password>@rdmpage.cloudant.com/biostor"}'
+```
+
+IBM hosted Cloudant
+
+```
+curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '{ "source": "biostor", "target": "https://<username>:<password>@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor" }'
+```
+
+
 
 ## Image proxy
 

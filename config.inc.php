@@ -168,6 +168,30 @@ switch ($site)
 				'port' => 443,
 				'prefix' => 'https://'
 				);	
+
+
+		// access using https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/dashboard.html#/_all_dbs
+		
+		// IBM Cloud Cloudant
+		$config['couchdb_options'] = array(
+				'database' => 'biostor',
+				'host' => '4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com',
+				'port' => 443,
+				'prefix' => 'https://'
+				);	
+		
+		
+		/*
+		// Bitnami Google Cloud CouchDB
+		// Need to figure out how much resource this will need to be effective
+		// very, very slow in indexing, probably not useful without massive resources
+		$config['couchdb_options'] = array(
+				'database' => 'biostor',
+				'host' => 'admin:B3Ov4CFf6Byo@104.155.41.89',
+				'port' => 5984,
+				'prefix' => 'http://'
+				);	
+		*/
 		break;
 		
 	case 'local':

@@ -12,6 +12,7 @@ run.config:
       - mbstring
       - dom # need this for xsl to work
       - xml # need this for utf8_decode
+      - simplexml # need this for CiteProc
       - xsl
       - newrelic
   extra_packages:

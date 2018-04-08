@@ -337,7 +337,7 @@ function display_images($callback = '')
 		
 		if ($config['stale'])
 		{
-			$url .= '&stale=ok';
+			$url .= '?stale=ok';
 		}	
 	
 		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);

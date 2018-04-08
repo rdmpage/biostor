@@ -38,3 +38,6 @@ web.main:
     php[fpm]: /data/var/log/php/php_fpm.log
     newrelic: /data/var/log/newrelic/nrsysmond.log
         
+  # writable directory for image caching
+  writable_dirs:
+    - tmp  

@@ -2,6 +2,8 @@
 
 error_reporting(E_ALL);
 
+$image_dir = dirname(__FILE__) . '/tmp';
+
 /*
 Based on https://github.com/andrieslouw/imagesweserv, enables images to be treated as static
 files and hence get cached by CloudFlare.
@@ -55,8 +57,9 @@ function download_file($path,$fname){
 
 function create_image($path){
 	global $img_data,$parts;
+	global $image_dir;
 	$path = str_replace(' ','%20',$path);
-	$fname = tempnam('/tmp', 'imo_');
+	$fname = tempnam($image_dir, 'imo_');
 	$curl_result = download_file($path,$fname);
 	if($curl_result[0] === false){
 		header("HTTP/1.0 404 Not Found");

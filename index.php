@@ -315,8 +315,7 @@ function display_record_summary ($reference, $highlights = null)
 				switch ($identifier->type)
 				{
 					case 'bhl':
-						//echo ' <a href="http://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></i>http://biodiversitylibrary.org/page/' . $identifier->id . '</a>'  . '<br />';
-						echo ' <a href="https://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new">http://biodiversitylibrary.org/page/' . $identifier->id . '</a>'  . '<br />';
+						echo ' <span class="bhl"><a href="https://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new">http://biodiversitylibrary.org/page/' . $identifier->id . '</a></span>'  . '<br />';
 						break;
 						
 					case 'doi':
@@ -331,35 +330,6 @@ function display_record_summary ($reference, $highlights = null)
 						echo ' <span class="lsid"><a href="http://lsid.tdwg.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
 						break;
 						
-						
-						
-					/*
-					case 'doi':
-						echo ' <a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></i>http://doi.dx.org/' . $identifier->id . '</a>';
-						break;
-					*/
-					
-					/*					
-					case 'biostor':
-						echo '<a href="http://biostor.org/reference/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>biostor.org/reference/' . $identifier->id . '</a>';
-						break;
-					
-					case 'cinii':
-						echo '<a href="http://ci.nii.ac.jp/naid/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>ci.nii.ac.jp/naid/' . $identifier->id . '</a>';
-						break;										
-
-					case 'doi':
-						echo '<a href="http://dx.doi.org/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>doi.dx.org/' . $identifier->id . '</a>';
-						break;
-				
-					case 'handle':
-						echo '<a href="http://hdl.handle.net/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>hdl.handle.net/' . $identifier->id . '</a>';
-						break;
-
-					case 'jstor':
-						echo '<a href="http://www.jstor.org/stable/' . $identifier->id . '" target="_new"><i class="icon-external-link"></i>www.jstor.org/stable/' . $identifier->id . '</a>';
-						break;
-					*/	
 					default:
 						break;
 				}
@@ -547,12 +517,12 @@ function display_article_metadata($reference)
 		{
 			switch ($identifier->type)
 			{
-				case 'doi':
-					/*
-					echo 'DOI: ';
-					echo ' <a href="http://dx.doi.org/' . $identifier->id . '" target="_new"></i>' . $identifier->id . ' <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>';
+				case 'bhl':
+					echo '<span class="bhl"><a href="https://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
 					echo '<br />';
-					*/
+					break;			
+			
+				case 'doi':
 					echo '<span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
 					echo '<br />';
 					break;
@@ -571,8 +541,7 @@ function display_article_metadata($reference)
 					break;
 			}
 		}
-	}
-	
+	}	
 	
 	// Title -----------------------------------------------------------------------------	
 	echo "<h3>" . $reference->title . "</h3>";	
@@ -1633,6 +1602,32 @@ function display_html_start($title = '', $meta = '', $script = '')
 		padding: 2px 5px 2px 4px;
 		border-radius: 0px 5px 5px 0px;
 	}
+	
+	/* BHL */
+	span.bhl {
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		color: white;
+		background: rgb(60,150,200);
+		font-size: 13px;
+		text-decoration: none;
+		padding: 2px 0px 2px 4px;
+		border-radius: 5px;
+		border-color: black;
+	}
+
+	span.bhl:before {
+		content: "BHL";
+	}
+
+	span.bhl a {
+		color: black;
+		background: #f5f5f5; /* white disappears */
+		text-decoration: none;
+		text-transform: lowercase;
+		margin-left: 4px;
+		padding: 2px 5px 2px 4px;
+		border-radius: 0px 5px 5px 0px;
+	}	
 	
 	</style>	
 	

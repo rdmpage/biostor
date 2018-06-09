@@ -319,7 +319,7 @@ function display_record_summary ($reference, $highlights = null)
 						break;
 						
 					case 'doi':
-						echo ' <span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
+						echo ' <span class="doi"><a href="https://doi.org/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>' . '<br />';
 						break;
 
 					case 'jstor':
@@ -523,7 +523,7 @@ function display_article_metadata($reference)
 					break;			
 			
 				case 'doi':
-					echo '<span class="doi"><a href="http://dx.doi.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
+					echo '<span class="doi"><a href="https://doi.org/' . $identifier->id . '" target="_new">' . $identifier->id  . '</a></span>';
 					echo '<br />';
 					break;
 					

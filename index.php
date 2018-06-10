@@ -315,7 +315,7 @@ function display_record_summary ($reference, $highlights = null)
 				switch ($identifier->type)
 				{
 					case 'bhl':
-						echo ' <span class="bhl"><a href="https://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new">http://biodiversitylibrary.org/page/' . $identifier->id . '</a></span>'  . '<br />';
+						echo ' <span class="bhl"><a href="https://biodiversitylibrary.org/page/' . $identifier->id . '" target="_new">' . $identifier->id . '</a></span>'  . '<br />';
 						break;
 						
 					case 'doi':

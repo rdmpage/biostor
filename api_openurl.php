@@ -547,8 +547,7 @@ function main()
 	{
 		$openurl_result->debug = new stdclass;
 	}
-	
-		
+			
 	// via DOI or other identifier
 	if (count($openurl_result->results) == 0)
 	{			
@@ -576,24 +575,29 @@ function main()
 							if ($config['stale'])
 							{
 								$url .= '&stale=ok';
-							}		
-							
+							}									
 		
 							$resp = $couch->send("GET", "/" . $url . '&limit=1' );
 							$result = json_decode($resp);
-				
-							if (count($result->rows) == 1)
-							{
-								$openurl_result->debug->found_from_identifiers = true;
 							
-								$found = true;
+							if (isset($result->rows))
+							{				
+								if (count($result->rows) == 1)
+								{
+									if ($debug_openurl)
+									{								
+										$openurl_result->debug->found_from_identifiers = true;
+									}
+							
+									$found = true;
 								
-								$match = new stdclass;
-								$match->match = true;
-								$match->id = $result->rows[0]->id;
-								$match->{$identifier->type} = $identifier->id;
-								$openurl_result->results[] = $match;
-								$openurl_result->status = 200;
+									$match = new stdclass;
+									$match->match = true;
+									$match->id = $result->rows[0]->id;
+									$match->{$identifier->type} = $identifier->id;
+									$openurl_result->results[] = $match;
+									$openurl_result->status = 200;
+								}
 							}
 							break;
 							

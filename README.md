@@ -121,6 +121,10 @@ bind_address = 0.0.0.0
 
 Reboot the VM.
 
+#### Firewall
+
+Note that now we also need to add firewall access, see https://docs.bitnami.com/google/faq/administration/use-firewall/
+
 ### Replicate
 
 ```

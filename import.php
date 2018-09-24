@@ -18,6 +18,7 @@ $end = 146770;
 
 $end = 1;
 
+$replicate = array();
 
 for ($id = $start; $id <= $end; $id++)
 {
@@ -105,9 +106,49 @@ for ($id = $start; $id <= $end; $id++)
 				print_r($reference);
 				
 				$couch->add_update_or_delete_document($reference,  $reference->_id);
+				
+				// replicate to cloud
+				if (count($replicate) >= 10)
+				{
+					$doc = new stdclass;
+
+					$doc->source = "biostor";
+					$doc->target = "https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor";
+					$doc->doc_ids = $replicate;
+
+					print_r($doc);
+
+
+					$command = "curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '" . json_encode($doc) . "'";
+
+					echo $command . "\n";
+					system($command);
+					
+					$replicate = array();
+
+				}				
 			}
 		}		
 	}
+}
+
+// replicate to cloud
+if (count($replicate) > 0)
+{
+	$doc = new stdclass;
+
+	$doc->source = "biostor";
+	$doc->target = "https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor";
+	$doc->doc_ids = $replicate;
+
+	print_r($doc);
+
+
+	$command = "curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '" . json_encode($doc) . "'";
+
+	echo $command . "\n";
+	system($command);
+
 }
 
 ?>

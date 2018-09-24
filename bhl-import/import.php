@@ -2,12 +2,17 @@
 
 require_once(dirname(dirname(__FILE__)) . '/lib.php');
 require_once(dirname(dirname(__FILE__)) . '/couchsimple.php');
+
+
 // BHL import
+
+$replicate = array();
 
 //----------------------------------------------------------------------------------------
 function fetch_title($TitleID)
 {	
 	global $couch;
+	global $replicate;
 
 	$title = null;
 	
@@ -45,6 +50,7 @@ function fetch_title($TitleID)
 function fetch_item($ItemID)
 {	
 	global $couch;
+	global $replicate;
 	
 	$obj = null;
 	
@@ -71,17 +77,119 @@ function fetch_item($ItemID)
 			$item = $obj->Result;
 			$item->_id = 'item/' . $ItemID;
 			
+			$replicate[] = $item->_id;
+			
 			$couch->add_update_or_delete_document($item,  $item->_id);
+			
+			// replicate to cloud
+			if (count($replicate) >= 10)
+			{
+				$doc = new stdclass;
+
+				$doc->source = "biostor";
+				$doc->target = "https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor";
+				$doc->doc_ids = $replicate;
+
+				print_r($doc);
+
+
+				$command = "curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '" . json_encode($doc) . "'";
+
+				echo $command . "\n";
+				system($command);
+	
+				$replicate = array();
+
+			}				
+			
+			
 		}
 	}
+}
+
+//----------------------------------------------------------------------------------------
+// doesn't work yet
+function fetch_item_pages($ItemID)
+{	
+	global $config;
+	global $couch;
+	global $replicate;
 	
-	return $item;
+	$parameters = array(
+		'op' => 'GetItemMetadata',
+		'itemid' => $ItemID,
+		'pages' => 'true',
+		'ocr' => 'true',
+		'names' => true,
+		'parts' => 'true',
+		'format' => 'json',
+		'apikey' => '0d4f0303-712e-49e0-92c5-2113a5959159'
+	);
+	
+	$url = 'http://www.biodiversitylibrary.org/api2/httpquery.ashx?' . http_build_query($parameters);
+		
+	$json = get($url);
+	
+	if ($json != '')
+	{
+		$obj = json_decode($json);
+		
+		if (isset($obj->Result))
+		{
+			$docs = new stdclass;
+			$docs->docs = array();
+			
+			foreach ($obj->Result->Pages as $page)
+			{
+				$page->_id = 'page/' . $page->PageID;
+				
+				$replicate[] = $page->_id;
+				
+				$docs->docs[] = $page;
+				
+				$couch->add_update_or_delete_document($page,  $page->_id);
+			}
+			
+			// replicate to cloud
+			if (count($replicate) >= 10)
+			{
+				$doc = new stdclass;
+
+				$doc->source = "biostor";
+				$doc->target = "https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor";
+				$doc->doc_ids = $replicate;
+
+				print_r($doc);
+
+
+				$command = "curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '" . json_encode($doc) . "'";
+
+				echo $command . "\n";
+				system($command);
+	
+				$replicate = array();
+
+			}				
+			
+			
+			/*
+			// ignore conflicts
+			$docs->new_edits = false;
+			echo "CouchDB...";
+			$resp = $couch->send("POST", "/" . $config['couchdb_options']['database'] . '/_bulk_docs', json_encode($docs));
+			echo $resp;
+			*/
+			
+			//print_r($docs);
+		}
+	}
 }
 
 //----------------------------------------------------------------------------------------
 function fetch_page($PageID)
 {	
 	global $couch;
+	global $replicate;
 	
 	$page = null;
 	
@@ -107,6 +215,29 @@ function fetch_page($PageID)
 			$page->_id = 'page/' . $PageID;
 			
 			$couch->add_update_or_delete_document($page,  $page->_id);
+			
+			// replicate to cloud
+			if (count($replicate) >= 10)
+			{
+				$doc = new stdclass;
+
+				$doc->source = "biostor";
+				$doc->target = "https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor";
+				$doc->doc_ids = $replicate;
+
+				print_r($doc);
+
+
+				$command = "curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '" . json_encode($doc) . "'";
+
+				echo $command . "\n";
+				system($command);
+	
+				$replicate = array();
+
+			}				
+			
+			
 		}
 	}
 	
@@ -142,7 +273,7 @@ if (0)
 }
 
 // fetch multiple items
-$items = array(
+$Items = array(
 699,
 8654,
 714,
@@ -9643,17 +9774,228 @@ $items = array(
 );
 
 
-$items=array(186605);
+//$Items=array(186605);
 
+// Bulletin of the British Ornithologists' Club, 
+/*
+select distinct(ItemID) from rdmp_reference
+    inner join rdmp_reference_page_joiner using(reference_id) 
+    inner join page on rdmp_reference_page_joiner.PageID = page.PageID
+    where issn='0007-1595';
+*/
+/*
+$Items=array(
+123705,
+123710,
+123711,
+123704,
+100930,
+101093,
+100962,
+100931,
+100942,
+100926,
+100946,
+114181,
+123708,
+123709,
+123804,
+123890,
+123799,
+125339,
+125355,
+125354,
+125290,
+125289,
+125287,
+125291,
+125340,
+125341,
+125305,
+125300,
+125306,
+125298,
+125299,
+125301,
+125292,
+123798,
+123887,
+123885,
+127065,
+127048,
+127044,
+127045,
+127047,
+127082,
+127046,
+127064,
+126847,
+126877,
+126875,
+126876,
+126873,
+126845,
+126843,
+126842,
+126839,
+126838,
+126998,
+126872,
+125672,
+124974,
+125666,
+124973,
+126880,
+126874,
+125531,
+125532,
+125530,
+125677,
+125678,
+125673,
+125674,
+125675,
+125665,
+125664,
+125663,
+125657,
+125661,
+125660,
+125588,
+125593,
+130382,
+101092,
+164184,
+125307,
+131341,
+182902,
+182875
+);
+*/
 
-foreach ($items as $ItemID)
+/*
+//$Items=array(138618);
+//$Items=array(111424);
+$Items=array(180091);
+
+$Items=array(
+ 89584 ,
+  89727 ,
+  89743 ,
+  89565 ,
+  89750 ,
+  89812 ,
+  89706 ,
+  89747 ,
+  89768 ,
+  89811 ,
+  89701 ,
+  89575 ,
+  89560 ,
+  89588 ,
+  89573 ,
+  89558 ,
+  89815 ,
+  89582 ,
+  89816 ,
+  89716 ,
+  89571 ,
+  89773 ,
+  89557 ,
+  89567 ,
+  89589 ,
+  89562 ,
+ 102858 ,
+ 103982 ,
+ 103976 ,
+ 103983 ,
+ 103978 ,
+ 103977 ,
+ 103975 
+ );
+
+$Items=array(110033);
+*/
+/*
+$Items=array(
+157027,
+159038,
+156976,
+156977,
+156770,
+156813,
+156812,
+156814,
+157008,
+156691,
+189272,
+189240
+);
+*/
+
+//$Items=array(123908);
+
+//$Items=array(185590);
+
+$Items=array(192797);
+
+$force = true;
+//$force = false;
+
+foreach ($Items as $ItemID)
 {
-	$item = fetch_item($ItemID);
-	foreach ($item->Pages as $Page)
+	echo "\n================ $ItemID ===================\n";
+	// check whether we've done this already
+	$couch_id = 'item/' . $ItemID;	
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
+
+	$item = json_decode($resp);
+
+	if (isset($item->error) || $force)
 	{
-		fetch_page($Page->PageID);
-	}	
+		// badness, we don't have this item
+		
+		echo "Fetching...";
+		
+		$item = fetch_item($ItemID);
+		
+		if (1)
+		{
+			// bulk upload all pages for an item
+			fetch_item_pages($ItemID);
+		}
+		else
+		{
+			foreach ($item->Pages as $Page)
+			{
+				fetch_page($Page->PageID);
+			}	
+		}
+		echo "\n";
+	}
 }
+
+// replicate to cloud
+if (count($replicate) >= 10)
+{
+	$doc = new stdclass;
+
+	$doc->source = "biostor";
+	$doc->target = "https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor";
+	$doc->doc_ids = $replicate;
+
+	print_r($doc);
+
+
+	$command = "curl http://localhost:5984/_replicate -H 'Content-Type: application/json' -d '" . json_encode($doc) . "'";
+
+	echo $command . "\n";
+	system($command);
+
+	$replicate = array();
+
+}				
+
 
 
 ?>

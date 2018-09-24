@@ -435,6 +435,41 @@ function display_cites ($id, $callback = '')
 	api_output($obj, $callback);	
 }
 
+//--------------------------------------------------------------------------------------------------
+// Display thumbnail image
+function display_thumbnail_image ($id, $callback = '')
+{
+	global $config;
+	global $couch;
+	
+	// grab JSON from CouchDB
+	$couch_id = $id;
+	
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode($couch_id));
+	
+	$response_obj = json_decode($resp);
+	
+	$found = false;
+	
+	if (isset($response_obj->thumbnail))
+	{
+		$image = $response_obj->thumbnail;
+		if (preg_match('/^data:(?<mime>image\/.*);base64/', $image, $m))
+		{
+			$found = true;
+			header("Content-type: " . $m['mime']);
+			header("Cache-control: max-age=3600");
+			$image = preg_replace('/^data:(?<mime>image\/.*);base64/', '', $image);
+			echo base64_decode($image);
+		}
+	}
+	
+	if (!$found)
+	{
+		header('HTTP/1.1 404 Not Found');
+	}
+}
+
 
 //--------------------------------------------------------------------------------------------------
 function main()
@@ -484,6 +519,12 @@ function main()
 				$handled = true;
 			}
 			
+			// Thumbnail image 
+			if (isset($_GET['id']) && isset($_GET['thumbnail']))
+			{	
+				display_thumbnail_image($id, $callback);
+				$handled = true;
+			}
 			
 			if (!$handled)
 			{

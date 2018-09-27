@@ -1,0 +1,2390 @@
+<html>
+	<head>
+		<title>BibJSON to Elastic Search</title>
+		<meta charset="UTF-8"/>
+		<script src="jquery.js"></script>
+		<!-- stuff below needs to go into CouchDB views -->
+		<script src="shared.js"></script>
+		<script src="language.js"></script>
+		<style>
+		td { border: 1px solid red; }
+		</style>
+	</head>
+<body>
+
+<h1>BibJSON to Elastic Search</h1>
+
+<!--
+
+an ORCID work
+
+{
+  "_id": "https://pub.orcid.org/v2.1/0000-0001-6238-2743/work/41066436",
+  "_rev": "14-d820290c916da8d83af4e684c70015ca",
+  "message-timestamp": "2018-04-17T13:56:18+00:00",
+  "message-modified": "2018-04-17T13:56:19+00:00",
+  "message-format": "application/vnd.citationstyles.csl+json",
+  "message": {
+    "id": "-GEN-1s6102i0s3",
+    "type": "article-journal",
+    "author": [
+      {
+        "literal": "谭运洪 and Qiang Liu and Shi-Shun Zhou and Xiao-Hua Jin and Bo Pan and Kyaw Win Maung and Myint Zyaw and Ren Li and Rui-Chang Quan and Yun-Hong Tan"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2018,
+          1,
+          29
+        ]
+      ]
+    },
+    "container-title": "PhytoKeys",
+    "DOI": "10.3897/phytokeys.94.21337",
+    "title": "Dendrobium naungmungense (Orchidaceae, Dendrobieae), a new species from Kachin State, Myanmar",
+    "URL": "http://doi.org/10.3897/phytokeys.94.21337"
+  }
+}
+-->
+
+<!--
+
+an ORCID work
+
+{
+  "_id": "https://pub.orcid.org/v2.1/0000-0002-9116-606X/work/41693997",
+  "_rev": "2-52c8022fc95afdb2e68ebac2c790a41d",
+  "message-timestamp": "2018-04-17T14:25:58+00:00",
+  "message-modified": "2018-04-17T14:26:04+00:00",
+  "message-format": "application/vnd.citationstyles.csl+json",
+  "message": {
+    "id": "Tanasevitch2017",
+    "type": "article-journal",
+    "author": [
+      {
+        "family": "Tanasevitch",
+        "given": "A.V."
+      }
+    ],
+    "event-date": {
+      "date-parts": [
+        [
+          2017
+        ]
+      ]
+    },
+    "issued": {
+      "date-parts": [
+        [
+          2017
+        ]
+      ]
+    },
+    "collection-title": "Revue Suisse de Zoologie",
+    "container-title": "Revue Suisse de Zoologie",
+    "DOI": "10.5281/zenodo.893545",
+    "issue": "2",
+    "number": "2",
+    "number-of-pages": "3",
+    "page": "331-333",
+    "page-first": "331",
+    "title": "Another new species of Oedothorax Bertkau, 1883 from India (Araneae, Linyphiidae)",
+    "URL": "10.5281/zenodo.893545",
+    "volume": "124"
+  }
+}
+
+-->
+
+<!--
+
+			{
+  "_id": "https://doi.org/10.3897/phytokeys.94.21337",
+  "_rev": "26-601b47237eaf6255d6e232a84680483d",
+  "message-timestamp": "2018-04-17T15:54:51+00:00",
+  "message-modified": "2018-04-17T15:54:51+00:00",
+  "message-format": "application/vnd.crossref-api-message+json",
+  "message-source": "https://api.crossref.org/v1/works/http://dx.doi.org/10.3897/phytokeys.94.21337",
+  "message": {
+    "indexed": {
+      "date-parts": [
+        [
+          2018,
+          1,
+          29
+        ]
+      ],
+      "date-time": "2018-01-29T15:10:35Z",
+      "timestamp": 1517238635522
+    },
+    "reference-count": 24,
+    "publisher": "Pensoft Publishers",
+    "license": [
+      {
+        "URL": "http://creativecommons.org/licenses/by/4.0/",
+        "start": {
+          "date-parts": [
+            [
+              2018,
+              1,
+              29
+            ]
+          ],
+          "date-time": "2018-01-29T00:00:00Z",
+          "timestamp": 1517184000000
+        },
+        "delay-in-days": 0,
+        "content-version": "vor"
+      }
+    ],
+    "content-domain": {
+      "domain": [],
+      "crossmark-restriction": false
+    },
+    "short-container-title": [
+      "PK"
+    ],
+    "DOI": "10.3897/phytokeys.94.21337",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2018,
+          1,
+          29
+        ]
+      ],
+      "date-time": "2018-01-29T14:42:24Z",
+      "timestamp": 1517236944000
+    },
+    "page": "31-38",
+    "source": "Crossref",
+    "is-referenced-by-count": 0,
+    "title": [
+      "\n          Dendrobium naungmungense (Orchidaceae, Dendrobieae), a new species from Kachin State, Myanmar"
+    ],
+    "prefix": "10.3897",
+    "volume": "94",
+    "member": "2258",
+    "published-online": {
+      "date-parts": [
+        [
+          2018,
+          1,
+          29
+        ]
+      ]
+    },
+    "reference": [
+      {
+        "key": "21337_B1",
+        "DOI": "10.3897/phytokeys.82.13172",
+        "doi-asserted-by": "publisher"
+      },
+      {
+        "key": "21337_B2",
+        "author": "Cribb",
+        "year": "2005"
+      },
+      {
+        "key": "21337_B3",
+        "author": "Govaerts",
+        "year": "2017"
+      },
+      {
+        "key": "21337_B4",
+        "year": "2017"
+      },
+      {
+        "key": "21337_B5",
+        "author": "Kurzweil",
+        "year": "2014"
+      },
+      {
+        "key": "21337_B6",
+        "first-page": "133",
+        "article-title": "First record of Taeniophyllum (Orchidaceae) in Myanmar.",
+        "volume": "64",
+        "author": "Kurzweil",
+        "year": "2012a",
+        "journal-title": "The Gardens’ Bulletin, Singapore"
+      },
+      {
+        "key": "21337_B7",
+        "first-page": "108",
+        "article-title": "New records in the orchid flora of Myanmar.",
+        "volume": "40",
+        "author": "Kurzweil",
+        "year": "2012b",
+        "journal-title": "Thai Forest Bulletin (Botany)"
+      },
+      {
+        "issue": "11",
+        "key": "21337_B8",
+        "first-page": "2064",
+        "article-title": "New orchids record in the flora of China.",
+        "volume": "110",
+        "author": "Liu",
+        "year": "2015",
+        "journal-title": "Current Science"
+      },
+      {
+        "key": "21337_B9",
+        "DOI": "10.11646/phytotaxa.305.1.9",
+        "doi-asserted-by": "publisher"
+      },
+      {
+        "key": "21337_B10",
+        "author": "Lindley",
+        "year": "1844"
+      },
+      {
+        "key": "21337_B11",
+        "first-page": "189",
+        "article-title": "Taxonomic changes in Gooderinae (Orchidaceae: Orchidoideae).",
+        "volume": "17",
+        "author": "Ormerod",
+        "year": "2002",
+        "journal-title": "Lindleyana"
+      },
+      {
+        "key": "21337_B12",
+        "first-page": "43",
+        "article-title": "Orchidaceous additions to the flora of Burma (Myanmar).",
+        "volume": "13",
+        "author": "Ormerod",
+        "year": "2003",
+        "journal-title": "Rheedea"
+      },
+      {
+        "key": "21337_B13",
+        "author": "Ormerod",
+        "year": "2008"
+      },
+      {
+        "key": "21337_B14",
+        "DOI": "10.3100/025.015.0215",
+        "doi-asserted-by": "publisher"
+      },
+      {
+        "key": "21337_B15",
+        "author": "Ormerod",
+        "year": "2012"
+      },
+      {
+        "key": "21337_B16",
+        "author": "Rao",
+        "year": "2005"
+      },
+      {
+        "key": "21337_B17",
+        "author": "Seidenfaden",
+        "year": "1985"
+      },
+      {
+        "key": "21337_B18",
+        "author": "Stearn",
+        "year": "1983"
+      },
+      {
+        "key": "21337_B19",
+        "first-page": "61",
+        "article-title": "Dianome epidendri generis Linn.",
+        "volume": "6",
+        "author": "Swartz",
+        "year": "1799",
+        "journal-title": "Nova Actaregiae Societatis Scientiarum Upsaliensis, Edman, Upsala"
+      },
+      {
+        "key": "21337_B20",
+        "first-page": "161",
+        "article-title": "New or noteworthy plant collections from Myanmar (7): Fourteen additional species of Orchidaceae.",
+        "volume": "61",
+        "author": "Tanaka",
+        "year": "2011",
+        "journal-title": "Acta Phytotaxonomica et Geobotanica"
+      },
+      {
+        "key": "21337_B21",
+        "DOI": "10.11646/phytotaxa.238.1.5",
+        "doi-asserted-by": "publisher"
+      },
+      {
+        "key": "21337_B22",
+        "DOI": "10.11646/phytotaxa.316.3.10",
+        "doi-asserted-by": "publisher"
+      },
+      {
+        "key": "21337_B23",
+        "author": "Wood",
+        "year": "2006"
+      },
+      {
+        "key": "21337_B24",
+        "author": "Zhu",
+        "first-page": "367",
+        "year": "2009",
+        "article-title": "Dendrobium.",
+        "journal-title": "25). Science Press, Beijing and Missouri Botanical Garden Press, St. Louis"
+      }
+    ],
+    "container-title": [
+      "PhytoKeys"
+    ],
+    "original-title": [],
+    "link": [
+      {
+        "URL": "https://phytokeys.pensoft.net/lib/ajax_srv/article_elements_srv.php?action=download_pdf&item_id=21337",
+        "content-type": "application/pdf",
+        "content-version": "vor",
+        "intended-application": "text-mining"
+      },
+      {
+        "URL": "https://phytokeys.pensoft.net/lib/ajax_srv/article_elements_srv.php?action=download_xml&item_id=21337",
+        "content-type": "application/xml",
+        "content-version": "vor",
+        "intended-application": "text-mining"
+      },
+      {
+        "URL": "https://phytokeys.pensoft.net/article_preview.php?id=21337&skip_redirect=1",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2018,
+          1,
+          29
+        ]
+      ],
+      "date-time": "2018-01-29T14:42:24Z",
+      "timestamp": 1517236944000
+    },
+    "score": 1,
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2018,
+          1,
+          29
+        ]
+      ]
+    },
+    "references-count": 24,
+    "URL": "http://dx.doi.org/10.3897/phytokeys.94.21337",
+    "relation": {
+      "cites": []
+    },
+    "ISSN": [
+      "1314-2003",
+      "1314-2011"
+    ],
+    "issn-type": [
+      {
+        "value": "1314-2011",
+        "type": "print"
+      },
+      {
+        "value": "1314-2003",
+        "type": "electronic"
+      }
+    ],
+    "subject": [
+      "Plant Science",
+      "Ecology, Evolution, Behavior and Systematics"
+    ]
+  }
+}
+
+-->
+
+<!-- SciElo
+			
+{
+  "_id": "http://dx.doi.org/10.1590/s1519-69842010000500028",
+  "_rev": "2-b8178fc59667c1d9f215e3766b65afd6",
+  "message-timestamp": "2018-04-19T14:59:26+00:00",
+  "message-modified": "2018-04-19T14:59:27+00:00",
+  "message-format": "application/vnd.crossref-api-message+json",
+  "message-source": "https://api.crossref.org/v1/works/http://dx.doi.org/10.1590/s1519-69842010000500028",
+  "message": {
+    "indexed": {
+      "date-parts": [
+        [
+          2017,
+          10,
+          26
+        ]
+      ],
+      "date-time": "2017-10-26T13:35:34Z",
+      "timestamp": 1509024934362
+    },
+    "reference-count": 12,
+    "publisher": "FapUNIFESP (SciELO)",
+    "issue": "4",
+    "content-domain": {
+      "domain": [],
+      "crossmark-restriction": false
+    },
+    "short-container-title": [
+      "Braz. J. Biol."
+    ],
+    "published-print": {
+      "date-parts": [
+        [
+          2010,
+          11
+        ]
+      ]
+    },
+    "abstract": "<jats:p>Two new species of Pedinotus genus are described from the Brazilian savannah area, providing a new key to identify the species.</jats:p>",
+    "DOI": "10.1590/s1519-69842010000500028",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2010,
+          12,
+          20
+        ]
+      ],
+      "date-time": "2010-12-20T05:16:39Z",
+      "timestamp": 1292822199000
+    },
+    "page": "1103-1107",
+    "source": "Crossref",
+    "is-referenced-by-count": 3,
+    "title": [
+      "Two new species of Pedinotus Szépligeti 1902 (Hymenoptera: Braconidae: Doryctinae) from the Savannah in São Paulo state, Brazil"
+    ],
+    "prefix": "10.1590",
+    "volume": "70",
+    "author": [
+      {
+        "given": "CS.",
+        "family": "Castro",
+        "affiliation": [
+          {
+            "name": "Universidade Federal de São Carlos,  Brazil"
+          }
+        ]
+      },
+      {
+        "given": "JF.",
+        "family": "Nunes",
+        "affiliation": [
+          {
+            "name": "Universidade Federal de São Carlos,  Brazil"
+          }
+        ]
+      },
+      {
+        "given": "AM.",
+        "family": "Penteado-Dias",
+        "affiliation": [
+          {
+            "name": "Universidade Federal de São Carlos,  Brazil"
+          }
+        ]
+      }
+    ],
+    "member": "530",
+    "reference": [
+      {
+        "issue": "142",
+        "key": "ref1",
+        "doi-asserted-by": "crossref",
+        "first-page": "369",
+        "DOI": "10.1111/j.1096-3642.2004.00133.x",
+        "article-title": "Phylogeny of the genera of the parasitic wasps subfamily Doryctinae (Hymenoptera: Braconidae) based on morphological evidence",
+        "author": "BELOKOBYLSKIJ AS.",
+        "year": "2004",
+        "journal-title": "Zoological Journal of the Linnean Society",
+        "ISSN": "http://id.crossref.org/issn/0024-4082",
+        "issn-type": "print"
+      },
+      {
+        "issue": "602",
+        "key": "ref2",
+        "doi-asserted-by": "crossref",
+        "first-page": "1",
+        "DOI": "10.11646/zootaxa.602.1.1",
+        "article-title": "A new species of Pedinotus (Hymenoptera: Braconidae: Doryctinae) from Brazil",
+        "author": "FÉLIX FC.",
+        "year": "2004",
+        "journal-title": "Zootaxa"
+      },
+      {
+        "key": "ref3",
+        "first-page": "512",
+        "article-title": "Hymenoptera de la región Neotropical",
+        "volume": "77",
+        "author": "HANSON PE.",
+        "year": "2006",
+        "journal-title": "The American Entomological Institute"
+      },
+      {
+        "issue": "1",
+        "key": "ref4",
+        "article-title": "A conservação do Cerrado brasileiro",
+        "volume": "1",
+        "author": "KLINK CA.",
+        "year": "2005",
+        "journal-title": "Megadiversidade"
+      },
+      {
+        "issue": "2",
+        "key": "ref5",
+        "doi-asserted-by": "crossref",
+        "first-page": "457",
+        "DOI": "10.1590/S1519-69842008000200034",
+        "article-title": "First record of Schizopyga Gravenhorst (Hymenoptera, Ichneumonidae, Pimplinae) from Brazil and a description of a new species",
+        "volume": "68",
+        "author": "LOFFREDO AP.",
+        "year": "2008",
+        "journal-title": "Brazilizan Journal of Biology"
+      },
+      {
+        "issue": "4",
+        "key": "ref6",
+        "doi-asserted-by": "crossref",
+        "first-page": "911",
+        "DOI": "10.1590/S1519-69842008000400032",
+        "article-title": "First record of Ticapimpla vilmae Gauld, 1991 (Hymenoptera, Ichneumonidae, Pimplinae) from Brazil",
+        "volume": "68",
+        "author": "LOFFREDO AP.",
+        "year": "2008",
+        "journal-title": "Brazilizan Journal of Biology"
+      },
+      {
+        "key": "ref7",
+        "first-page": "166",
+        "article-title": "The Doryctinae of Costa Rica (excluding the genus Heterospilus)",
+        "volume": "70",
+        "author": "MARSH PM.",
+        "year": "2002",
+        "journal-title": "Memoirs of the American Entomological Institute"
+      },
+      {
+        "issue": "2b",
+        "key": "ref8",
+        "doi-asserted-by": "crossref",
+        "first-page": "755",
+        "DOI": "10.1590/S1519-69842006000400020",
+        "article-title": "Aiura, a new genus of Campopleginae (Hymenoptera: Ichneumonidae) from Brazil",
+        "volume": "66",
+        "author": "ONODY HC.",
+        "year": "2006",
+        "journal-title": "Brazilizan Journal of Biology"
+      },
+      {
+        "issue": "2",
+        "key": "ref9",
+        "first-page": "55",
+        "article-title": "Formigas como indicadores da qualidade ambiental e da biodiversidade de outros invertebrados terrestres",
+        "volume": "12",
+        "author": "SILVA RR.",
+        "year": "1999",
+        "journal-title": "Biotemas",
+        "ISSN": "http://id.crossref.org/issn/0103-1643",
+        "issn-type": "print"
+      },
+      {
+        "issue": "4",
+        "key": "ref10",
+        "first-page": "1",
+        "article-title": "Biodiversity in the Neotropics: ecological, economics and social values",
+        "volume": "68",
+        "author": "TUNDISI JG.",
+        "year": "2008",
+        "journal-title": "Brazilizan Journal of Biology"
+      },
+      {
+        "issue": "1",
+        "key": "ref11",
+        "first-page": "207",
+        "article-title": "Manual of the new world genera of the family Braconidae (Hymenoptera)",
+        "author": "WHARTON RA.",
+        "year": "1997",
+        "journal-title": "Special Publication of the International Society of Hymenopterists"
+      },
+      {
+        "issue": "22",
+        "key": "ref12",
+        "doi-asserted-by": "crossref",
+        "first-page": "345",
+        "DOI": "10.1071/IS07028",
+        "article-title": "Molecular phylogeny and historical biogeography of the cosmopolitan parasitic wasp subfamily Doryctinae (Hymenoptera: Braconidae)",
+        "author": "ZALDIVAR-RIVERÓN A.",
+        "year": "2008",
+        "journal-title": "Invertebrate Systematics"
+      }
+    ],
+    "container-title": [
+      "Brazilian Journal of Biology"
+    ],
+    "original-title": [],
+    "link": [
+      {
+        "URL": "http://www.scielo.br/pdf/bjb/v70n4/a28v70n4.pdf",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2017,
+          5,
+          26
+        ]
+      ],
+      "date-time": "2017-05-26T18:08:35Z",
+      "timestamp": 1495822115000
+    },
+    "score": 1,
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2010,
+          11
+        ]
+      ]
+    },
+    "references-count": 12,
+    "alternative-id": [
+      "S1519-69842010000500028"
+    ],
+    "URL": "http://dx.doi.org/10.1590/s1519-69842010000500028",
+    "relation": {
+      "cites": []
+    },
+    "ISSN": [
+      "1519-6984"
+    ],
+    "issn-type": [
+      {
+        "value": "1519-6984",
+        "type": "electronic"
+      }
+    ],
+    "subject": [
+      "General Agricultural and Biological Sciences"
+    ]
+  }
+}
+
+-->
+
+<!--
+
+Elsevier open access
+
+{
+  "_id": "https://doi.org/10.1016/j.sajb.2011.04.006",
+  "_rev": "2-0c9d4af3c1bb4dace561d387cf5eab98",
+  "message-timestamp": "2018-04-20T09:20:22+00:00",
+  "message-modified": "2018-04-20T09:20:23+00:00",
+  "message-format": "application/vnd.crossref-api-message+json",
+  "message-source": "https://api.crossref.org/v1/works/http://dx.doi.org/10.1016/j.sajb.2011.04.006",
+  "message": {
+    "indexed": {
+      "date-parts": [
+        [
+          2018,
+          3,
+          27
+        ]
+      ],
+      "date-time": "2018-03-27T17:22:38Z",
+      "timestamp": 1522171358305
+    },
+    "reference-count": 19,
+    "publisher": "Elsevier BV",
+    "license": [
+      {
+        "URL": "http://www.elsevier.com/tdm/userlicense/1.0/",
+        "start": {
+          "date-parts": [
+            [
+              2012,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2012-01-01T00:00:00Z",
+          "timestamp": 1325376000000
+        },
+        "delay-in-days": 0,
+        "content-version": "tdm"
+      },
+      {
+        "URL": "http://creativecommons.org/licenses/by/4.0/",
+        "start": {
+          "date-parts": [
+            [
+              2016,
+              10,
+              26
+            ]
+          ],
+          "date-time": "2016-10-26T00:00:00Z",
+          "timestamp": 1477440000000
+        },
+        "delay-in-days": 1760,
+        "content-version": "vor"
+      }
+    ],
+    "funder": [
+      {
+        "name": "Spanish Science and Innovation Ministry",
+        "award": [
+          "JCI-2009-05243",
+          "CGL2008-02982-C03-03/CLI",
+          "CGL2009-07405/BOS"
+        ]
+      }
+    ],
+    "content-domain": {
+      "domain": [],
+      "crossmark-restriction": false
+    },
+    "short-container-title": [
+      "South African Journal of Botany"
+    ],
+    "published-print": {
+      "date-parts": [
+        [
+          2012,
+          1
+        ]
+      ]
+    },
+    "DOI": "10.1016/j.sajb.2011.04.006",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2011,
+          6,
+          3
+        ]
+      ],
+      "date-time": "2011-06-03T13:11:26Z",
+      "timestamp": 1307106686000
+    },
+    "page": "257-265",
+    "source": "Crossref",
+    "is-referenced-by-count": 6,
+    "title": [
+      "A morphological re-evaluation of the taxonomic status of the genus Pellegriniodendron (Harms) J. Léonard (Leguminosae–Caesalpinioideae–Detarieae) and its inclusion in Gilbertiodendron J. Léonard"
+    ],
+    "prefix": "10.1016",
+    "volume": "78",
+    "author": [
+      {
+        "given": "M.",
+        "family": "de la Estrella",
+        "affiliation": []
+      },
+      {
+        "given": "J.A.",
+        "family": "Devesa",
+        "affiliation": []
+      },
+      {
+        "given": "J.J.",
+        "family": "Wieringa",
+        "affiliation": []
+      }
+    ],
+    "member": "78",
+    "container-title": [
+      "South African Journal of Botany"
+    ],
+    "original-title": [],
+    "link": [
+      {
+        "URL": "http://api.elsevier.com/content/article/PII:S025462991100055X?httpAccept=text/xml",
+        "content-type": "text/xml",
+        "content-version": "vor",
+        "intended-application": "text-mining"
+      },
+      {
+        "URL": "http://api.elsevier.com/content/article/PII:S025462991100055X?httpAccept=text/plain",
+        "content-type": "text/plain",
+        "content-version": "vor",
+        "intended-application": "text-mining"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2017,
+          6,
+          20
+        ]
+      ],
+      "date-time": "2017-06-20T01:04:23Z",
+      "timestamp": 1497920663000
+    },
+    "score": 1,
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2012,
+          1
+        ]
+      ]
+    },
+    "references-count": 19,
+    "alternative-id": [
+      "S025462991100055X"
+    ],
+    "URL": "http://dx.doi.org/10.1016/j.sajb.2011.04.006",
+    "relation": {},
+    "ISSN": [
+      "0254-6299"
+    ],
+    "issn-type": [
+      {
+        "value": "0254-6299",
+        "type": "print"
+      }
+    ],
+    "subject": [
+      "Plant Science"
+    ]
+  }
+}			
+
+
+
+{
+  "_id": "https://doi.org/10.3969/j.issn.1000-1565.2001.01.019",
+  "_rev": "5-17361cf5ad4e1b7c6a4d10183a4de246",
+  "message-timestamp": "2018-04-25T12:05:21+00:00",
+  "message-modified": "2018-04-25T12:05:21+00:00",
+  "message-format": "application/vnd.citationstyles.csl+json",
+  "message-source": "http://localhost/~rpage/microcitation/www/citeproc-api.php?guid=10.3969%2Fj.issn.1000-1565.2001.01.019",
+  "message": {
+    "id": "ITEM-1",
+    "unstructured": "张俊霞, 宋大祥 (2001) 中国平腹蛛属（蜘蛛目:平腹蛛科）一新种记述. 河北大学学报(自然科学版), 21(1): 78-79",
+    "title": "中国平腹蛛属（蜘蛛目:平腹蛛科）一新种记述",
+    "abstract": "记述中国平腹蛛科平腹蛛属一新种：铃形平腹蛛Gna phosa campanulata sp. nov..",
+    "multi": {
+      "_key": {
+        "abstract": {
+          "zh": "记述中国平腹蛛科平腹蛛属一新种：铃形平腹蛛Gna phosa campanulata sp. nov.."
+        },
+        "title": {
+          "en": "One New Spider Species of the Genus Gnaphosa (Araneae: Gnaphosidae) from China",
+          "zh": "中国平腹蛛属（蜘蛛目:平腹蛛科）一新种记述"
+        },
+        "container-title": {
+          "en": "JOURNAL OF HEBEI UNIVERSITY",
+          "zh": "河北大学学报(自然科学版)"
+        }
+      }
+    },
+    "type": "article-journal",
+    "issued": {
+      "date-parts": [
+        [
+          2001
+        ]
+      ]
+    },
+    "author": [
+      {
+        "literal": "张俊霞",
+        "multi": {
+          "_key": {
+            "literal": {
+              "en": "ZHANG Jun-xia",
+              "zh": "张俊霞"
+            }
+          }
+        }
+      },
+      {
+        "literal": "宋大祥",
+        "multi": {
+          "_key": {
+            "literal": {
+              "en": "SONG Da-xiang",
+              "zh": "宋大祥"
+            }
+          }
+        }
+      }
+    ],
+    "container-title": "河北大学学报(自然科学版)",
+    "volume": "21",
+    "issue": "1",
+    "page": "78-79",
+    "ISSN": [
+      "1000-1565"
+    ],
+    "alternative-id": [
+      "DOI:10.3969/j.issn.1000-1565.2001.01.019",
+      "http://d.old.wanfangdata.com.cn/Periodical/hebdxxb200101019"
+    ],
+    "DOI": "10.3969/j.issn.1000-1565.2001.01.019",
+    "URL": "http://d.old.wanfangdata.com.cn/Periodical/hebdxxb200101019"
+  }
+}
+
+-->
+
+<!--
+
+{
+  "_id": "biostor\/105158",
+  "_rev": "1-659bc809d996173b60a6b33ec3dd149a",
+  "author": [
+    {
+      "firstname": "Hugh",
+      "lastname": "Scott",
+      "name": "Hugh Scott"
+    }
+  ],
+  "type": "article",
+  "title": "A new species of Nycteribiidae (Diptera Pupipara) from islands in the Gulf of California",
+  "journal": {
+    "name": "Allan Hancock Pacific expeditions",
+    "volume": "2",
+    "issue": "10",
+    "pages": "167--171",
+    "identifier": [
+      {
+        "type": "oclc",
+        "id": 1321112
+      }
+    ]
+  },
+  "year": "1939",
+  "link": [
+    {
+      "anchor": "LINK",
+      "url": "http:\/\/biostor.org\/reference\/105158"
+    },
+    {
+      "anchor": "LINK",
+      "url": "http:\/\/www.biodiversitylibrary.org\/page\/4164353"
+    }
+  ],
+  "identifier": [
+    {
+      "type": "biostor",
+      "id": 105158
+    },
+    {
+      "type": "bhl",
+      "id": 4164353
+    }
+  ],
+  "bhl_pages": {
+    "Page 167": 4164353,
+    "Page 168": 4164354,
+    "Page 169": 4164355,
+    "Page 170": 4164356,
+    "Page 171": 4164357
+  },
+  "citation": "Hugh Scott (1939) A new species of Nycteribiidae (Diptera Pupipara) from islands in the Gulf of California. Allan Hancock Pacific expeditions, 2(10): 167--171",
+  "thumbnail": "data:image\/gif;base64,R0lGODlhZACfAPYAAHx3WoR\/YYaBY4mEY4yIZY6JapKNbZWRb5OOcZaRcpqVdZ6Yd5uWeZ6ZeqCX\r\neqKdfaWgfqSfgKahgqqlha2ohqehiKyniK6pirCph7KtjbivjbWwj7myj7SvkLaxkrq1lb24lry3\r\nmL65mcG6l8K9nMq9msS\/oMXAn8jBn9HFnMbBocrFpM3JpszHqM7JqdDHpdHKp9LNrNrOrNXRrtzR\r\nrtTPsNbSstvVtN3ZttvXuN7aueHSqubYr+HWtuLZturdteLXuOPcu+nfvO\/jt+XhvuvivvHmvvPq\r\nv+PfwObiwevlw+3pxuvnyO7qyvDmxfLpxvjtx\/DnyPPtzPnvzPXxzvvyzv\/4zu\/s0PPv0Pju0Pby\r\n0vz10\/751vb12vv32f772v\/+4v\/\/6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5\r\nBAAAAAAALAAAAABkAJ8AAAf+gEBAQktQUFOHVVNTiotZjlNZW1mNkYtbVVtTmpmMVZ+YmZihnp6d\r\nk6hbqquPq6JWo6uqmZ+woFWCQk5Ph4u+jJy\/v5qqvo+Uk5SfVVZWmbChy9KtkpKoXl5b2a7Rr9C0\r\no7dbuU5ShouNitKapuibkd2Xy6GqztL3wJpZ1vvZ2da0nNXbYmtWNFe4BpXrZWqZu0\/vRqFTN69i\r\nxVjM7klU5SXLNlkgRYmUBU5jQl1QnjBqOO\/dqYOb5s1aZo+gOGkCM\/GrxhEhvXCiSB6MluuJSpag\r\ngMXUeeseLVBAXz0taRBkx54gq2aNZavmOCC7ekEcaXATyZgzm9qEFotbQZ3+srZd3SZJXNuQBet9\r\nEoSEVyKTqqxttbnuG7epz6BuvTqpo2CCVR9vBbfqhxAkUXwxDEXFFuXApNR5ytktmil7iqutCyxY\r\n8atVVOySVugXEcMqVPLlFLVSWBUouEVTnFhp4spkpBztm6SY7b3YikkKcuLktlPUGykRdzqWotOZ\r\nK6ssR6iOZ12t3AaydQXEcpRELDFxGRmUZE1w67tyMVhfFZd+6YGWVS3MQLbFfncZ1IMgmSHlWUaQ\r\nFciMPbBQuAqCnjljGFWsCKhNVtA0MwpbIdYn4nS9AMQFghdeuOKLMFbxooszwmijjV6s+AWCXOz4\r\nX0gH\/vTMgSIVuN50DWb+EYUTXPhQxBJFRAmlFUUoIcSVSwgRRJRVbgGFD04UMs4TMzhZxA0\/+IBD\r\nEEFEIcQNQNhwAw40PBEFEkAgIUkUNwghRY42AgGDjL8FyQWVqzSjqF5ILsKFBhp8EQMEOJAggwYf\r\n4FCFByNQQIEHGigxAqcwcMAFBzSAoMENXGTwAAoagADDEhP8QAEQE8AwAgYYTDCCAy6IEMIIEcjw\r\nhQwtmDDCBC9c4MEKJqzwBQkPsLCCBiN8gMEIHKDAgRO\/FUHdE1KwRRtwSoCwgRQ4qADDB0HoCi4J\r\nIcRwwwcmwLDCCCPYUEIWMawQwwhTUJGDCUK4AMQIVIBQBAuVyhCDCzX+rJBsDjXY0MIIQGxxAww4\r\n2DCqsi6c8MEXLPgwwwYsswwCCSicAMQNRdAARRFDSPGEEcAtqIQULFGxxRdU9FgjRwguVyOMXxzo\r\no49T7PiF1FyAkePUOwaJNRZggIH10FMXvV\/TUAxRRBU7FPGDEUMsYYUPUBhhhM9QQIcTEUncQISW\r\nQSQRhBRI6LAEElJsoUSeQdggRRBTMHFDD0JMEYQgRBAxwwxbBCEEDYIAAbATU9ygRAxIbNHD4Urg\r\nQAUOMcwQBBE2XK63DZVT4YMUPgzxAw0\/\/BAl2ymUPYUghVBRN3CxcUEBDA\/4imsEGTgRQwQjXCBE\r\nDA688AAJI2QQfQz+H0wwARdAtLDCBDdAcEMSIgDhwA0tfIDEA1l0QMMHFyQBw78ShCB\/CxOggApY\r\nkAAJzKABKjDZBJRwgyqoyQdCAIsV5FYEHgyBST4rmFO4cAIirEAFLrhBDExQAikAwQQbGxgM5CQw\r\nGtjATQhzgeFuEAQXJGEFRKBCDGLAAhf0oAQ3MFbIbsACLiiBBTKwAQtGsAIbmCAJNgiCCD6Igxl8\r\nwAXfMgIRvvSEYFzCChc0XQ+QABxD4KYZz1iRKqR2oLENbT9q3BE29gMGGmnBP2o8UI7aCKgbLY1p\r\nXEhCEYjwhEFaARFGuNIF5eaMKSwIdJ4AzjJiQwWhJcMjqOBJhzL+mQo8emFHWcijJeKyCi1YUhqV\r\nXIYpc7iELUHBCk8AQixlUAIZQKE9P2DEgsjoCUrWwpKSycp4tuIRJ5jAAUAIAgtg0LEW7LBwstDC\r\nHbsQTXrcp2hNSMISlqCEJVTBCVYSgtx28QQe8GAHa6PB6ZI0i7xgBZPYWEWOssGij3AhCCc4wQy8\r\n9wEYcMEDJnhBFPazDTViAxtaYBF6jPizJUiBC1Lwm0pstAUh7OBKPeiBEx7BCGVgwpJx+QjSrpFH\r\nF2HiC9AwKBei8CGs+AOP\/hHRhbSwBCLgYAhUkEIRnqAEUXDhKMUYQhUy6oTMcEcVWhBPJ3syzMG0\r\nKKlD8k81MCn+iW3cMRu1QI8UmKSEIlAhCWuiAp8g9wLICQEKXIACD4iqjOiAQqFZyWNJ+5MoOJJy\r\nntqIJz3hehcjTuFQEO2mJadQjp5mATheGoIOgKAET9xlPbIgKIxEGqK4vqhpB\/VPPBGU2ZaqAqT+\r\nkUJPnUAFJRSNjzryD3sYGx5FMCcgP7EGF+6IoDtqpT6Z4AIRgtA0PWZFpIOxbWCcAAQfgEmbS9jC\r\nEmI5vNLBzQi5NAIOGCtJmTRFJtUU7oHsIbQhEeoLEXiADpywVKd61j\/CVdIUdlaFJwWBCn8DQhTy\r\nNIUdOKEIPtiCE6ZbiCmsp0BbgZGhBDzgPFpBjQ4YAQKUgFn+gvZkjiBRqV0n4YQX0EC3Oa3kJJLG\r\niWfQbR6GyYpZBpIgf5i4J\/uRwuAcrFcu7JXEATLQFJrA2CoQYQkrAul+3goNOCmhup+oC4EgQoxw\r\nJGiYkmBRKHUEXKcm5rq3MEcRcLCEJhBhPznVQRCecCUh9KAI+7GCjw9hE4QIxEOQYUtJn9Y0SUht\r\nanL5j2D2keRYHApIsHHoE5KbBDUqwhDVISxaVcHfQ6yHr0GKcKL\/CUQksCkH8u3AgnRggx2CAQgk\r\nwMIWohUEMDhBA1hYwQzAcIKHzgiPd1YjFZzAJi6U1tV1heOhmgEn0J0HFrMdzIExYYXOCHcCJDCB\r\nCC5ALBP+RCECDgiBBzAg7C0gYQIlAMIKWECCKUShA1O4gAp0cAIW\/BVE7VRFE4qQhCooYQtJUIKr\r\nnxAULgBjgrskM0Foq0ZZp8UZlXRG0qTA7yhgIwtSiMJyvBDRr0qhCU3QghJ0sAUsTMGh2gSaKeXZ\r\nxi3c0bZS+MKZirZNKBABEVF4AnUQ4QQrcG6jkZ3ti+6ItZZ\/LWsn9doXvOaFrtE8C1jTkTSnJvOZ\r\nGy2hLv+s077G779ZOa1+Y4ISlOCEH9yXvKYDC5mfIbTZfkEFF1gBDC53AhB0u2RF0AEFiBCDDNyr\r\nBiUggQ0+IDETeMQBwe5XBjD3KX018QYecKgOMkCCE6D+gIf72oIEPAADErgAhE2EJgwEV4woAK2Q\r\nRmCGLqlbJNxYnAsJFAEELvCBD1BgAxQYthJKMIEp2IAEpDdBBxxgAhNE4PVuj3sIWDBFLrAggRTI\r\nwAqo5QMy3QAED\/iAB1iAARtwIVov+MAKPtABEsSAoXNKroyKEdMt\/AAKHyaRXXWE4zdTzWh45HnV\r\nviBwN09NwGzWUb1zPvMdgaFHMr+QenGsRigEIQZdlI8RdnBydJRZu6qVcgUFGXAVSlIjF7yWZvYB\r\nWCuCax+BSQWmRz+TR0FwA0aQf6rgBHPDWoixBRrWGRZ3Zk51ZsEEXDtGIolSD3z1UiDhEfshCU3Q\r\nWMz+cEtF8FdhtgiPlA9EAg1Fc2glVXER9iIvdVDbJ2ANuF0ssiIvRVGotkauBiUpARy2wW5WkEET\r\nQhCzdWA+aIQERiN9VG9tBIa7tnKptlcOdmoFBig2ERtS6F9hlkHzgUqxoQWGEUzmFRcOplkY0iID\r\nFiR75Ek8omgWJ00mBRKcI4OTVHGdITQj5oEIhRD15mJvNDayZnX2hGq9VXGSGIYJtR+2lWMiBSF6\r\nESSPJG8ysgSXUwQ7cmBG42It9345twXvFwSahgRAFwRdsCNa0ARfgANNIHO8KDVUQAQyxwW8aEQ5\r\ntwRTowOfNHNW9gVEcIwwJwsVEnWQRI0fAAIcwAL+V3Y5KKBEPXR4HzSMLOA6xxcDE+ACLmABJgAG\r\nNtAAICAtOgACM+ABHqACIsACNjBtOoAyzqJPOZAsHzQDLkAEX5BPYHABICACXZePX7AAHuACGwAB\r\nM4AhAKYKGXVW\/vUJRQMxM0ABOHAqHJAB+aQCKuABJCACD1BTwxcDX6B8ASkCNqACXKADMYCS0AgC\r\nIGADIoCSNmADJ0ABOmB7tCcCM0AEJ4kDt2dDBwkCX2ADISABC8kCfZZPt\/cBz6eFRnIgPXBR+ZBb\r\ngPRTOuJyb\/YisEhzX\/BJzdhyn9Q1PMcEWOCKM5cNWpAjUqAFPfcFWsBz7acjMuc15mVcXuUlZXT+\r\nA6oABDiQBf3yWVRwAxkQkpazBFTQBEWjBTlABFrgATpABdBIAiTwAV6QcFLgASKgBFjABE3ABFRg\r\nAzoABt4zmUFgAjqgBVLQADlwcErQBE2kA0mAmrP5hAx0AklwZUkIR2IGJlCwBSsAkRygAEqwAQrQ\r\nOg1gAA7gBB4AARNgAQcgARswARDwnRfQBCIgAUTgmAzglMAHARswnjbgBRaQARcgARCAjxLQeWAg\r\nATkgAiIAQiKQA5mZAxngAdwJbPFzARtgACJABSQAfCTweSrQNLuGa\/txAz5gWlYwA0CQbnz2N+iW\r\nbl9QU0kQottUWjeWBLtImVuAcELTBFdAmQj+9ydYcAW9yaKUqQVMEJoE1wR3iQXSJAVY0AQskHAJ\r\n5wXSRAVaMAOVVElX0KKnplBc0AMVChxcgAN7WQVJMDU01jVS8Jvtd6U6QIxYI01g8FVX9gVIwEC\/\r\n+EmBwwRW4zVWwwRpiTVW04xWw3Nzuoxf0ASd5oo9kpYhCYaAZY1oBQMLAAEaIAXicwEcIAEUsCwO\r\nkAEdgAQvAGwzQAI40AAZkAAe8AEKsI9e1wRcMAEb0ACdJwFe4AEMoGwVcAHj+QES0AResJ8hcAEd\r\nQJr46AET0AEXoAAZ4ALz8wFS0J0KkAQxQAEQkAAGkAEywCOsKCIUmgTJGQQvwAEjsAULqpD+KyAr\r\nJLACAdoEMNA+UuACMCABwgICKhACNqCbHWQ5LFCSIuAFPaQCuhcCKzB7JqkFP2mSE2MDSVADLFAD\r\nORAsLKAETLACzHgDPEkFSxA7+XQDpYOGQUI8\/mUFwNE08AdzoQQGqImXfwkGXWBzbqmXclqnYMCx\r\nM+eWNteWIOumYYCyIJuLWBMGfbSLSHA0R8gFcFIIujV2RDCwS8AENQkCMdABoHoDJpABNfClWpAE\r\nOZAEX5oDXuC0K5B1icONHoCaHpAESIAxSDADXsCbUmADGJMDOaADLmCaLsCbOeABOLAFNpC2J2mi\r\nhzeln\/cy1RpmN7sfgjCBK4ACQCAB8Gn+Aq96kslyA1+gAyRQAwkwASDABS6QAN7jARewBa7KqIXq\r\nAc0jAVpAAhsQnyGgABJQAF8gASewBR4wqx9gAAlQAE0rARZwAa8nAqarANpGkV5AAQ+wBTiwAjWg\r\nAiuQA0EQhlqIILV2CJL0BLvYcBDlcNa2HzyqBVigBERopAmVpJSZpFtwBWnJoj6qcC4wW824i1pw\r\nBTrABHpkSkbaI9JUlwnnYkTKWapgagwYUyiyCQhSsz3yhTMXBEjwfkywc1\/aYC5HmVhjAu0HZzX3\r\nBTPAAjnQdTkABlBUR19ARJx5R1TwSStyAqC6H7EjixNAexbbgDXySE9APpuadWBAAf\/+mI5fALsW\r\ngAArsAL1ybgNUAMtbAHDGZ8Z8JQHQAKH2wDCQgIWIAIKsAI9Up\/KdkVfoASaimMUkATdOQES0AAk\r\nAAEfkAGgmwHw5QEx+AUP8AAXkJxYWIlPChZ\/VQQzQERBwAVKNCcxwFsuoI8FaTlg9ZOwyjoKy0OG\r\nmwT6eLg58LYf0AKxEwNXmq5OqwNN6wVxzIs6MANK5AKxc3uPTAQ50CMhg2NUdmMiXCNiBhaSQAVF\r\nIIt26qZSk3B62b5Ts5ftVzRrCQZXAAZKQAQ1R8pE82a9qbGh2bJj+rFY88onGwYxqpcxYJBSQzs3\r\nwoorsiBLEDUzQK2XMwPdtnUowFv+XmwBS9wAJ7AiS6ADrJNPLbAFM7AjygQC7pgA1mK2YmsDFDAD\r\nrzwDInBDH8ACHvC2lxMC6qZDJKADK6CO8nwBrsYBJsOLVEAARcSKYUiKQQAuT\/oB+6SQCyACCxCU\r\nFKCMrGoDR8SNgbSPJHABE6ACsGOQWOcCYHADWSerNZCNFNBtuqUCOPAA+xwC5tquEAACleTILmCP\r\nK5AAG8ACRooDrKM6WyACKBCSSMiAT6oLgkFPT8OZOfVJXVBJOVI0eYo1XWBEVTY1MKuWPqfKddl9\r\n2SBHOxemTB3WELwEXmM0V3N+YrPJakRDAudqPG1KLGBKe+m4TZADFNAF2+Yj4Oz+aiqgbsa4AVDr\r\nBS1QOEkAqkvwwPqYoC6WcJM5NUzgASDABJtZST1CAhkQA1vABMSKcErwkzi0TZ\/EAhwQwmrEipCT\r\nGaqwARkAeoBLkqqgAEwgAgIQBBQAAjgWAwpAAWCgAg2gAA2gBURAASZQAJlaARIwxScQkYcbAu8J\r\nAgrwACCAqTWAl020AQ+gAhPwAbzYkxnwASnpARlAARMwq5j9meHszj4ioS\/SJ29tOdxMaUd5lG7b\r\nBKxJadysXK6Tp0HAzR+KA0zrN0lgAjZEBDrAYEtwyDY1nDdmA9rbN1cgmdR2pZL5s5OJcC7qopUE\r\nqpZtI2O4IOwmI3K6v2tZcy3+i6d\/+QWv3KZh0JpMsOJgwDUydwVsKjUhi7Jh0Dd6GQbn94t86TWz\r\nqctkKWtjqLdb8lc+wAFE9L0zgAAiQALc6AUk4AG8pQIRsJ8ocwK+e9NLK8Nf0AKs+7b42AKjdgIR\r\nUAPhrANPPqUd4ALLd8WeuQIi8AEGGQO4vQQboHYuMHgnEMTmKgI7OWt+RKEKTQQgcC\/ZfAMq8AEm\r\nuZksY5DqCAIu8AWhN0UlswVqLo8VwAL6GMMTIAJP2QEqkAMKjJJeAJQncAEp6QKtEywksMYxcAJK\r\ncAVXBMkBqwI1UAPqGLAz8KfH\/KRgwgiXxWYud5bnxwXae8DFTspe0wXJvuz+LXexKttzPbeXbWrt\r\nNOeWHl5xFHo2MvKYUtCzRNBTT7iaNrDE56ZEIhBIc22MCBdI24RwfaYDEXBuSVBJX2rgC5sEYGBT\r\nCVXnIMA6NoAD6ubTXDADXkcEssgCdG7oIBAEFelHbX1BRSMEELCNAeQBFODDnPvdBq7CGRCVGcAF\r\n43kB0zIBO+wswCa5X9CdHrAB5EkEDfAAENAAE\/kBbHwADwoBQYADA7ABHwABFPB8IJABNsWQImCQ\r\nM7B5J5ABDWDzrPLrOBsE3pRWHnjhpmR8B1daFjyZXfDuF+4FSuqJKFqZppRwdLiLayw0Cd5bXnAF\r\nWEa9YmPZCkukRQPUrqb+YfTH1hNKCJ+As7\/YI5jec+OHpU+pcP2+4mQ54u1X7XiJNTjw5Q+qlzag\r\nyufnI5c1ljmn+X60XZADOgcvqp4nngH6OiKgA7Zarx\/QAFfw8h4QASZAr\/mjAhZg4DYUAiIguEqg\r\nAkB\/AS4gxNs2nlrwna7qLBlA03ophEvzhRKP+TBC6AeCxnJeujT0zjfEkwKTA7c313bOky4guFk7\r\njwaernGsAyFw6hJweFvLwExgQ6cesOo4kzHAYHCmhJXo\/JGofjDCiu79VvlrWoCgBfb1BWZIOHiY\r\nGCao1RVmCKZFVTgI6eUFBvkV5tX1dYVVGAYpCdbVpUW4ygrW9OX1ukT+ycple2vFZXUDtDS1taXL\r\npQXCsjHj86WTYxNjM3OzHNSiouNyoeOlxaIykySx8bXk7VITgr3CpJXDoPQl4ZGT47JiY9Ph0dJC\r\nEjTTtMVC3gwbNR7MEIECDImBLVYQuSWMSzAuPXw4qWIF2BYrYESwcGFgxZcPEx48UBBBwoQPEEB4\r\nOCGBwgcuOgQkWHBBQTgXOFN2QODBghYiEhJsYbJCxYcOHy6oUAFigocJKjxkoHJlAwgRKkRkyHCC\r\nAo4vMYK4OMHChsRcETPeEKLkV7CMXKhsoWL3C14tXJYQ0bZX1Zcmr7xQ0eJlSxNKww5jSsWFECZY\r\nqpJgwhRZsirBgwT+r\/LCBfQkVhMh2toB5EkVLkVALAFG5QQlKTNwYKISWQkRVldygLHRxMuXbYJy\r\nBBkWObjwL8MwLQ5O6MqN4Vi0aFlCmLKNLzkyqGqiIogqLiJAbMDL1rStHkAusn6AYsMFCgZOcIFx\r\nIgaEDAdanLDAwhcqKPDVCV9kQIEETTWw3QYiWLDBBhM4pYAN31jggVUSIMAAEyo8IMIXEExQAAQk\r\nGGCADjo0YAEYFiSwYAYeSJAEWS54sMAGtqQHEQ5COIFbEUQsAcMMRNyAzBc3PIODDU3OsIISOizk\r\nQhNd6ECQhToQpuINSNggTw4qEKGFCzZEs4wNLWCRhIVeuJBWDjj+LJOEFjo8ZIMSzNiwhIqqLLHE\r\nUEmoJ5EtQAThxBS5MJcIc4NVkgorlYCBRROCGGJnIYhoEVwXTByiQyRfdGFIGEk8glgk1iWhiaWJ\r\nNKGJdaP6w1wQhEyUC4+8vMaFEiwgeeYNVBABwkI4ZLDBElzMwAILSdUwo0ctgAECAjWssEJAM5pw\r\nTp5gNLACnF+4EIMX3dngAj02hFeDCBJ0FYIOHubAjQo3oovsWCuxQOgtQAjxBCUuEMACDCyEoAIX\r\nJJzwwQdgUTCDgAxPcMIJXYkQQogqgEeCBx+4IIENHnRAAldvKuUCGCt84EUL6Lq8gggN5FDDB0l5\r\nIMKbHmCpQgj+N1gwgwo2nDDdDAsxp14uhzoBTBM6ZEZIZKFF5sUsrWhaiaSHYK2qcI1q7bUWNWY9\r\nyGVbP0qIrHohjcuOXBzqy10nkDnJLLNwIcWyM1DR5zCTWJpEE0zAsqXgqWhTwxacJnHFF0xY9ngT\r\nXOQwHRNq4dZFDlfYuQIWbyLm9BW\/KRB4EiSwIPkMtpoWTDD\/JjruBQtksMQGyDYwEwsHbACBBySA\r\nQMQJIUDQgAQPZECCFhJE4IUKGSj4ARUgbIVhBUzoIIFXDWyg0g05MPhOE1GpcIG7OVvs1QdqnZDB\r\nBxRMkMEEExw4Qb+GtpfFXUkQQcQWSqwQBCXgQAlWIEITAJX+hFlcQQmBUwJ2gqMEJWgjgleQXBMY\r\nyIQmWCYWTFACE5agG9DhhghUaMLmYmCCzXmhOlqQgheUwKkSEkYLV7hCXfiSNFvcwCJVCMYgEIE1\r\nqSlhGD+E1SASiBW+JVAQg6ngpApxhcCVamvqAEMmDFEjTSgiCS74hKgS8UNYPIR1t8BBAFcThA00\r\n7AMeuwD7ipUBEVBBBCTgwow+oAMomQcCNiACWGKQjxnNQCErAIEXMmSCLV3AA84LgsokUAMusABn\r\nTilTxkzgBRZIwAXzCAEjL+CUJARhAi0AgQvYph4f\/CAuXCBCCNgYMw5QoCoi4MAGcAAeEGwhXRLI\r\nwRZc5pL+JXgBSzjYwLo+oAIBYUhAJqhGEzK0Lhs8DpkC+kALXBACL8RABC5ogdjApCIVhIwFIgCO\r\nEk6gAxYoSxh0uYUPENXDTKwCOV8IRtRssQpM1cIzQDyFPK8YCU1IBm+c0EZAHRHQW2gjE1e8xKgK\r\ngZvS6GIiPYDLaoalhCAAylm1uRMR9red\/fGPCHOySxKix79WSrCEX0jC40SpAyoM8wooS0IIUHdN\r\nZSgBPDmQiA4cqQMMkU8kXEiCiuxBAhfcQCQbYd0WKhKXcS3gAwPAwRJOgAMJhIUCyMqADbZAgQsU\r\n7wQHeIALZvEAropEBB5ogg0+AAaPqeQBE7BTA6zSABP+tI8BE+gAEppQPhGswALueJ4XgiCCGFwD\r\nj17wigUQtgJ84AAiudrILnywhB5K5C58uQJe7qK4JOolCYqbhHWUZR3c1EWmXpBCSw87KEoIThtd\r\nWIx1ulCdUWlDC+oYlRa2oI3hgG44oLnFPdmpCyso1wdFuBsRZnCCFdCiLq84zDw1BYYZLIcVXhgL\r\n1VglNFgFt6U6wAITkMAq4WQmCV+yIqNyoIN6Xman223CccSHF9Mod787dM8SfEAxAlwABDGoGAWm\r\n14EOPAAvFCDBgMSWAQiswANboYCBTPCBGIBBkzdimAUs8IEGdMAFFohAggkhgRCQoAMSQMIWQvCF\r\nIKT+WAImaAEDFHCBDkwgRCKgGBgkIAAIhKNtwNCFD4SQ2R5+ARlFYgEOknACFyQhBi6TzRztUYPB\r\nQAlLYBrIF2ogzZYmYUlHskcOXKaDGqRlBUjgTg7aJE0teNNy81iGmXSQhLR84UjuWAae1wKR1r2u\r\nCqvBbiEiI0xDoMKKgSoEFrbAiUiUAoyScLTXtHgIVJQCFqP44aQfkQgsmFcRAb1ioQLtOo1OAW8z\r\ngAEOzFijJDygLFM6QRKooAObxRWG8NWBlFS0pRzEIAlCCYJXjQom+H5qwkyAr1HfLI+WPoOTNWhB\r\nfGmCTRHAYMnog9IGEtY2t+EAf1+AwQGmt4EDc2H+qxdAkAUyMJbEfAEEV7DBt50ylYp1JQMqoICS\r\nTGCCFcAgBLgzQQ68sIIQUMMC5FKBCSwAgi\/YgAHZwybCkACGPN8ARF9wl4RW8DwQEGojWwBCEZyQ\r\nhaLOINB1iQykPVEX0LCtFpyGxScc5SioFVdqnE4EcBlVpzByejnblakVlyO1cHPBjFH4RbmlcBe+\r\nkUBy28lBxFhgHeusNjmUsI5hBGEhWxQHvRJnVdYz9wUspFA4XTgMYnYLq0nsFjHDcSGnvhCCj9rv\r\nbUKQwqpxYIAJJGADFE7AASagAC6sYAAkUMD7ICBB6HkAfKBsAI7B0AIASAAMOriABTwvAQa4IAz+\r\nOZhQAlYAhg4oAB6\/kUALMtAAUIYgZRjCB1UGRYLn+a4jC5hfWyDyL79\/QQkDKUcfm4QDF\/Slj3J6\r\nbjCCgCUwS3AZbx6c5dpMZ\/jKYwWeigGWWJWEHKD3Ny4QWxLOz4TBiaDZNpCCcgijBAt9QQpMSIxE\r\n8cn3uE0qEY2rZ2TCsH\/UEVABtQkBNRyYBka41RlXQAqk4jib0ASTRmk\/JGmK0FKA1jr+ggRM0xcb\r\nEF1Co0kf4BECIgJswk0iIAIn8BIhsAJRZgLeRxBbYAMikANfwC05UGNg4AIo2AIhUANhEFRgZgI2\r\nEFfvkjL2kiE9E0Xq0wEZ1AEmQAKeZAIjQEf+EVdk6gEECVQFe7YBKyAB5eMw3OMbEqAATgNK7cZW\r\nbJQ9kYUxLqACYJADHdACNkgNHXADXmACGIOCLjBM5fQgRNgCgFQDOigCNdYVNEEC66IFShABHQOF\r\nAMcCRMMFGEEor3OF4iAIy9EF29UoTSAKOCcpm4g1XMM1ZRMZpgALkJY1XpMYopIJl2I27hU1pcEj\r\nPoJyEpEfdcEE6CQgfLgCdUIYYfARG8YvUaQmWmACb0cJJuBSWoAEoVAnMZADWABDW1AnMeMCUuAy\r\nlJIEU7AOvdECTZADTDCEXgA8pVMD4ecCQRAEg9Jy4fYvTbdkE1A8IKCCFHA9A4APIFAVyWT+L7Km\r\nAB4gYSEgFBjzMRfQBCKQEiaQIefQFPbwADYgYznmeh9gAhfQPBFgA1jgAQ+QhCWWAXnWMBbAVo\/l\r\nSR\/gIP3CHECwgcGAFf4jU0YFOibkds14WjIkOMHBKZaik+rgiaFQHfWnGF7ABEGwQtZRHcHgdQu1\r\nlIoDXHzRWqsyd1PTNkjzL0+QP4VwHEMxCNaYT4hgCJ9CaaNigF8ZRj8ENZKilmu5Xfh0XczRlvaT\r\nhU8QDMcSPSfQARtwfhOwgycgAgwUAs30MSqwDh5gAm4oAh0gAhOBSvfkKNuFc26ZdGyDGTKHGbBw\r\najsHNayDA0gABSmnAx4wA1uAA90RONH+pVQs4FLcRCU1qCY2oAPSKDSDE5mYaVyfIZmbyQWDABFI\r\nA1xEBxrC8VvCoZlucwtvEQUpN5mv4Chng4BpY4CldguisJtHxwpGpDhABJZSwBnNaQhEKSvakEWx\r\ngHQ5dANFQJebJXMTABytdH4WFEFGlQSuZSHXIzmWYyEn4BtYMIhYgGceEQQZFFTj2AKsklHDgATX\r\nw01ggAQ5oApIsAw1gD34IAgrEAE68CUhAF+hgUoamFkaIW8daSAeeAwiMiNkGAIYl2MegJBzNFgX\r\nEAEmMH+oN0oR8CARYAE9uEgZYiksGgsVkDHbaAEIIEFLoWMtwBQRUCMZ4wHnIAKg1KH+wIdkGlFk\r\nNGQXfkNCysBbu4EYW6ADXpc2Xic2EiEKnkAZqaAKNzecwEU1qRickDZqV4QJYABcXcAFokic6sE2\r\nLDkLP7cKiwGK4RcQqgAaX8p\/8YUI5+cKhiCOnOcbvzUulqKdRLkctFmZk4EJoqaDwUkFB0celjKZ\r\nqNQDSgA7OZAAaNExkZghBmIDLIAhTeoBSSE2I+MBEpli+KBwSLoULdAFJhYCFSAFOQBiGsoEONMB\r\nMdAxHaB2IXIjF6APhmkC5mABGJYFDCmHMmoBE0BUxpV0b3GLxLckS5JH9iASNrAC0VA+FpI8STAQ\r\nMwAo8LUz8oAlNIMEzogEEopbSID+BEEQHIqFXhB6cEqABC9kOgmqrxnUoPrqjCwZbU0gZfOUdJEx\r\nqigHadZBaV4EnYswf4XwCZoIao5ACpMWspDwCltQW1vAgO4VBmgXCQq4aQMYBlcAalFwp8fVmxKb\r\nBImydLijAlJAfPYAm\/RiJyryEaLgDMh6AVfgBQm2MSDToC0ABObSAjVQA\/JwAViAXgCXq2ayAmDG\r\nBUigDy1wcDeoTdFaYy1gAVhrmB3hVTNnGhV1izaQAQpGBTgAASpATiIQVrg2YRB3SlURiSBwA1vA\r\nkB2SA0A6AhmQA12AYQDHLR6gijVgAh2AMIdZq2DABTEQAoHJBFcwAhZgA17wAgD+lwFT2AEtYwG+\r\n0YMrQJX4Zws0sIFZoJz4BBqtIxiZQBiiIDlRg3NeA0RXRCpfFEY3VzafMRmfEQlXhF3yZIqH1phS\r\n8zpQwAVLVRdWEwQrsBC7VX+4gQlDxAVWAgqqYDmdsWgtkH4y+3bR+gUD6wUaakWOoLT0VylZIGpE\r\nmQU11LkDW7WNIw9YcE27axpIQwOk+gQ08QAYID+T1Vg28AAXYCffRnC3lgA1oAUZcAEHkj0qUAEB\r\nCkoxGgEjMLkREAHNxgAVMKTmMsE0oQBrVAHWmmBXILlM8QGfxzw2EAAdAAYYVroXECDcalw0UARD\r\nIAV4oRsO1D+OUylCSQRYElP+k\/Nof7VCj8Nbj5ZBLvVXV5CgTNAFWXBe+kqUCSpq6MU4SBAFHSSw\r\nnqCvWCwFCUpDZPxCRXlerxDA+IQDzQUFlGB0hbAOhVB\/pXiAiSCWYBDIMYsFkCCBGFcKpCBpoKYJ\r\nrNIFSACAgzCIAwhG1fmV+Oe2O+BAeaMEH1Ay+cECCjB7CCkgKlADIEA7QMAANfgBMaoDXfCEhcgt\r\nDFBDT5hCYGBiNeMFNuC4I9MCHrAOTwgGRmoDXWChh4mDusqQOZAFLJgBGVU+xYk0XzCq6NlKaDE9\r\nA5ExT\/FVKjAP5XF+kPQFU5uiLdNMSIqkV8AEoDuFYCC55WAuYHZmPmgCWJD+Ayn6ZTjIBL+EBDfg\r\nAmBbtTUABDWABNXaDFjrzTunljKwgXfMc1czf5kRRplgC1bEm1vjipGgtJgmpwNYCRVdCHOavC2r\r\nXltg0dWJuTPHCnB7x5MgEcWlDS\/9m2s6NXkaGmx608R5GTvN05eRCr9ZZFuQBY+RBY4gu2g61EPd\r\nBRpx05Cmm47SAw2dEUpJd8cFCwylKbupKZCZT3NaCSL9nVddvD90vAZ1CI+hvLYgc6OImbyLczvg\r\nBErQ0mzqOCrARVknQb8kSkyABXDooJ8CX5zSbKN2BSbA16ELBmWsr88IBlzcxy4AcExwA1OLcUgw\r\nAudVtWEA0BIaHFh7sPr+Wi4857oy4ASJkj9M7Z9IsKI1ALpf4KygpAKZ1AF3pTIKVwEMwFYM8EIt\r\nrJgHpwImNgF6pQU1wAAXELoMZwJf8gFUi3kRUAEfEAIjgLU+qA81gIcZ8LnVZgHJlBkPzQWkbdpM\r\nTTVI4DlYsIkCK2oapBzA8GjyqUGB435b4EKiwAR5M9Qr5IlNkKDB4AnfiQlMcN\/HQZSS85uxwMVS\r\nYJ2SabPf\/SNRsAVE8ABNQQIx4AASIC8JlwUtkD3QjQ8xQB54BAYhMAEh8FYRwN1rCbFqKTU7HTWX\r\nGpyT0aZXzaE3KylwTbFQwD82oK9LwtfiR43hh2fQxwJYcBCDQhiWcl7+vgSKPHcZcLnWTj7jPQ1c\r\nbArTTc6hOdfdxrUDPyIFmpVPkaDVavk1KM7WKs67K\/6WCvXiMifacBnjNjvNmUEDPzIFPdQ6xXV\/\r\ncInlOVebbX6b1+XdMI40xHnmAfyY3NWmTy41MhBBU2AXEwHjbrnnmBznEdvd8xcgK5BO8zkdaP6W\r\nMn7VfD6ZXD1QkgI1O9BcVNBOwZnloGjqCi7amMxFHacCKwB1nd7dXE10gI7JuV5zmXG8nBYZA5wo\r\nU63WoaFekk5zuunDx5UFQ8QckLYF1KnWux7qNffro67sA0XqsGDjdX6FPrztVr2Zld7mcE67On3t\r\n3X7piU7owT7NwfmjBQyNcnZO5cKO7oXu1mlJ5o556ZIhGdtF6Hzu6mddvEjHXeCdBXae08frugT\/\r\n6dPMXYD+GaV+mZC565DJ76F+qSodNaSdnLLL1KXRoX0OiuqF4ihP8MjO5gNfCxov8BU\/dLVZc3Ad\r\n8vnz0gpN6bC+8RBfC5JOdMje4jLv8gE\/8ddV9DIH8g4+8jVt7jSulqRe7r3p5Hmq8bjJll198hJ\/\r\nGZERCAA7\r\n",
+  "date": [
+    1939
+  ],
+  "names": [
+    {
+      "namestring": "Basilia mexicana",
+      "identifiers": {
+        "namebankID": 3738173
+      },
+      "pages": [
+        4164353
+      ]
+    },
+    {
+      "namestring": "Penicillidia",
+      "identifiers": {
+        "namebankID": 4286766
+      },
+      "pages": [
+        4164353
+      ]
+    },
+    {
+      "namestring": "Nycteribiidae",
+      "identifiers": {
+        "namebankID": 378331
+      },
+      "pages": [
+        4164353,
+        4164355,
+        4164357
+      ]
+    },
+    {
+      "namestring": "Basilia",
+      "identifiers": {
+        "namebankID": 378332
+      },
+      "pages": [
+        4164353,
+        4164354
+      ]
+    },
+    {
+      "namestring": "Diptera",
+      "identifiers": {
+        "namebankID": 425292
+      },
+      "pages": [
+        4164353
+      ]
+    },
+    {
+      "namestring": "Pizonyx",
+      "identifiers": {
+        "namebankID": 113323
+      },
+      "pages": [
+        4164354,
+        4164356
+      ]
+    },
+    {
+      "namestring": "Basilia speiseri",
+      "identifiers": {
+        "namebankID": 3738191
+      },
+      "pages": [
+        4164354
+      ]
+    },
+    {
+      "namestring": "Basilia pizonychus",
+      "identifiers": {
+        "namebankID": 3738176
+      },
+      "pages": [
+        4164354,
+        4164356
+      ]
+    },
+    {
+      "namestring": "Myotis",
+      "identifiers": {
+        "namebankID": 2477731
+      },
+      "pages": [
+        4164354
+      ]
+    },
+    {
+      "namestring": "Basilia ferrisi",
+      "identifiers": {
+        "namebankID": 3738192
+      },
+      "pages": [
+        4164354
+      ]
+    },
+    {
+      "namestring": "Basilia boardmani",
+      "identifiers": {
+        "namebankID": 2613155
+      },
+      "pages": [
+        4164354
+      ]
+    },
+    {
+      "namestring": "Pizonyx vivesi",
+      "identifiers": {
+        "namebankID": 6376304
+      },
+      "pages": [
+        4164356
+      ]
+    }
+  ],
+  "classification": [
+    "Animalia",
+    "Arthropoda",
+    "Insecta",
+    "Diptera",
+    "Hippoboscidae",
+    "Basilia"
+  ],
+  "status": 200
+}
+-->
+
+<!-- 
+{
+  "_id": "biostor\/50335",
+  "_rev": "2-00b09a2e98a6b32126c9885d6a64f2ea",
+  "author": [
+    {
+      "firstname": "Achille P",
+      "lastname": "Raselimanana",
+      "name": "Achille P Raselimanana"
+    },
+    {
+      "firstname": "Christopher J",
+      "lastname": "Raxworthy",
+      "name": "Christopher J Raxworthy"
+    },
+    {
+      "firstname": "Ronald A",
+      "lastname": "Nussbaum",
+      "name": "Ronald A Nussbaum"
+    }
+  ],
+  "type": "article",
+  "title": "A Revision of the Dwarf Zonosaurus Boulenger (Reptilia: Squamata: Cordylidae) from Madagascar, including Descriptions of Three New Species",
+  "journal": {
+    "name": "Scientific Papers Natural History Museum University of Kansas",
+    "volume": "18",
+    "pages": "1--16",
+    "identifier": [
+      {
+        "type": "issn",
+        "id": "1094-0782"
+      }
+    ]
+  },
+  "year": "2000",
+  "link": [
+    {
+      "anchor": "LINK",
+      "url": "http:\/\/direct.biostor.org\/reference\/50335"
+    },
+    {
+      "anchor": "LINK",
+      "url": "http:\/\/www.biodiversitylibrary.org\/page\/26246005"
+    }
+  ],
+  "identifier": [
+    {
+      "type": "biostor",
+      "id": 50335
+    },
+    {
+      "type": "bhl",
+      "id": 26246005
+    }
+  ],
+  "geometry": {
+    "type": "MultiPoint",
+    "coordinates": [
+      [
+        46.766666666667,
+        -24.633333333333
+      ],
+      [
+        46.966666666667,
+        -24.966666666667
+      ],
+      [
+        46.916666666667,
+        -24.983333333333
+      ],
+      [
+        46.85,
+        -24.533333333333
+      ],
+      [
+        48.458333333333,
+        -18.85
+      ],
+      [
+        47,
+        -22.233333333333
+      ],
+      [
+        47.116666666667,
+        -18.183333333333
+      ],
+      [
+        46.483333333333,
+        -23.45
+      ],
+      [
+        48.983333333333,
+        -17.733333333333
+      ],
+      [
+        49.266666666667,
+        -16.85
+      ],
+      [
+        47.333333333333,
+        -24.083333333333
+      ],
+      [
+        46.783333333333,
+        -24.65
+      ],
+      [
+        44.716666666667,
+        -18.691666666667
+      ],
+      [
+        44.758333333333,
+        -18.983333333333
+      ],
+      [
+        44.833333333333,
+        -19.133333333333
+      ],
+      [
+        49.316666666667,
+        -12.3
+      ]
+    ]
+  },
+  "bhl_pages": {
+    "Page (Title Page) [1]": 26246005,
+    "Page 2": 26246004,
+    "Page 3": 26246003,
+    "Fig. 1": 26246002,
+    "Page 5": 26246001,
+    "Fig. (Illustration) 2": 26246000,
+    "Fig. 3": 26245999,
+    "Fig. 4": 26245998,
+    "Page 9": 26245997,
+    "Fig. 5": 26245996,
+    "Page 11": 26245995,
+    "Figs. 6-7": 26245994,
+    "Page 13": 26245993,
+    "Page 14": 26245992,
+    "Page 15": 26245991,
+    "Page (Cover) 16": 26245990
+  },
+  "citation": "Achille P Raselimanana, Christopher J Raxworthy, Ronald A Nussbaum (2000) A Revision of the Dwarf Zonosaurus Boulenger (Reptilia: Squamata: Cordylidae) from Madagascar, including Descriptions of Three New Species. Scientific Papers Natural History Museum University of Kansas, 18: 1--16",
+  "thumbnail": "data:image\/jpeg;base64,\/9j\/4AAQSkZJRgABAQAAAQABAAD\/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0a\r\nHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL\/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIy\r\nMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL\/wAARCADJAJsDASIA\r\nAhEBAxEB\/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL\/8QAtRAAAgEDAwIEAwUFBAQA\r\nAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3\r\nODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm\r\np6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6\/8QAHwEA\r\nAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL\/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx\r\nBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK\r\nU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3\r\nuLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6\/9oADAMBAAIRAxEAPwD1+zQi\r\n1hHRRGnf0qwrS45RevY9sVFGrPbeWjBTswGK5AOODj2qvb2mqxtGX1SGVQfmH2UDcMH0Prjpjv8A\r\nhxKN1c0uaoFKKKWkAoFLigUoIpgAFKBmjIpwPFAAeBSChiKMj1oAUUtJmlzQAUUZoyKACijIoyKA\r\nDFNIp1IaAI2FR1MeaYRzTEZ8iO2nzLGG3mNwuxtpzg4wex96z9GvJLeNre9bYEBYST3UbsTlsjj0\r\n2k89OR\/DV6YuNOuNjbHEb7W2bsHB5wev071hafDBPdPHeWpuEnG0q+nhFz8+ST3BGRz6\/WtFsI60\r\n8UZ9jVG+N8BAbFrYKJFEonVjuUkAhSCMHGcZB5wMd64nTvFV7Ja507T4X1LVJLy6QCR5I9kJWNGO\r\n5hjd+77ooBLexlxux3PRc04HnpXByeMNXXWmsBZ2O1dTtrDeHcg7ovNmx0yVXPoBjvnjNuda1X+y\r\nvEl1LNa3kV1qX9mWtrIZEAG5bckFXyAW8wnGCSCd3AFCiK56dkccU\/8ACvK9avL0XHiTUPLs7y10\r\nx4dO063mVxtldFUlWDZDH7QqEjBIHVcc9dpWp3F7fTWmni1i0\/TLoWD+YGZ5SsSsdh3cY3KOQxOG\r\nPFHKFzpTyfuk\/hQPpXB+IIhqHxJ0y1WzW7Frpc91LCxCrJvdY0DE8cfORnOOcc1nf27qng7QF0NZ\r\n4LzU7CCBpJJ98ivJPMyxxL8ythQD8x6ALxzwcoXPTsj0oyPSuGu\/FmsLq17bWttZSQw6raWETYcm\r\nXzFV5MYI5VGLZ6AKfvdRXn8b6vJ4bvfEFlZ2gsRbSParPu3u\/m+XH0b5gw5IwuCygMecHKx3PQs+\r\n1GfauNuvEOt2GqWVnfW1vGk8yI1zBC88Ss8pVYmIYMjbdvzkFSzdABz2I5FKwDZJ44sbzjOcfhWV\r\n\/akshPlyJg52naR7DPB\/GrtzeRQPseMsQNwOPr\/hS\/alEojET8uqZxxyuc\/0qGbwVldxuSW90s6j\r\nCuDjJ3Lj2\/oanqnDdtNIF8h1Hqc8fpVumjKasxDTD1qSm4pkmbH5mOCMe9Q3WorZOqSWt7OWGd1v\r\navIBz0JUHmrCHipRUpjZjvq1rLNHNJo+pvLFnY7abISueuCV46CqSx6Ei2qr4WuQtrn7OBpBxFnG\r\ndvy8ZwPyrqABTgKtMRzpuNLaVZD4cvi6zm4VjphyJSMF+n3iOM9ahmbTTZTQQeGbld8huFD6VlPP\r\n5IkYcZO45z1966kAUuKdxHKWn2GOwktbrQ9Ru\/OuGu5vN08lXlZ9+7aScYOMdcBRycZq5Dd6db3s\r\n19D4bvo7ubHmTpp2HfjHLdTwB+VdCBS44p3A5wXlguoNfr4cvxeMu03A08CQj03dcfjTZ59Nu5pZ\r\nbjwvezSyhBI8mnqxcIdygk9cHkehroyMVzkurava3l1usJri3DFoDDCcsu8R7G4JyDl845Uj0JoA\r\np6FFBo8l5dNo2pTX13dTXElyLBVbDuSFzuJwq7V6\/wANXIX0yCB4IfCl3HE8gldF0+MKzhtwYjPJ\r\nB5z60g8QavGzl9DmdTvKBFkBUKiHBynOSZMEegGOpEy6tqtxfRWv9mS24E0ayS7WdCMOzgEqBj5N\r\nu71YetMAN3ZnUBfnwzfm8C7ftH2JPMwO27Oe5\/OuiU5AOCPY1yaarr\/2\/DWchtjLKBiFgdn2hUQn\r\n5OP3Ydu+QVPFWI9c1hnDHRZQHVAsZDAhz5hOWwRjCoM9i3JpWA3bi7W24McrkgkbFz+FQtqON3+j\r\ny8fd4xu9PzrGt7y4utU8q70yaLfD9oysjHauWyMbB82dny8\/f9sHMW51iCRXudJmnEccm9I42Hmt\r\n5uEZSAcfu93HHOOgxU2ZvF0ktTrY9QD3AjMRQEnDMew71erlxf3cRliTQZzsL4Ls5VwCuMHaTy2O\r\noHAPXHNq21rUp7uCNtFmihlYBpHZgUBRW5Gz3ZevVcZ5oSfUzm4t+6btNpxptBJmx\/dFShlB5IFR\r\nxD5RVK+tJprlXQuV2FdojjIzzzliD+VZobNUOn95fzpwdP76\/nWAbC7\/AIN6gHI\/cQH1x\/Fz1H5U\r\n+XT7mQqVEiYXBxHDyeefvY7jt271okI3fMj\/AL6\/nR5kf99fzqjHGEjVW0\/cVABYiLJ9\/vU8Kv8A\r\n0Df\/AEX\/APFUxF0Sx\/31\/Ol82PH31\/OqQVf+gcP\/ACH\/AI04hdv\/ACDh\/wCQ\/wDGgCx50efvr+dc\r\nzd22sfb5p7O5YL9sDRrJdEp5XkgH5d2P9YScccKK3AB\/0Dh\/5D\/xp4H\/AFDh\/wCQ\/wDGmBj3Euty\r\nWFlMBF9qEzPNBFMqAL5LhU3bsMBIUOeuBnGRVaI+JobZIDLbSeUihJHlG9yscnLNu5JdYs9Rhzxw\r\na6HH\/UPH5p\/jS4\/6h4\/NP8aAMoz680pAls0jDjDFVJZCC39\/hgcJjpznOKpzTeIxF57TW0TpGWwr\r\nhlZhHLgEZ6F2jzjn5epHNdDg\/wDQPH5p\/jS4PX+zx+af40AY0+oasLCG6hitkmdGklUgbvvjy48Z\r\nznYWGf72M4GajeHWLa+tDFcrdW8NoElDXW0zTZYluvA3KnGBw7AcDa27g\/8AQPH5p\/jVWezlmkLp\r\nFNFkYIRo8frmgDOF14l2kk2H3WwNy5zukx\/F02+UfwbrViC61xrtfOFmsHmqDtkU\/IC4Jz1yRsOM\r\ndcjjtNHp8ybgftDhgRgtHxkEZ4+v6U8WUixsvlz84+bemRhif64+gFAGtnIB65opkSlIUU5yFA5x\r\nnp7U6pGYD6gYxJsVGEe4E57gqP6n8q0+hrAnuN0s2RkI0i7SSdxDJj+fT+dbx60NJIB4p4rGnvtW\r\nhuZVi0pZ4Q4EbCcISu0Ekgj+9uH4Co5r\/XjZpJBpUSzHzA0TzBsYUFCDkdTkEfqO6SAmvdL1C6W7\r\nWLVZIBMyNGVU5ixnIBDDggL6c5Pfhs9pqcMD3Eut7FizKzG3XaqgOTx6YK9f7p55GIZdX1mMySf2\r\nC5iUHC+ehY43c8H0C8Y6nrTxqWqXELq+gMYnQ8NOvzArnBU46njn8QKvURVs7x\/vP4nh2R74issC\r\np8wXbn5jk4Yg+hxj1wwTNcooj8TkSZE3meWFUqdiqOeMZU8d95qd7R2t0mj8OQLceaWeIOq5wQQS\r\nwHPr0PTFRTW90EcR+F7Rzj91kx\/JgAjPrhs9MdPxLAkkYyS7G8SCK5gXa7YCjccsp25CkYI4IPA6\r\n55p4lc3MccvimBlJjPlqsas+GVjyDn5lIHGOCPxjaOa4vbZL\/wAOxMrzBDOrBtq8gkgA8YPQnB5z\r\nUdvaXqQgTeF9PkLKrME8tOdq7hg5HB3c56AfiATrMxinnh8SRhMtK2yMScbiPlBJ4+XaMdSCeSaL\r\ni6mgR\/M8SxRPGpZ0a2XeMA\/w5z36YzwKYUu4JXjg8NWY82NlyCoBUEjDYHcEHB9T74cYr1h+88LW\r\nchK\/OTLH8xwD0x6gd\/8AGgB63wjuCJPEKyx\/3RCvOeOGXryynj0+pqGztbqaEWNt4q89jGc4jDtt\r\n4yd27IPzjBznnjpxPPY3L\/a1j0Sy\/cxym2aULIZXBBXPIxu5Jye\/Wlt11LT2dbfQLT5ZJFV4ZEi3\r\nJ\/CcYOMhUBHsOw4QE02m66GQw62Dl\/mD26ABck8cfQYrVsYLi3t9lzdtcyZzvKBew4wPoT+NUJLn\r\nWluEKWEEkLKmR5u0o3y7snuOSQQM\/KeORUc+oa3FYpcDS08xd5kgWYOxAXK7SByScjGPx9QDcoNY\r\nrX2uBGI0ePcpPAulIbg98DHOPzrTtJLiWDdcwLDLuI2B94wDwc+4waVgLHako7UmaQzlGDRNPggF\r\nnlb5WBx86ccd63EfzBuAYDJHPHQ4rEll+adnky0byKFZF\/vp\/wDW9\/eta0YPBkHI3uM7cfxGnLYS\r\nLYp4FRiq6y3+Bm1hPzHOJe3bt1xUIZcpwqjI+o7WMcUAbZ8qsSfmz3I7Y9qd5t\/k4tYSO373rz9O\r\nOPrVgXsUVUEt7xm2i\/7+\/wD1qHkvcArDETjkFu\/Hf069u1Ai3ioLiW5ieLyLcSqSRJl8FR2xUIk1\r\nArzbQA\/9dT6\/T6\/56OR75j80EKjJ6OW4w3077fzNAFzFL2qjG+oCNN8FvvwNxEhxnvjinK9+fvww\r\nKO5Vyf6CgC5Riqkj32X8qGH7rbCznrjjPHrihJL8KN0EBPGcSH8e1AFvFFVWa+KvtjgDbVKZY4z\/\r\nABA\/h0P86b5moZH7iAjHJ8wj+lAF2ioITOS3nKijPyhST+dS5\/zigB1NPWndqbUjOWcymad2l+7J\r\nIBknIG9OmPQVq2pUQHAbAdxyck4Y1lSwgTSM25hukcl04GXTjj\/PGavxNLFCBBEJv3km4h8fxH17\r\n5qpbCRHJqTl2MVzGqY6PC5I59qkGozCUKZouHww8h+fp1pxv5kJU22HAyFM6An9f8\/ylS+lKMXt1\r\nXA4zMpBPYfjUoZXGoSlsNcwg4UjED4YEf\/XH5U5b+X5SbiEgjHywPyfx9yKlXUJCuRbrjt+\/T\/Gk\r\nkvpdkm6ECPb98XCDGRz9KoRH\/aUrABbiINn\/AJ4P0HWj+0bgbszQfLj\/AJd5OmQDxnjqKaBN2NwG\r\n54N2PXpx36\/lTQZGTGZsgHBN4vHOR+oA\/OgCx9ulO3bcIWBIYfZ3wfT6fnSC8uHYKt1GGxzm3bGc\r\n+vT0piPKhXzDNtfjJulbHPOM+n9KAZuAGnZscf6auSfSgB7ahIMkXC+Xkncbd8gdf6jtTBf3II\/0\r\niIg55NrKKa7u0smJXBOTxeAA446Y47fjTvLaQbnMowBuP2wEDjjP1PFMCVryYrt89UOc7hbtwMcj\r\nnvkj\/OaX7cWMhS6GMYAaBiVJ6ZwPQGozujkSUtlmzwLsAdcdxz1\/lTopPs0ikfMWQkh7pTjJHP6D\r\nn6\/igA31wBkzRgHnm2fv9DTheSv8v2hQxIAP2Zx3x34qc3so3kxxbVBIbz1x14z6A1H\/AGkxXISH\r\nI6gzrwPX+Y\/CgCu2oSlUYXCxgoM+ZbN19f8A61WIJruSZo2eIFTk\/umwRnHBzika\/nOCsULA8L++\r\nHLen58VMJ7lm3RwK0R5VvMHI7H8qALo6UlA6UuKkZytwMJIDgZMmMKV\/jjxjPX69PTitS0UrCcgj\r\nMjnn3Y1kFixvOTnzJRnceBuTjr\/nFbFmFEJC7sCRwS3Uncc\/rmqlsJErwQynMkSOfVgD\/nqaVbO2\r\nX7tvEOc8IBUij2pl1N9mt2l+XjH322jr61CGJ9itc5+zQ\/8AfAoWxtV3bbeL5uo2jms5dWnzhhZ7\r\nscqJ+e4Hb1wPxq1DqUZQNK8QDbQuxgQSQDjP4jHrketWIsiytVORbQg+0Y\/wpfsdscZt4jgADKD\/\r\nAD2FENwtxH5kOJEP8SsCP51KGb\/nmfzFIZD9ktI4sGCERrk\/MowPXrUe\/TA2D9mDKR2XIPUf41ZO\r\nWUq0WVPBBxzTRBEetqh+qrTAjjGnTMEjW2dtvAAB4\/wqVLS2jUhYIgD1+Qc0qxqjZWBVPqAop+9v\r\n7h\/MUhDfs1vgDyIsDtsFKba3OMwRHAxygp29v7h\/MUb2\/uH8xQAwWlsqlRBEAeo2DnnNL5EOMeVH\r\nj\/dFO3t\/cP5imtKysgxjc2OT7GgAMEJI3RRkjplRTgoVQFAAHQCnc+9Bz70AKtOpq0tIZyShoY7u\r\nQAKN8pBUKx+8vcZwevHXn2rYsxthYbt372TJxjncapx6WhjcCU4kd3Py\/wB5lYj\/AMd\/Wr8MYhj2\r\n7i2WZs4x1JP9acmrAicUy4cRQFzC0uCPkRcnr6frT1pJYY54zHKu5TgkZqUMyZ5SZSY7SZVxjaLR\r\nW6Hr\/n296cDJhhsk4PT7Gvt\/iT+BplzbWEdy8JW3GEGVeVlIBJzz36D9fWmKtsJd2LMMRyRcseTg\r\njt6hf89bJJhNcKN5guGG77otF\/Lr6d6sfa3DEfYJeCORb8Hn\/eqMXkuBmS1bgHKztzk4Bxg4H8qc\r\nLyQMxaW02YyP9IYEHHPb60DLkZEkSOYghIztaA5H1wakAX+6n\/fg1S+1uEJaW2XIOCLhjyPw+lTR\r\nyTSKSphYA4yJ2\/wpAT4X0T\/vwaXC\/wB1f+\/BqIfaNvIi3ZH\/AC2b8e1GbjaeIt3b9+2P5fSgCXC+\r\ni\/8AfhqOP7q\/9+DUf7\/B5izkcea3THP605fM3fOUxj+GZs0APwPRf+\/BprD5o8D+MdIsdj60\/j1\/\r\n8jGmSbN8W4r98Y3OTzg9PegRYoNFFAxRRmjtSUgM6H7gqXHNRQ\/cFTCs0UOFNnmMEJkEZcggbRx1\r\nOKctR3UJnt2jCoxJHD5x1B7VaEZkt1cvJ5yw3Ccf6sOhB\/PPp+vX0BJdeWNouXfByo8vPB47d\/8A\r\n9eKVdIlVTHssjHz8uxsfw9v+A\/y9OZINMmglDRraKFUgbVYHv39Of59asQObtiv7u6B3noUxjj26\r\ndT0z1pf9M8wYS7w20EkxkLlRk9Ox6+44qdIL0S5eWJo+MgFs+9Wgjf3R\/wB\/G\/woAqR3F2F2mzl4\r\nUHJK8nOMcfnSrc3RaNfsEo3EAklcLk9+fxq4EP8AdH\/fxv8AClCH+6P+\/jf4UgK32i4zxaPg\/Ska\r\n5uQRiykPTutW9jf3R\/38P+FGxv7o\/wC+zQAyJpHjDOjIT\/CQDT+ff\/vijYf7o\/77NLsb+6P++zQA\r\nc+\/\/AHxTGYiSJcMQSSSDt6evr1\/Sn7G\/uj\/vs1FJbs80L7Y8ISTuBY9uh7dKALNFJRQA49KSl7Ul\r\nIZnQcoDU4FV7b\/VL9KsVmhlW\/uHt4VMckcbE4zIpI9O3uR\/nkVRf3Cjcb2zIIXB2tjkZB+mKt3u\/\r\nbGEM+7d0hdVP\/j1USbsLkG9344RriIZ\/T\/P6VaJJ\/wC01kiXybmBpclsOrYK8kDgdcD9DR\/ajKxV\r\nri16ZB2vzkcVCXuHJXF\/nPBWaPtxz2654Pp+FStJcA+apuSA5zGZ4xxznH054J7VQDf7TlYkpdWR\r\nXC8FXGOQD26ZP4Zp0eqyMoZpbMDI5AkPXPt6A03E21j5l6xXkMLiPkDP+POaUec37xDeMr5OBcRk\r\nD\/63P6UwJE1T5sNdWuMjor5xz7den60HUpY41LXFpkH5iFfGCuR9O5\/KopHuWG9TdkBSfluYgMgf\r\n\/r\/LNP3zqGRxejhuROment06ce5oAlOpNHKFee2+\/tYBHyOR+VNOoTBn\/wBItRsO1w0b8HJH9Mfn\r\nTY5JNyHN3wM4NxHyM5GfqD+QpdtxgLm8APzEm5TI9vpQBKNRPmMPPtioGeI34\/ySKYNTdXVZZ7UE\r\nfeCxyHHTOKY32gKC320E8cXKdyf\/ANX405RMwOHux83X7Snt\/LH86AHm\/lC7vPtyNpP+rf8AvEfp\r\nxSDUWIU\/aICe\/wC5frn\/AAx+VCmdRz9qOM5P2lO\/+FNPmhQwe6POcfak6YP\/ANagB66gwYb5oD0O\r\nFifkYB\/qK08Vl\/vWkDZuDtbO37UuPy+hrU\/z1pALRRSUhmfbf6pasVXteYl+lSSW0UxzImT0zkj+\r\nVZoY6SCKbb5savtO5dy5wfWojptketpCc9cxigada4A8o8Yxl2OMdO9L\/Z1qVCmLgEEfM3H61aYh\r\n32G0xj7NFjGP9WOmc\/zo\/s+z2lPssRUnJHljH+eTQLC2ww8vIYYILMc857n2pfsNt\/zz7Y+8f8ad\r\nwsCWNpG29LaJW9RGAf8APJpfsFoQQbWHGSeYx1IxSCwtdu3yuM5wWPX86kitYYDmNSCRj7xP8zTu\r\nFiP+z7MZxaQ85B\/djoeDTv7Ps8EfZYMHr+7HPOasDFLRcCr\/AGdZf8+kH\/fsUo06zGD9miJCheUB\r\n4HQc1ZpcUXCxXFlahlb7NDlfunyxx34pTZ2p620R+sYqfFFAEH2O2wR9niweo8sUG0tR\/wAu8I9f\r\n3YqximsiupVhkEYIPcUCIPs1szZ8mItjGdgzUu5cZyKYtnbJjbBGMHIwvek+xWvP+jxc9flHNAE4\r\n5GR0pMUqhUUKMAAYAopDM62\/1S\/SrNVrX\/Ur9KsCsyh1KDTRThTQhaKQUVQDhSmkHWlPSgBRS00U\r\n7vQAUUUUALRSUGgQuaKSigBaM0lFFwAgEgkcjpS0UlAH\/9k=\r\n",
+  "date": [
+    2000,
+    10,
+    6
+  ],
+  "names": [
+    {
+      "namestring": "Squamata",
+      "identifiers": {
+        "namebankID": 582609
+      },
+      "pages": [
+        26246005,
+        26246004,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Zonosaurus aeneus",
+      "identifiers": {
+        "namebankID": 2546573
+      },
+      "pages": [
+        26246005,
+        26246004,
+        26246003,
+        26246002,
+        26246001,
+        26246000,
+        26245999,
+        26245998,
+        26245995,
+        26245993,
+        26245992,
+        26245991,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Reptilia",
+      "identifiers": {
+        "namebankID": 2549792
+      },
+      "pages": [
+        26246005,
+        26246004,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Zonosaurus subunicolor",
+      "identifiers": {
+        "namebankID": 2546589
+      },
+      "pages": [
+        26246005,
+        26246004,
+        26246000,
+        26245995,
+        26245993,
+        26245992,
+        26245991,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Cordylidae",
+      "identifiers": {
+        "namebankID": 2549755
+      },
+      "pages": [
+        26246005,
+        26246004,
+        26245991,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Zonosaurus",
+      "identifiers": {
+        "namebankID": 213007
+      },
+      "pages": [
+        26246005,
+        26246004,
+        26246003,
+        26246002,
+        26246001,
+        26246000,
+        26245999,
+        26245998,
+        26245997,
+        26245996,
+        26245995,
+        26245993,
+        26245992,
+        26245991,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Gerrhosaurinae",
+      "identifiers": {
+        "namebankID": 6491498
+      },
+      "pages": [
+        26246004,
+        26245991,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Zonosaurus rufipes",
+      "identifiers": {
+        "namebankID": 2546587
+      },
+      "pages": [
+        26246004,
+        26246003,
+        26246000,
+        26245995,
+        26245992,
+        26245991,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Zonosaurus brygooi",
+      "identifiers": {
+        "namebankID": 2546577
+      },
+      "pages": [
+        26246004,
+        26246003,
+        26246000,
+        26245998,
+        26245996,
+        26245995,
+        26245993,
+        26245992,
+        26245991
+      ]
+    },
+    {
+      "namestring": "Gerrhosauridae",
+      "identifiers": {
+        "namebankID": 215816
+      },
+      "pages": [
+        26246004,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Cordylinae",
+      "identifiers": {
+        "namebankID": 5954684
+      },
+      "pages": [
+        26246004,
+        26245991
+      ]
+    },
+    {
+      "namestring": "Tracheloptychus",
+      "identifiers": {
+        "namebankID": 212750
+      },
+      "pages": [
+        26246004,
+        26245991,
+        26245990
+      ]
+    },
+    {
+      "namestring": "Zonosaurus madagascariensis haraldmeieri",
+      "identifiers": {
+        "namebankID": 209354
+      },
+      "pages": [
+        26246004
+      ]
+    },
+    {
+      "namestring": "Gesta",
+      "identifiers": {
+        "namebankID": 2630548
+      },
+      "pages": [
+        26246003
+      ]
+    },
+    {
+      "namestring": "Andringitra",
+      "identifiers": {
+        "namebankID": 4484324
+      },
+      "pages": [
+        26246002,
+        26246000,
+        26245999
+      ]
+    },
+    {
+      "namestring": "Moramanga",
+      "identifiers": {
+        "namebankID": 4466900
+      },
+      "pages": [
+        26246002
+      ]
+    },
+    {
+      "namestring": "Ambositra",
+      "identifiers": {
+        "namebankID": 4450459
+      },
+      "pages": [
+        26246002
+      ]
+    },
+    {
+      "namestring": "Zonosaurus tsingy",
+      "identifiers": {
+        "namebankID": 2546591
+      },
+      "pages": [
+        26246000,
+        26245995,
+        26245994,
+        26245993,
+        26245992,
+        26245991
+      ]
+    },
+    {
+      "namestring": "Zonosaurus anelanelany",
+      "identifiers": {
+        "namebankID": 2546574
+      },
+      "pages": [
+        26246000,
+        26245999,
+        26245998,
+        26245997,
+        26245996,
+        26245995,
+        26245992,
+        26245991
+      ]
+    },
+    {
+      "namestring": "Zonosaurus bemaraha",
+      "identifiers": {
+        "namebankID": 2546575
+      },
+      "pages": [
+        26246000,
+        26245998,
+        26245997,
+        26245996,
+        26245995,
+        26245993,
+        26245991
+      ]
+    },
+    {
+      "namestring": "Masoala",
+      "identifiers": {
+        "namebankID": 1850330
+      },
+      "pages": [
+        26245999,
+        26245992
+      ]
+    },
+    {
+      "namestring": "Pseudoxyrhopus",
+      "identifiers": {
+        "namebankID": 212325
+      },
+      "pages": [
+        26245997
+      ]
+    },
+    {
+      "namestring": "Paragehyra gabriellae",
+      "identifiers": {
+        "namebankID": 2543324
+      },
+      "pages": [
+        26245997
+      ]
+    },
+    {
+      "namestring": "Pseudoxyrhopus sokosoko",
+      "identifiers": {
+        "namebankID": 2544251
+      },
+      "pages": [
+        26245997
+      ]
+    },
+    {
+      "namestring": "Antsalova",
+      "identifiers": {
+        "namebankID": 2998827
+      },
+      "pages": [
+        26245997
+      ]
+    },
+    {
+      "namestring": "Phelsuma antanosy",
+      "identifiers": {
+        "namebankID": 2543433
+      },
+      "pages": [
+        26245997
+      ]
+    },
+    {
+      "namestring": "Phelsuma breviceps",
+      "identifiers": {
+        "namebankID": 2543439
+      },
+      "pages": [
+        26245993
+      ]
+    },
+    {
+      "namestring": "Phelsuma seippi",
+      "identifiers": {
+        "namebankID": 2543483
+      },
+      "pages": [
+        26245993
+      ]
+    },
+    {
+      "namestring": "Phelsuma guttata",
+      "identifiers": {
+        "namebankID": 2543448
+      },
+      "pages": [
+        26245993
+      ]
+    },
+    {
+      "namestring": "Geckolepis",
+      "identifiers": {
+        "namebankID": 211100
+      },
+      "pages": [
+        26245993,
+        26245991
+      ]
+    },
+    {
+      "namestring": "Phelsuma madagascariensis",
+      "identifiers": {
+        "namebankID": 2543458
+      },
+      "pages": [
+        26245993
+      ]
+    },
+    {
+      "namestring": "Zonosaurus maximus",
+      "identifiers": {
+        "namebankID": 2546584
+      },
+      "pages": [
+        26245991
+      ]
+    },
+    {
+      "namestring": "Cordylus",
+      "identifiers": {
+        "namebankID": 210597
+      },
+      "pages": [
+        26245991
+      ]
+    },
+    {
+      "namestring": "Zonosaurus boettgeri",
+      "identifiers": {
+        "namebankID": 2546576
+      },
+      "pages": [
+        26245991
+      ]
+    },
+    {
+      "namestring": "Zonosaurus laticaudatus",
+      "identifiers": {
+        "namebankID": 2546580
+      },
+      "pages": [
+        26245991
+      ]
+    },
+    {
+      "namestring": "Pseudocordylus",
+      "identifiers": {
+        "namebankID": 212290
+      },
+      "pages": [
+        26245991
+      ]
+    },
+    {
+      "namestring": "Gerrhosaurus major",
+      "identifiers": {
+        "namebankID": 2540038
+      },
+      "pages": [
+        26245991
+      ]
+    },
+    {
+      "namestring": "Platysaurus",
+      "identifiers": {
+        "namebankID": 212190
+      },
+      "pages": [
+        26245991
+      ]
+    },
+    {
+      "namestring": "Gekkonidae",
+      "identifiers": {
+        "namebankID": 215823
+      },
+      "pages": [
+        26245990
+      ]
+    },
+    {
+      "namestring": "Phelsuma",
+      "identifiers": {
+        "namebankID": 2547005
+      },
+      "pages": [
+        26245990
+      ]
+    },
+    {
+      "namestring": "Sauria",
+      "identifiers": {
+        "namebankID": 215868
+      },
+      "pages": [
+        26245990
+      ]
+    }
+  ],
+  "classification": [
+    "Animalia",
+    "Chordata",
+    "Reptilia",
+    "Squamata"
+  ],
+  "status": 200
+}
+-->
+
+<!-- 
+{
+  "_id": "biostor\/113663",
+  "_rev": "1-ca0f0cd93d297a4988b44aef89c42e36",
+  "author": [
+    {
+      "firstname": "Paulina D",
+      "lastname": "Jenkins",
+      "name": "Paulina D Jenkins"
+    },
+    {
+      "firstname": "Christopher J",
+      "lastname": "Raxworthy",
+      "name": "Christopher J Raxworthy"
+    },
+    {
+      "firstname": "Ronald A",
+      "lastname": "Nussbaum",
+      "name": "Ronald A Nussbaum"
+    }
+  ],
+  "type": "article",
+  "title": "A new species of Microgale (Insectivora, Tenrecidae), with comments on the status of four other taxa of shrew tenrecs",
+  "journal": {
+    "name": "Bulletin of The Natural History Museum Zoology Series",
+    "volume": "63",
+    "issue": "1",
+    "pages": "1--12",
+    "identifier": [
+      {
+        "type": "issn",
+        "id": "0968-0470"
+      }
+    ]
+  },
+  "year": "1997",
+  "link": [
+    {
+      "anchor": "LINK",
+      "url": "http:\/\/biostor.org\/reference\/113663"
+    },
+    {
+      "anchor": "LINK",
+      "url": "http:\/\/www.biodiversitylibrary.org\/page\/41008582"
+    }
+  ],
+  "identifier": [
+    {
+      "type": "biostor",
+      "id": 113663
+    },
+    {
+      "type": "bhl",
+      "id": 41008582
+    }
+  ],
+  "geometry": {
+    "type": "MultiPoint",
+    "coordinates": [
+      [
+        49.166666666667,
+        -12.533333333333
+      ],
+      [
+        46.966666666667,
+        -22.216666666667
+      ],
+      [
+        46.833333333333,
+        -22.166666666667
+      ],
+      [
+        49.133333333333,
+        -16.85
+      ],
+      [
+        46.8,
+        -24.566666666667
+      ],
+      [
+        48.766666666667,
+        -17.7
+      ],
+      [
+        49.166666666667,
+        -12.483333333333
+      ],
+      [
+        49.166666666667,
+        -12.516666666667
+      ],
+      [
+        48.983333333333,
+        -17.733333333333
+      ],
+      [
+        49.3,
+        -12.266666666667
+      ],
+      [
+        48.45,
+        -18.85
+      ],
+      [
+        48.3,
+        -14.05
+      ],
+      [
+        48.966666666667,
+        -14.15
+      ],
+      [
+        48.533333333333,
+        -8.0333333333333
+      ],
+      [
+        48.5,
+        -19
+      ],
+      [
+        46.966666666667,
+        -24.966666666667
+      ],
+      [
+        46.85,
+        -24.533333333333
+      ],
+      [
+        49.766666666667,
+        -14.433333333333
+      ],
+      [
+        46.966666666667,
+        -22.183333333333
+      ],
+      [
+        47,
+        -22.216666666667
+      ],
+      [
+        47.016666666667,
+        -22.216666666667
+      ],
+      [
+        49.583333333333,
+        -15.766666666667
+      ],
+      [
+        48.766666666667,
+        -17.666666666667
+      ],
+      [
+        48.466666666667,
+        -18.85
+      ],
+      [
+        46.966666666667,
+        -24.983333333333
+      ]
+    ]
+  },
+  "bhl_pages": {
+    "0": 41008582,
+    "Page 2": 41008583,
+    "Page 3": 41008584,
+    "Page 4": 41008585,
+    "Page 5": 41008586,
+    "Page 6": 41008587,
+    "Page 7": 41008588,
+    "Page 8": 41008589,
+    "Page 9": 41008590,
+    "Page 10": 41008591,
+    "Page 11": 41008592,
+    "Page 12": 41008593
+  },
+  "citation": "Paulina D Jenkins, Christopher J Raxworthy, Ronald A Nussbaum (1997) A new species of Microgale (Insectivora, Tenrecidae), with comments on the status of four other taxa of shrew tenrecs. Bulletin of The Natural History Museum Zoology Series, 63(1): 1--12",
+  "thumbnail": "data:image\/gif;base64,R0lGODlhZACLAPYAAF9aUGNdU2ZiVmlkWm1pXnBqXm9sYHNuY3VxZXh0Z3ZyaHt2a316bn58cYF7\r\nb4J9coGBb4SCdYiEd4mId4aFeoqGeoeIfIyLfZCMf4+Qf4mHgI2NgpGOgpCPiI+Qg5OShZqVhpeY\r\nh5qZh5WVipmWipeYjJuajZmXkJ2dkp+emKGdjqCfkqCfmJ+gj5+glJ+gmKKhj6Oilaqllaaol6mp\r\nlqWlmqmnmqeonKurnbGtnq6wnrKyn6emoainoKeooKytoq+uqLGuorCvqK+wpK+wqLKzpbm2pba4\r\npru6prS1qrm2qre4rLu7rba2sLe4sLy9sr+\/usC6p8G+rMG+sr7Brr\/As7\/AuMLBrsnCr8PDtcvG\r\ntMbItc3JtsTGucrHucfIu8zLvdDHttHLt9DHu9PNvM7QvtbQvtjRv8fIwc3OwdHOwc\/Qw9PSw9rU\r\nxN7Yx9XWyNrZywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5\r\nBAAAAAAALAAAAABkAIsAAAf+gFqCWGGChYeCWmFiYmGOj4yMZGNiZJWVlpGYZGRnZ2JnnJ2gnJ6g\r\nn2dhnmOeqp6dnrGys7SxibeKuYpiXIqHj2FgkZxiZpeVZmBmosSgjbGqoqmtoK7QrdOw1rGltam6\r\nXLy+i7yM5FpjY5ZkYZbLZMbuxWbvzJau25xm3tuu9J5qZKlp00YWQVq5sFzBkoihFkK4pCSSImVL\r\noivCxGTMKKlet2nZ6O0Duc1bKGyppjhqFUZKyUU7RKigISOHDBUygmCQYQSHChhRVqyIgQODiiBR\r\noiChsSgMF6dcwjGKx+wMK1Zh3tGDJ6pfKlZWVdFroybKzRxmc2DIoQLnlIL+0B6F41JPDaMxwshk\r\nFNWGjRo1bM6w6UuY4Bs2gc8UJLiYsePHbh63iezGzRnKlTMrjjw58ubIYKlhyUGapozTOXCkJo3j\r\ntIwYsFfUJM16deodpHcUUW2TdJAgvW3k+O2b9vDfyIsDt2GjJvMcLGYHMRJl+PC3srSIGW38txEj\r\nRb6LN7Jj\/HcmUZiop6h+fRYmSCjKn0JxypQo9Omrz28fPX8p9tV3nxJJEZhUUgBGIV9SislCDiZg\r\niMIFGH+JAoYXnFyozl9jDKRGh2mAkcYbYCDWl4d\/oegGYIC9scYaaaiRxouH+cXGGn6R9ZeNBA02\r\n2BuAIcbGG2\/0xQ40vPT+ssWSTIIhgxRceIEhhheS4cUUH6oxBQte\/OVFjBc8YUMQLKiAZYcp\/kXC\r\nl14U0cEXacQJ2BZKrEChiGCgkWaKaHQZoxpo6CUoGBHCA81cUWoBxoRecMHGASC48cADEpAw6RQg\r\ngHDBAxg4AAICFXDwgRccSIAAGxUs4MACD7DgAAYYcMABCBxQWucJClzAwAUkXIABCQdUUOkHtda6\r\n57FqkCHnnmQk5klU4mzRaJRksLWAFw44EIANk5IBwgIKZIsABgsYoMIDUzzAQAReoFCrBgqoQOsD\r\nBzzgwKQMpLHCCaweEIECDyhgwr2ycsAACRwEwMEUbKST5V+BhkiGjGn+TMxJYK6MMde0Fy7apbT2\r\n2fehF2gwQYKWV145BcnpoIFGyFhOgcYYXrAQxRhTOIxGE09UUcUWaXyhRhZZdDFxn1JOAQSWKQJZ\r\n4cN\/AlYxLK1ExaQWUkZVBAc2IOuFDV6s8KfIE7NhgxM2r4gYiybCQVYbOPu1Ro1pZIHCFHDYaB8c\r\nK7vt12EkYBnj0Q4XChjVqUQliLTTbjHFAA\/0WkEFkV+gggMcDIAwTiu4oYSnDxDwAAJbgtABCBg8\r\nAIIGD3Bwwgn2NqDBFDFoUMEGXzxgwAEcrDDFCQZEXu8JHKiAhqUO\/FVxsinGSGiyiIejhUVZSCnl\r\nFmQckMADCwwQwAX+DiDAwQEGKGDAAAoUUYENYDhwLuQK9FCrvdkqoAC4CnCwqgMHADHCAffLAgUU\r\ncIAAjIqACghAvQLAqnQtgANt0FPF0oCmCk1sIFaxSiKWlAXGZU0LXYCZymQ2hSc8gWhLMMIQ8pSG\r\nLWThCV2I0RNCFEKZ6UlKY\/jCFL7gspnFzD4pS9rK7IMGxPTwWHrSE\/OYJwuHXEEQXsCaF8DABBQM\r\nyUNj60Ea2BCnNPzsDXES0RbZ8AEmwMEGTAASYYbEMLrF6G8e0hOFjqUyQAFKiciaWbJG0qGHTI9o\r\nHfTCFtRAAgOQQAKiWtgHNLAA8X3gBBfoQgMuQKwPrIADXShBBxj+kIUSIOAAJcAACLjVATVMqgMV\r\n6EAHNECCDqhgYXqMURokGCP7OAFm9sEZLoMoJTMExBNbwMIWrpAFYXKhC4qyAcAGQAAErEAN2WLV\r\nAwawgQvAIQIICECqFDCAJ0TgARtIAwMIYL8TOCAIrXNDBQJgrwU0gAPgAoEChMCGPn0oQl+qZRHZ\r\nUMKcIS1LK8PjleDCiisM8wpUIKZFlhQyXeZsiPbxWRbA0IUnMCELIQuaF7ogJYz+0C9awpkXiuaF\r\nEz5BS3xSg5RkpCeRqQEKQHwZEe0Twi5dKAsHKahBlxQVKRHqgikCaZpuxEUcCVV5Q20DkJxGlsqQ\r\nhaiHcVpQj\/X+Bpwp4T4yu1KK0OSwlaVBCxMDy0KoAAMaCIc2RQiCEKazVrUKoa1q\/cEQ0ioEJdjV\r\nrkVIwl3t6oSr2hU\/UdirEpJQBCU0QbBKaI9hmXBVFvSAB5DlQQ8mq9YeAAEIQeiBEHrAnCC8RRUF\r\n3cIOTFOT6RiBQARCD2r3alEnMBZmt+znE3BJ25A5YbazvWVsp7Db24asB1dtQhSEy4S+KsG4gb0q\r\nE4pgAyzJ4grQPegtxsAEI2A0CllYghSywAUlSOkHS0hCEqqQWCXcSYyylNGx1qa8Lq5Bvc2LE4xe\r\ntIYn4OhEegIpYmDEtr84dxrQRQIVEgrdKWiHBKkTFYI5EAH+G4AANgQgAQUYYIEOcOACU0jDFKoQ\r\nog7Hd4loklKICHWhGPlpvmCY7xJExE+RTcGuGfYCTO1jYi0UxBXQRWiOl6QFLhjYeli7UAjfk4U4\r\ndUEJaShpF7ZA0Spw9EIjlVOEpgDUjTIMDNLykoxgWLQudEFoTPjTy7r0YiAIwT4\/qCvTtDqNMBB4\r\nwDnuIBeCQAISNMcENiDKCmzQARuswAQ4MMIIbCAEFozgBCX4AQpiMIIZFCEGD2AO16bwG5xs7ZI4\r\nIEEQfiCUoxSBBDd4Agoi4IIusCHMO1Lj2rh41IGQ7SRvHnBChZkFKbwWo1I44RTe40ImLMHLE60o\r\n0b5M0S\/+fAEMw17ZFK03Uo5WdMm77mAXxNgFK3wBRjNU3mGbgMurrrRDLy6IKAQsazjLWQU2sFQE\r\nONABCXzgAg0YQQRWcIEi1EAIEohBCUrwgQ3gYJMfUOUHihyjDnFCDRdCQ57g9LwRx4mH154lGJ6g\r\ncJU+oQlAaIIQ+uoEJxThlikimygQSoUdlFsKWPDCcGQwghLY4AY1wAEKcPADFwyhBkNAgRFiAASa\r\nX9beK2AuEH4goqexV1ldlO+McBSnotKow1CAwmxlCoU+TaEJSYCZlrAz7nITmGhaYAIamWDCKvSk\r\nCFV4whKK8AQnZCEJZL\/oEk7IBBwUYbnZrcKjmaAFu0r+QQlCKMIQkrAEK4DH40MYwmxRINchMCEJ\r\nor7BCToghEPzwAlnvrpeYSyEOp4iDFdAAskJvJAtpNAIqfkOeH9A8x9Utwa\/nusPnvADIiyBCEXI\r\nKw5iAF4m\/EYJwzmt2H\/wA9gv4QdHIMINBv+EGxBhCDeIweBrUIMXvOAHPnhBDZwgV8IStq6JfTHD\r\nYiGGKFCB3KQXZt2XgIMlLJf9W4jhEIAg+CWEeu5zPTYa6EvfZbVIqF0kIvz3IiPCfzcygC+CBsYW\r\nf15WQ\/ZBNFzwS6BwfqMHZ1tQBiEgACAwARxQAQzwAQ9QAmGyAQvwARFwAQoQAQ1QAh7AAFtgbGlQ\r\nBgz+d2wkpix6YWJoMCMwyENlIINJFyf7N18I+CIpJidHVSifQAbkhgRHUG4\/cwQ6cFFEUwXV5UJZ\r\ngAZp52VL4DNV8AVWwGRbQAVWYAXTJiJXIjER4jhT9GUK+AUyOIZlgIVOBidx8jNj+AU9s4Mklicf\r\n0mERggpiEHpUcARNKGtMsAU4kAEm0AIisAI5sAIqsIgoYAIuUAMmkARDUIk1cAMlEANFMAMuEIok\r\noAJ29gMfYAM4AGg4sImTWAMf8HwtAHMhEAI3wAQjYAIl0HKM5wEo4AIvkAQoUAJEsAZuqHAV1yE5\r\n+DyvIAYJNWBMIGtEswVclgU\/QzRg8AVV8IVe2IX+X8AkaLAkxkaMZQAGyqYXUzQjJPaCW8AExkaH\r\nViCD17aAT8BCCjdL3RhxSfdeSzQ163AG5geFNKcDy5d7R2AER7AER3BXRbB2uEcER5AER5BX4sWQ\r\nRFCRyRd4hZV7ufcdEZl7FQmRDhmSyYd7GhleBEkESWAE7udr7rcES5BY6pFYT6AEEegMzIhQhFiI\r\nSPCMEgV20Vg0Y\/iFWyCUDTiGS\/KFVpAFWlA9UrJkTNKATmYF2TiUXviFTsmADeiU3fiC7Yg0zGY9\r\nP0UKstYEhShrYfgzhMIoSZdiazCOJDZLa3CNMDIjOdhhbAAGZXCXbOCWDzeERAIj1zY3e0lUe\/n+\r\nImXwIjCYXjIiKNLgdYW4BT9jAhcgAh9ALEWgBmMSAzdQBCMQfUVwAzegc4k3AzjABKyHAzJHFNSH\r\nmkNBFDXHmS5AeJlYAi5QAtU3A0wwA9nnAnaHAzcwA0Pgmy5wA3I1AkBDKApnhhGyCWVZbgZVBYOY\r\nXftBUQ\/4dj4DbNSod16WjV1QBUXzBC7EQUoZjd7pM2SYjVSwBSjJhd2Zdk6mdj5DBYcImdgYNHtY\r\ndHskEuVWlgi1BTEgApoyAyaQA3cnFCSAAkugmTeAA1RQAxyAAy7waK64iSMQAyYQfcNhoXuGAo+2\r\nmSzoAhswmy\/gA7M5A3L1A53oAh4wBDGwaDf+YHMlgAJbQIyEEiJswhXGsITlFobriFEnVDTSAkhT\r\nMJQNuFFcGX\/duGRdUD0c1VHi2YBHOZRI+YJ2SIaQmQXbeGwcVTRfwKXXSGJxmZbCQA+yRohel54u\r\nFCVQ1igsRChMpgYTsodM9qVTVIMUsjY32I5tOYAz0pf7Z20EKCf5NGKE4pbGRijJYAZ0gX6yphDR\r\ntQVRsmz3Wac1SqlueqiTCih6gZck1o7teI0R14aBuQVGoHbsiCe7Jo0RlZ546YZzWgyMcH6ylmO0\r\n1gVxuih3MjFJVqMUYiUdM0VcOUXUolLMMzGEEo+tKpdtKF88pIBLup1dICNewENM1qReIIP+blkG\r\ndDEPojerOTY9TMKmdgqmXTQxlpqMe+hhEfIXhEIyIgIn8BiqxBiPEWeYKRYhcpJkHfYl91kGjFAG\r\ngggfpLdjxzQhBsurF0KDVUKox1qoDLuYyfKWJKZwZRA0cXiY89qDChg0YRQoXQJfNpWWXOCvZWAM\r\nZ0pg4Wk9XFAxE3JBMbin\/qc8eGmYB0gxc3SfCognARiHEKeAJAOEAQgobIJHFbOH8ECy\/wgDqEkD\r\nTIsDOoCauqGRm\/YDOfADQTAEjaeRgddWwTlXgjcEuBcESpAhfpGwcxkjazCjCMiW\/Ld0NpIiOjJU\r\nhAKrijpgQ+ABJuABJTADMBACLTADMiD+FDJQAysABN\/hki5JeO3ha4zrkourHq5FdusaA4T2AcxF\r\nfagYBKRpAy1gf0eQeDXAezGQArxnAyNQA0ZAAntWBJb7AzHQaTFAAkZgF8ZgBgkVAwgAARCQAAcw\r\nAQiQACJAAjlwARWAARVgBHlDJDdCJMzbvEbFvEPSvGDkX1KIBtRYNEA6d9nYhVI5d+DZWmt3QkWw\r\nMuFRUXb1A3cnBRhCsrZLBTNASRlwAfKbAbQCAiZQZx9gAosWAy4AG9QHGzEAAzEwA7CBAovWv0PR\r\nmkJhAxnyGyWQBKE7cyvgejWQAjhgBck3AzdwBBZQA8yhBKKmczXABCtwihxAAr5purH+wQFSoAYl\r\nWwxIEMM6MAM6MAQ6oAPhoQTfcVWBZR7hkUKn15JGQHgqCcThdVdTgCeCBEMXZUJTMG1ThI3YmI1f\r\n0AVM4GVP3J1FIzMYlQZl16Uv9B4YMhWBeH5IkAWDuJUudF5R0yw4Ml9bdK9vLIAFOEbN8gaiYHci\r\nELrFh6I0d6C22ZmwtwJLQAGLxrrFdwFVcANG0IuK5gOBZgK4yL9FYAb+CsNXsAMTYAEmAAEeMJlG\r\nYEmnSAKWFAQycAQwsAIisGhM8AFBYAIiYAItuhslcANOgAIfkAIGbGcnhXDbSYUm5HrFpQTuF8ZR\r\nmQXW9QRJCUPQygRcaEIYVWu85q\/+xsCMAzbDn2tzNOCS4PEdOSAEWrBrW1hdRJBdprprSlA9KtkF\r\n2ntR0UYobBC7SyACqFkCEpAEloQCQkFYLJBpvPcBsEEC3IcDKSDLvRgCMTDCgrZoF2AEJlAEZ\/DC\r\nZiB6M5ABIeACMxACuycCMWAENvABS2ADJrBnH7CKEMzIWLsbzOF7K9AFvGd31IcCYlcEPUgG6kGF\r\nSUmFPjMFRcBRboeHRuBlyIZsRZN21Ih22Aie0aikZUjNYiBghFjDhKged\/eMS4BRjGUEZAd3eOjM\r\nJsQEUxDUL0RR1FhRvmbFE0UoORDKMXACuByjnmhJTGACTCAEJFACRuC6RVCJIYD+y6iZBA\/MiSiQ\r\n0fZ1rOP4wjBMBTqgiB7gtzDQAhegvxdAmj8gA0zwnx1tAjcHoTewBA89FAYcuruHA4MHHrBXInox\r\nIfZ5rApLYlRyrF7AjUsGqsb2hd9Ihnt4bD2oDBN9fkMwAzlZBE2oHmdHEUuKzISld0RAdqo6BWRn\r\nXZB33FdMhRGCr\/d5bH0agM4TNPUaIjAiIjlYl\/s3s4Wq29QMBqKnAyEQARn9ybJMiTMwavmrz09Q\r\nAzHai+8GaJI8FCMQorvHehSav0twl9edjAw3Yh2CJ\/sXRg8HhBV7tmugcG5IYhOSDLE6iKR5wwfZ\r\nEyspnwY5BNdpUXRHdgHiMwv+CXfZ6WXEzQR7OCGHymT6d6jJiZydSuNfmicI69pYFpaMsANXoAMT\r\ngAMV\/QEzQAMfQAL\/2cpLUJtLMAKiVgJsUAKlqAR5xntVgAMxKnOdaJpzzeIR8kKN+9UWxbhk13ZN\r\nUARrJV5oXgQ9R3zEh5pwznpPy3oTRQYvDF07QMODqAMr2R86PQTd6WUnZARuRzQlFQQppOJVoL1L\r\n0GxCTSiSvHsfUAMjcMC7UQSue6AlzDU3sAIdsC8PfLazxOA5jpfVLAYmNwMTMIsfUAEmkAE28ARC\r\nUQJVMAQRMFeLVgNbcAO3iJrqsQERigZFgAIwd+VdwGk1QJp4IgINYILy2wD+DCABEVBNJLABK8AA\r\nn04BB8ACKEABC8A6FYAC3O2UT5akSSotGlGyYIDnO6ADHYkEWv2SYY12aYe47IydL+RCWtiAwwZs\r\n+l6o1SV4Au+16BsEGllYAU\/M3OxrQ+x9efXwav58N5AFu60RovfYikgDESDLJzzX79YCk2gCivYD\r\nMFcDLjDSePYDRpACJSBz9u2Jq\/gBHFrna\/mDW2Tzo95FdZl0QTiOYQonYUpidCtgSIDD7o7DRmBr\r\ny0WFcdcFQzzmdRd37kl4TlAD2dXRwazyS1AGeiGFvlYFhPdr0Lyk3qt26dxBzqx4PnPT4AnM7Azi\r\ni34Fdh4JArbY+fu+GJD+Aa2xG0sQAZ3pAk+g5RtQA4\/Gfo62Aqs4AkYA2rkoeD8AnDjgJzaAviiA\r\ntTVgikuAAoQbAwlq1yhaoTjwBEjubzWwAR\/gApXpBLXpaCLYaB9gBD1YDOiNBKNFAztgckegGwVZ\r\nxM6Mie0H9oO36EF9UaVKheMVXou+hfE3UXFCNDMZHjrd1Uoj6Kb6HkZQ6z5jUb+GdqZ3xXN171q9\r\nBYkaDqK3AxmQAS3QAhkwAwwgyyDwAZtJifrrARF6AyHgAagpAkPw0JX4+InGooBQUxODM1R0k7aW\r\nVmSD8jNy83NRwnRTEoOCU7PhQhIzUnNS5IKDg2mStFEytCHIWWTCtDL+kgVGBiYmhnSFRNMyMzP0\r\nW8hUxGRUVHVs9MSUVKVzdLTEtFRkZazMRETVVU1t1MXGljZVtDTEVEU1tJSUlOVkpLwE5lT0s\/Rk\r\n9LW0hJPkSJEvz57kO5ekxpIvOLrcwgVm144MFFu0yBDigwkdFWLMiGUKRREcLoZ4uPECx48ZKJbc\r\nwEGkBI4SN1zG2ICjJTk1OWLUuFTlRowfQ2bUwGHCihEcWWqgIJWzCpASLp7W+HLDiJENmFyU+DCC\r\nyYcsZMyYyYUEyREa0XB8LHLEiEBlRpgwySKl2I8jVY78+EElsDG7Q55ssUvticEsZdSAwaEOxxKB\r\nXYbEEPLlycxkS+7+OamyZF6VLt5cmnCxZMuaL2vArFm9JQ0YMFwg7tIh4gMwHBdm5BBB6oggTE5w\r\nrPjogooPqjcsuCj5IwkhJj+K+EwnEowZMD8IrciZAplKfz9qDAESA0gRIIJq\/MAhcMYTnyWtrFb0\r\nhfXs2WVyRbxyBDAW6VDEDEfEoMNLki3xw0tMKLENN1T89YIhPzzhjiMlFGHQVEAMAUYaabCRhUh6\r\nNZjED1UQ4cQSghQBYxKZ3fPEOUsMhYMVKVoTQzuRwBhbGduJscMVO3yQwUWE6KCCbjDEINMPS61Q\r\nRBAoEJEEEUW98MINlg2hUg03uFBDEUfF4MIPryXShQtDYYJDCj\/+rMAggy\/UQAQLN\/hgBYMpuCTU\r\nBy14OaYLRXzQoAsfZEIWRFxIBMMOO9Aww4AG6kBEMEn4cMQNWPrQpQs+ALZiFSic8AMR0aWqyYVP\r\nDIFGrEPccM1fQACBDBBOVAfEDzzU0IRBPDzRQw9\/\/XWIeX85YsMhhyJVCxdlgFGGRCJMukOlO+jQ\r\n1iFDULFnckN4NeaeVBDBok+p1pDEDV76YN4TN5DWRYNDJNGDUO7ycEITvYZSA79NnKBBEvig0F4S\r\nbo65kiYFkoTmFmT0xwWRV9AwgQgiwBDNDNx+UAg67nLpAhEV+sAOSsuVR5QPS3C56a6jVPFFF1b8\r\nwF6LZR7bREL+xfbQhQYdnNBFrzdYwUMKlf0ABmpDlAAGPg0NsYVltWyRyxZXUNHLDDRkwLGBW+gQ\r\nzBGzDjGrD0RU4cMQWvqg9gtaAhFJivcWxmINVpCmIxF8utTirU1AAcSvivGQBBBQ+AtEF+1WMcQP\r\nW\/hQhRE1dAFjQz90YfkW0orBxRaQ0rADDDR8sINbJuBQ5Q0tgIrSC3H73XaF5jkBrwmg8sB7EiO8\r\n4ITNRdcABCh\/NdFDCilAkULhKQjxPA9QEPXDCyoOMeoMDQWIjCgiQL76FGB4LsYWRU5KOg1XwHCE\r\nDjSwv9QQsnvK5QvK0Y79qKn60OsPKfCeghrIaQn0utWvfqD+Px70oAbE6pn0evArNPzFCS9A3NqA\r\nwDorEAEFWSgCCkwwBHowhVoV48IVojCRi8AgAwc6jQeKQAIcvKAEyykBl5YDKvmB6gUp6IDcKoiC\r\nFJDpCSNA2OZsdoP\/9QBeQHgBC2rAPAWygAdNEAILetCBJhBhA35LQgNe8ASEMSEGRQgLEEwQgyfZ\r\nIBZk2EJ\/tkCFi7UABqajARK2ZbZloE2LM0QXujSYv3PxgAhN0OIGEVeFXUWHNPHAGRDQ5QQo9CAJ\r\niiHCE5IghGAVsgdNoKAGn+ADStIKc1WozhCEwDprMGViYsDFbUIAgve1gAamoKUOjuKCCtHEAyUw\r\n2QxfcIL+G5Ysl5ET5guS8AJRfWELXyCCl3yYBPlxaQQj8MGveMCCbP4PBZkcgZxegIIhGOE5IyjC\r\nBUxgNBO85ANboA0X3okEKmRrBkUg3Q7kcgwkoGMVKzKkv0pFBbZVYZChVFUSOpmEbcCHClawwhd6\r\nlqV3FHKiftNRIYGQBChk0glPqGIi14ahGjBhC0uowmH8QY0iaIE\/tIknDiAgghBkLAZG2MFGJhVC\r\nD+TPb9XjwS99sIEK\/k52MxzBaUrpAQsQIT9WqMEM8eSCEVQhqDAbQeGEcIIOQCGbJ+CBEHjggleV\r\nBAUecEQNOMCEGXxABlkgmxtr884dUKF90pjrDg6jFSP+ZKGka6vCiihXhSZYQYsNDSwVorkOJzgh\r\nCYrdghXW4dAvfKYKjI2mFZxgBYZOtAlomEKwFsehYC1WMaNRRhHk4YUsKOak7ywDXHcBAwjEIAS0\r\nhcDqRPADEMxgBCXo7TOS2i8LdGADHfABCl7QBCqUwIdVsOEv2HEEdDH1BSY4gQd+EAEPaMmG4Exa\r\nCljwvA6woAkI20DyfrAB6aTJMiMgQRBiEIRLzOACVBjf+KoFoBkgiAqXYkIUtpCFu7DDb0Qo7Nq0\r\neFBuFLgKmQUNFbToV2UcwaFoWGw+MMRYJ6hDi58dHBSm8ATPTvSRBbaCOrLQhWZkQQlTYEbl2lkG\r\nisX+8wggqMAFdEBbjWRABUyQQQ5ewLYOWACYHfBA\/TZg5CInQQM2tCERxJTMGbggBHtrqgtu0IES\r\nPOUHJVAqAk9wAiB0oAMjaAIPhqaB5o0AVUYoaww+ADLLgEAJJCgBCThwBDO8s6VqEYgOihGNIzAB\r\nCXnJwor6qsG1KZgb0STkXxiNLip0hrE0c6xiOlMFDEMusA1d3GYXh9GOKuYzkvYGDkazBCV0AcTV\r\nuAJtXl2kr00gSTLVDQgsAoJDlQAUp+pAC3gwgiK7AJlJnZUNmzAuUT2Hly5o6BdKcBKdNqcEVADm\r\nC3jbhBS8YAMaQEEHBJiCEWhgBE64QQ1GMIMbfGD+AR9wgQmKAIIPxCAGF8jzFsyAtV3M9Y4B8tgV\r\nZnCXLATYr0l4cJYabDYGRzjCJXZCQAcrWCswM0FWqFBhH\/sMiEMBDYPrGRQW9wQoPGFvzfjCY7dA\r\nry3U4AhdALDnQge6Vw4oAx8IQYAugAGkuPsHyr72CEy2XPs9Z0xGfoEHvJLLdiXH5F94ztNyySUq\r\nnADau8t2mQsH7BMkIQVZrcEKUEAVFFRCy0y4QLyNEINovZML59PBEHSwBCoghglFSgZoOKpYBkNU\r\nQpuCZIQ\/s4QCL5YbDt3CEQrOYB0NFuINjSRjg\/UOKOArkk+IpIm9sQUiqKMue4WPqz\/HdirEIAP+\r\nF4DzDDIyWxG0wAQmaIBzZlhcLvuAlyeYvQ1F5a4ZnKTLOphhCWbQ0Ir7\/gVWAFVvoY2C46YglGTe\r\nQAqawIKuOmGDJ3DBDKogbwYwEAUjoGkMOLADNqw99O3j1tthhAQmlIIJkUuCi4Yw\/eis7VxJuFkI\r\nh1BItLEIXE6A+xG+UAaPFRjJFVCBQUiZ9WBPwCJQgA9FkFFd0DPBckkhNHfyMgVCUAQroARaADpi\r\n4Fq3YQERQBEZQG9QYgEZQFYuxG0u0AIloAEu4AG8dF0jYGQWIIM2aH3pZgG9FXzNcXTNRVQm0wQ2\r\n5BzpZQlrlkU8oAEbcAJLAHangQI1wm0jcCP+SiADKrAEEyMtoWd+OrADRaADMZAV7USGEmczwXdx\r\naGhyaFBYzGRyEpcfJlcFZUA7maU2qrIOTeADnvIqbiN574BRndQFloQOReANRZAFq2AEUxAERWAE\r\n7QQ6FRNPX7N6MFApHiACsbAfjoWGnYiGaBCH+QGKoOhQzsZUX0A2yTF7JUNthJRMN+A7FMBBAnRt\r\nnfRII\/ADaCR2P2ADT6ARVSIB8iYFE+NajxIYoucx8KF+IPaFRXAuR1AhBTcrylGA\/IUu2OMlQZEy\r\n31IUVlAG66AlQ4CAN7Q2cGMFt1IE\/gIPLDIserg26FAjM7BXxeGIWlEEXkAGFeOBOnCMMdD+ArQl\r\nAkawOkZwCSAEi1c2Ay5xdDSkXMsREzBIFZ2iXDSRTMRnck9XAlagZVSnKtdGQcdlXOzCIiPgNk\/h\r\nD5eAAh9gBD\/ABCKwAfpFAipAFrnggUdABWSDAzrwC0tAA0dQCkGgBFlgbFgSTTewDoChKtrVNvKD\r\nLp2xhyEUTUtQirZXBdd1Ln5UBbUXHU2AD1iyWHLTM+VolM2gBI44El6AA0agBCYwjGeRC3KlVhYR\r\nAqQgbyYgAr9XBENwBMTUW\/bDJXuyil7hA0PnNpawJ711A2z4BbNnP1RBFR3wFEQQTF2FQOCGEijA\r\nO9VDBB5kHSZgAziwRmJnCiUAAnnWH7n+YJNH8AstgGMmIDZoxHMl4yXjkm4VgjYko0FyQ0NV0CVG\r\n6TYmU2D5MSvENCtARnXu6B4v82T9snVNaG7fZhM\/IATwxTrdoV9HwAY0SSQ3GQwtwIJPogNIkG6a\r\nUAJuhz3JRBVw0zaDCS6rIDsVNybIFnirEIdYMiZwA07g0pi1d1wJcW4pgC5g1ZHWVx2kcCMqoD1q\r\nZQMfQAVmQZM26QsGUiljNG84kAPa4y5XlkwF14Lg4gGQ4y5L+QLpRpEeegNUgAZQYAXc2DbmxoZW\r\nECsxmgajCIozGitrECuJwAavsaOvYQY9+qNssB1uKQbS0G9pWRc6wDoqURdv5yVaQgT+gWc2+jcD\r\nn7I21oNAfhMYflViK1pt+0MEMSqmXxCjMAqKOGqmbKgIIrIfs8EaZcAGZOAYYnAGDzpXEzASv6A9\r\nYVgKafcCzoESJWF9LzANOOg3JVCV58Jz3DB1KNGlbBh13BVMUXYnG4ACkQBtXNIELhB7M4QCG8Ag\r\nE+ABMTBGbgIDa8UFrCQGZnAEatEC7UNLQZADcGEE1JAF7BBK2NME6BCloIF\/gcdQBfabXIol39JQ\r\nAWiHbKNg9Oc2u4IliaarWvRgfqUZAncMaFMM8EEN+kiTM+YBEAABRoABGDADGmMCH8ABMwBthmkJ\r\nNNFbRsYAR1dNJUABY0ZD7ul7Gfn+WCZTZOhidB6QBDSEnuBUKbLjax2QBBbhAzToAhJwATawBC7A\r\nAGslCyogAxJQBG1Qp7lgBGmxLTvQqkWQF3URBDgASjWBNujQDiYTDHuIJVcZHYflR1gZfA8XGIOF\r\nLusQWFrifovlBE2gcIf2YESgV\/qAYt7ABKumBFIQBFlApNuJBBAAAiaAARqxAzJwrhIgAbxlAUoF\r\ng1NmAYbprtCGqEVVfRbwA1n2p0kQY0ERAh3gAsQFhMo1Q00wAr4zApwaVMM2rxZABVWRDxugAhdw\r\nTiRwASQgBTJAAkvQBnSKFmnRAveEBGrpD\/dkF9uANpKWJYEHOW7jEkT5DE3wA0D+21d+FXENtaU5\r\nq0Ea9AOZpXhReg8BJZVU8BkTpgyHMRhLIAUYsgQBNgWpehZ1ej4ioAJHsgI0gKAyYBw2oARzSbYl\r\ncQPppnvHNgPIFVQnQAEl0AT2E0zc1WlcxiU+pBy9tb1adwJ5O1QdsCJIxiLxmQXy9mYaARmeIANK\r\noAIS46C6wDVe6IXyVBcPUgRTMAUS4jaB0TZEEF1H0En+ALs9QzmCtWjiGIDnYrrcEFiJlCWJpFiK\r\npSNZYnEO5gRKIAQBlxhTwATmYHj3tqpvaSQXAQEWYQI7EAOZeAGgSVa7Z4MM8Hs26BxUEQK9FVUe\r\n8Ds+sINGZwEtEHy\/dK+9tIf+MHh0LXAuJ4EC2gMB1MZbeZsENrACbAUC5\/QBJOBeK1B693YWZxFH\r\n8gQXM7ADN3IhWWAEPUE5+ZMq58KrgecEaINMitUz5xJQCAwYNUvBbHMvGecON+Bw7eAMj2UFAuEO\r\n6mAFU+AFIosMWTAFZakFUyADUqAFT7sDWDARGVA6GUECVbsDYvEBiHoDEHBcNlgCS+ABP+wcQ3YE\r\niBq3XdJLXXYEHqADcKh7rneEEWABT7OEDbAp5hEBGxABk1ACG0CDpRcCYPwAJCAD0SyQJqACNna\/\r\nwbuqUcALNbUDWTC5LZYDk6EM61Bt4HKiaPObk1FuTEC7UHqVFswOiRdhUPn+DpWlee7QInZhaFUw\r\nBV0gcDaTBe3kBWDgBV7ABV0QOgiN0LXhuGfBzUeSASAQA1TLGxOAFDVnfS5gAcsRg11bAt7ZZacn\r\nKibACSXww5n6tcEHDEQgg9QUAiDUABGAArQVgzHgBSOiBmlw0AXdpmDgGPsxBrYwMWWsndwsBTTQ\r\nsVJwBbWaF0cQBEywyM8QGIARGN9y1Qs2YS\/gjKILWQHlV94YgGVQUpmVBFswGjUCDk+gDKpVlifc\r\nBV7wBbNx0HRt0D09G3BFk24ZBVqABJkIAk8S2PQ2tT\/QAjuIdNB2dDFIFRYwlxlgAbPcWxvQAka3\r\nbb\/XAjEWgFUAg8sRAY\/+YASEiwMfkAIxqK42oALDRQJF8NP74dO0gdB5vdcrfAVYoAW3bdtYwAW3\r\nvdBbwNC\/zQU+Ldxk4AUr9dp27dNyOhs87QVqMAVkMAayUdDELRs8HdRArQZBLadjMAZyCt1q0N1k\r\nIN7iHd5kIAbmbd5RgAVXcEJY4N62nQVYsAW3PQWec9Aud9Bwhddtegu1cQsPwdPibQvgnd3\/7Rhq\r\n4N3jPeBAPd4EXuBqcAbZbQYJPt7nfd7oLQVYgEJ0lAMZQAMfjrwgEAQqAAMyIAKTGwNK8E5jUNA5\r\nTdy0oeAhEiLenQbKXeMPLuAN7t3gXd7hfeANnt1qMOHifQZkEAZFTuT+FZ7htx0GWCAGtw3lth0G\r\nTw7lWsAFY\/BOB83drz3Ur\/bfdN3dzT3e3Q3eCk7eBD4GZlDe4y2nCA7dST7hQy7eFz7nF57hTd7k\r\nt03lYhAGYaAFU86BTz5+XsDd3F0br7YfrWQL+Mjdt9Dj5N3dY4DkYwDhko7kZUHhRF7ml27kderp\r\nR07kYRAFeI4Ffa4FTs7kf67nvP1OYlDoxV3ot+AfrfTfbE7etV7gY87mlH4Gka7m4m0GQo7gZ0Ds\r\nZBDhQ07snk6nU27eYqDeeV7lucCBqs7bfz5+47flhN7lsyEGjuHij\/7mBK7rPl7m3T3kcT7evX4G\r\nYWDeye64jovkxP7e3n1e6rZd5an+5FSONWuH0FgO3UNdMTDe6G\/+EAQf7pHO6Qiu5hPu5pge7Mle\r\n7Mq+7hNf7M3+3u7N5\/b+5FNe6mLg5LsNOvL9Tp4T6IY+1Pk48OY9G7KO3gY\/3nLO5g0\/3m1QFmwg\r\n6Za+7qAu3uyO3hau3hdf6k1+8R6v2\/auBfNt5ZGY72Ng5a3u6Oedqufdpq6+6zsv53Ru62RA8w1e\r\n5BNv7Dz\/9RJPBj8P9LlN77ld9Fbu5IK+27vd9Cbv6o1O6BDRSlNu4VU\/51kv5OIt88be3fF+5O9O\r\n7DTJ7oEAADs=\r\n",
+  "date": [
+    1997,
+    6,
+    26
+  ],
+  "names": [
+    
+  ],
+  "classification": [
+    
+  ],
+  "status": 200
+}
+-->
+
+<div>
+	<div style="width:100%;height:auto;">
+		<h2>JSON</h2>
+			<!-- JSON for data object goes below -->
+			<textarea id="json" style="width:100%;background-color:#224FBC;color:#FFFF66;" rows="20">{
+  "_id": "biostor\/113663",
+  "_rev": "1-ca0f0cd93d297a4988b44aef89c42e36",
+  "author": [
+    {
+      "firstname": "Paulina D",
+      "lastname": "Jenkins",
+      "name": "Paulina D Jenkins"
+    },
+    {
+      "firstname": "Christopher J",
+      "lastname": "Raxworthy",
+      "name": "Christopher J Raxworthy"
+    },
+    {
+      "firstname": "Ronald A",
+      "lastname": "Nussbaum",
+      "name": "Ronald A Nussbaum"
+    }
+  ],
+  "type": "article",
+  "title": "A new species of Microgale (Insectivora, Tenrecidae), with comments on the status of four other taxa of shrew tenrecs",
+  "journal": {
+    "name": "Bulletin of The Natural History Museum Zoology Series",
+    "volume": "63",
+    "issue": "1",
+    "pages": "1--12",
+    "identifier": [
+      {
+        "type": "issn",
+        "id": "0968-0470"
+      }
+    ]
+  },
+  "year": "1997",
+  "link": [
+    {
+      "anchor": "LINK",
+      "url": "http:\/\/biostor.org\/reference\/113663"
+    },
+    {
+      "anchor": "LINK",
+      "url": "http:\/\/www.biodiversitylibrary.org\/page\/41008582"
+    }
+  ],
+  "identifier": [
+    {
+      "type": "biostor",
+      "id": 113663
+    },
+    {
+      "type": "bhl",
+      "id": 41008582
+    }
+  ],
+  "geometry": {
+    "type": "MultiPoint",
+    "coordinates": [
+      [
+        49.166666666667,
+        -12.533333333333
+      ],
+      [
+        46.966666666667,
+        -22.216666666667
+      ],
+      [
+        46.833333333333,
+        -22.166666666667
+      ],
+      [
+        49.133333333333,
+        -16.85
+      ],
+      [
+        46.8,
+        -24.566666666667
+      ],
+      [
+        48.766666666667,
+        -17.7
+      ],
+      [
+        49.166666666667,
+        -12.483333333333
+      ],
+      [
+        49.166666666667,
+        -12.516666666667
+      ],
+      [
+        48.983333333333,
+        -17.733333333333
+      ],
+      [
+        49.3,
+        -12.266666666667
+      ],
+      [
+        48.45,
+        -18.85
+      ],
+      [
+        48.3,
+        -14.05
+      ],
+      [
+        48.966666666667,
+        -14.15
+      ],
+      [
+        48.533333333333,
+        -8.0333333333333
+      ],
+      [
+        48.5,
+        -19
+      ],
+      [
+        46.966666666667,
+        -24.966666666667
+      ],
+      [
+        46.85,
+        -24.533333333333
+      ],
+      [
+        49.766666666667,
+        -14.433333333333
+      ],
+      [
+        46.966666666667,
+        -22.183333333333
+      ],
+      [
+        47,
+        -22.216666666667
+      ],
+      [
+        47.016666666667,
+        -22.216666666667
+      ],
+      [
+        49.583333333333,
+        -15.766666666667
+      ],
+      [
+        48.766666666667,
+        -17.666666666667
+      ],
+      [
+        48.466666666667,
+        -18.85
+      ],
+      [
+        46.966666666667,
+        -24.983333333333
+      ]
+    ]
+  },
+  "bhl_pages": {
+    "0": 41008582,
+    "Page 2": 41008583,
+    "Page 3": 41008584,
+    "Page 4": 41008585,
+    "Page 5": 41008586,
+    "Page 6": 41008587,
+    "Page 7": 41008588,
+    "Page 8": 41008589,
+    "Page 9": 41008590,
+    "Page 10": 41008591,
+    "Page 11": 41008592,
+    "Page 12": 41008593
+  },
+  "citation": "Paulina D Jenkins, Christopher J Raxworthy, Ronald A Nussbaum (1997) A new species of Microgale (Insectivora, Tenrecidae), with comments on the status of four other taxa of shrew tenrecs. Bulletin of The Natural History Museum Zoology Series, 63(1): 1--12",
+  "thumbnail": "data:image\/gif;base64,R0lGODlhZACLAPYAAF9aUGNdU2ZiVmlkWm1pXnBqXm9sYHNuY3VxZXh0Z3ZyaHt2a316bn58cYF7\r\nb4J9coGBb4SCdYiEd4mId4aFeoqGeoeIfIyLfZCMf4+Qf4mHgI2NgpGOgpCPiI+Qg5OShZqVhpeY\r\nh5qZh5WVipmWipeYjJuajZmXkJ2dkp+emKGdjqCfkqCfmJ+gj5+glJ+gmKKhj6Oilaqllaaol6mp\r\nlqWlmqmnmqeonKurnbGtnq6wnrKyn6emoainoKeooKytoq+uqLGuorCvqK+wpK+wqLKzpbm2pba4\r\npru6prS1qrm2qre4rLu7rba2sLe4sLy9sr+\/usC6p8G+rMG+sr7Brr\/As7\/AuMLBrsnCr8PDtcvG\r\ntMbItc3JtsTGucrHucfIu8zLvdDHttHLt9DHu9PNvM7QvtbQvtjRv8fIwc3OwdHOwc\/Qw9PSw9rU\r\nxN7Yx9XWyNrZywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5\r\nBAAAAAAALAAAAABkAIsAAAf+gFqCWGGChYeCWmFiYmGOj4yMZGNiZJWVlpGYZGRnZ2JnnJ2gnJ6g\r\nn2dhnmOeqp6dnrGys7SxibeKuYpiXIqHj2FgkZxiZpeVZmBmosSgjbGqoqmtoK7QrdOw1rGltam6\r\nXLy+i7yM5FpjY5ZkYZbLZMbuxWbvzJau25xm3tuu9J5qZKlp00YWQVq5sFzBkoihFkK4pCSSImVL\r\noivCxGTMKKlet2nZ6O0Duc1bKGyppjhqFUZKyUU7RKigISOHDBUygmCQYQSHChhRVqyIgQODiiBR\r\noiChsSgMF6dcwjGKx+wMK1Zh3tGDJ6pfKlZWVdFroybKzRxmc2DIoQLnlIL+0B6F41JPDaMxwshk\r\nFNWGjRo1bM6w6UuY4Bs2gc8UJLiYsePHbh63iezGzRnKlTMrjjw58ubIYKlhyUGapozTOXCkJo3j\r\ntIwYsFfUJM16deodpHcUUW2TdJAgvW3k+O2b9vDfyIsDt2GjJvMcLGYHMRJl+PC3srSIGW38txEj\r\nRb6LN7Jj\/HcmUZiop6h+fRYmSCjKn0JxypQo9Omrz28fPX8p9tV3nxJJEZhUUgBGIV9SislCDiZg\r\niMIFGH+JAoYXnFyozl9jDKRGh2mAkcYbYCDWl4d\/oegGYIC9scYaaaiRxouH+cXGGn6R9ZeNBA02\r\n2BuAIcbGG2\/0xQ40vPT+ssWSTIIhgxRceIEhhheS4cUUH6oxBQte\/OVFjBc8YUMQLKiAZYcp\/kXC\r\nl14U0cEXacQJ2BZKrEChiGCgkWaKaHQZoxpo6CUoGBHCA81cUWoBxoRecMHGASC48cADEpAw6RQg\r\ngHDBAxg4AAICFXDwgRccSIAAGxUs4MACD7DgAAYYcMABCBxQWucJClzAwAUkXIABCQdUUOkHtda6\r\n57FqkCHnnmQk5klU4mzRaJRksLWAFw44EIANk5IBwgIKZIsABgsYoMIDUzzAQAReoFCrBgqoQOsD\r\nBzzgwKQMpLHCCaweEIECDyhgwr2ycsAACRwEwMEUbKST5V+BhkiGjGn+TMxJYK6MMde0Fy7apbT2\r\n2fehF2gwQYKWV145BcnpoIFGyFhOgcYYXrAQxRhTOIxGE09UUcUWaXyhRhZZdDFxn1JOAQSWKQJZ\r\n4cN\/AlYxLK1ExaQWUkZVBAc2IOuFDV6s8KfIE7NhgxM2r4gYiybCQVYbOPu1Ro1pZIHCFHDYaB8c\r\nK7vt12EkYBnj0Q4XChjVqUQliLTTbjHFAA\/0WkEFkV+gggMcDIAwTiu4oYSnDxDwAAJbgtABCBg8\r\nAIIGD3Bwwgn2NqDBFDFoUMEGXzxgwAEcrDDFCQZEXu8JHKiAhqUO\/FVxsinGSGiyiIejhUVZSCnl\r\nFmQckMADCwwQwAX+DiDAwQEGKGDAAAoUUYENYDhwLuQK9FCrvdkqoAC4CnCwqgMHADHCAffLAgUU\r\ncIAAjIqACghAvQLAqnQtgANt0FPF0oCmCk1sIFaxSiKWlAXGZU0LXYCZymQ2hSc8gWhLMMIQ8pSG\r\nLWThCV2I0RNCFEKZ6UlKY\/jCFL7gspnFzD4pS9rK7IMGxPTwWHrSE\/OYJwuHXEEQXsCaF8DABBQM\r\nyUNj60Ea2BCnNPzsDXES0RbZ8AEmwMEGTAASYYbEMLrF6G8e0hOFjqUyQAFKiciaWbJG0qGHTI9o\r\nHfTCFtRAAgOQQAKiWtgHNLAA8X3gBBfoQgMuQKwPrIADXShBBxj+kIUSIOAAJcAACLjVATVMqgMV\r\n6EAHNECCDqhgYXqMURokGCP7OAFm9sEZLoMoJTMExBNbwMIWrpAFYXKhC4qyAcAGQAAErEAN2WLV\r\nAwawgQvAIQIICECqFDCAJ0TgARtIAwMIYL8TOCAIrXNDBQJgrwU0gAPgAoEChMCGPn0oQl+qZRHZ\r\nUMKcIS1LK8PjleDCiisM8wpUIKZFlhQyXeZsiPbxWRbA0IUnMCELIQuaF7ogJYz+0C9awpkXiuaF\r\nEz5BS3xSg5RkpCeRqQEKQHwZEe0Twi5dKAsHKahBlxQVKRHqgikCaZpuxEUcCVV5Q20DkJxGlsqQ\r\nhaiHcVpQj\/X+Bpwp4T4yu1KK0OSwlaVBCxMDy0KoAAMaCIc2RQiCEKazVrUKoa1q\/cEQ0ioEJdjV\r\nrkVIwl3t6oSr2hU\/UdirEpJQBCU0QbBKaI9hmXBVFvSAB5DlQQ8mq9YeAAEIQeiBEHrAnCC8RRUF\r\n3cIOTFOT6RiBQARCD2r3alEnMBZmt+znE3BJ25A5YbazvWVsp7Db24asB1dtQhSEy4S+KsG4gb0q\r\nE4pgAyzJ4grQPegtxsAEI2A0CllYghSywAUlSOkHS0hCEqqQWCXcSYyylNGx1qa8Lq5Bvc2LE4xe\r\ntIYn4OhEegIpYmDEtr84dxrQRQIVEgrdKWiHBKkTFYI5EAH+G4AANgQgAQUYYIEOcOACU0jDFKoQ\r\nog7Hd4loklKICHWhGPlpvmCY7xJExE+RTcGuGfYCTO1jYi0UxBXQRWiOl6QFLhjYeli7UAjfk4U4\r\ndUEJaShpF7ZA0Spw9EIjlVOEpgDUjTIMDNLykoxgWLQudEFoTPjTy7r0YiAIwT4\/qCvTtDqNMBB4\r\nwDnuIBeCQAISNMcENiDKCmzQARuswAQ4MMIIbCAEFozgBCX4AQpiMIIZFCEGD2AO16bwG5xs7ZI4\r\nIEEQfiCUoxSBBDd4Agoi4IIusCHMO1Lj2rh41IGQ7SRvHnBChZkFKbwWo1I44RTe40ImLMHLE60o\r\n0b5M0S\/+fAEMw17ZFK03Uo5WdMm77mAXxNgFK3wBRjNU3mGbgMurrrRDLy6IKAQsazjLWQU2sFQE\r\nONABCXzgAg0YQQRWcIEi1EAIEohBCUrwgQ3gYJMfUOUHihyjDnFCDRdCQ57g9LwRx4mH154lGJ6g\r\ncJU+oQlAaIIQ+uoEJxThlikimygQSoUdlFsKWPDCcGQwghLY4AY1wAEKcPADFwyhBkNAgRFiAASa\r\nX9beK2AuEH4goqexV1ldlO+McBSnotKow1CAwmxlCoU+TaEJSYCZlrAz7nITmGhaYAIamWDCKvSk\r\nCFV4whKK8AQnZCEJZL\/oEk7IBBwUYbnZrcKjmaAFu0r+QQlCKMIQkrAEK4DH40MYwmxRINchMCEJ\r\nor7BCToghEPzwAlnvrpeYSyEOp4iDFdAAskJvJAtpNAIqfkOeH9A8x9Utwa\/nusPnvADIiyBCEXI\r\nKw5iAF4m\/EYJwzmt2H\/wA9gv4QdHIMINBv+EGxBhCDeIweBrUIMXvOAHPnhBDZwgV8IStq6JfTHD\r\nYiGGKFCB3KQXZt2XgIMlLJf9W4jhEIAg+CWEeu5zPTYa6EvfZbVIqF0kIvz3IiPCfzcygC+CBsYW\r\nf15WQ\/ZBNFzwS6BwfqMHZ1tQBiEgACAwARxQAQzwAQ9QAmGyAQvwARFwAQoQAQ1QAh7AAFtgbGlQ\r\nBgz+d2wkpix6YWJoMCMwyENlIINJFyf7N18I+CIpJidHVSifQAbkhgRHUG4\/cwQ6cFFEUwXV5UJZ\r\ngAZp52VL4DNV8AVWwGRbQAVWYAXTJiJXIjER4jhT9GUK+AUyOIZlgIVOBidx8jNj+AU9s4Mklicf\r\n0mERggpiEHpUcARNKGtMsAU4kAEm0AIisAI5sAIqsIgoYAIuUAMmkARDUIk1cAMlEANFMAMuEIok\r\noAJ29gMfYAM4AGg4sImTWAMf8HwtAHMhEAI3wAQjYAIl0HKM5wEo4AIvkAQoUAJEsAZuqHAV1yE5\r\n+DyvIAYJNWBMIGtEswVclgU\/QzRg8AVV8IVe2IX+X8AkaLAkxkaMZQAGyqYXUzQjJPaCW8AExkaH\r\nViCD17aAT8BCCjdL3RhxSfdeSzQ163AG5geFNKcDy5d7R2AER7AER3BXRbB2uEcER5AER5BX4sWQ\r\nRFCRyRd4hZV7ufcdEZl7FQmRDhmSyYd7GhleBEkESWAE7udr7rcES5BY6pFYT6AEEegMzIhQhFiI\r\nSPCMEgV20Vg0Y\/iFWyCUDTiGS\/KFVpAFWlA9UrJkTNKATmYF2TiUXviFTsmADeiU3fiC7Yg0zGY9\r\nP0UKstYEhShrYfgzhMIoSZdiazCOJDZLa3CNMDIjOdhhbAAGZXCXbOCWDzeERAIj1zY3e0lUe\/n+\r\nImXwIjCYXjIiKNLgdYW4BT9jAhcgAh9ALEWgBmMSAzdQBCMQfUVwAzegc4k3AzjABKyHAzJHFNSH\r\nmkNBFDXHmS5AeJlYAi5QAtU3A0wwA9nnAnaHAzcwA0Pgmy5wA3I1AkBDKApnhhGyCWVZbgZVBYOY\r\nXftBUQ\/4dj4DbNSod16WjV1QBUXzBC7EQUoZjd7pM2SYjVSwBSjJhd2Zdk6mdj5DBYcImdgYNHtY\r\ndHskEuVWlgi1BTEgApoyAyaQA3cnFCSAAkugmTeAA1RQAxyAAy7waK64iSMQAyYQfcNhoXuGAo+2\r\nmSzoAhswmy\/gA7M5A3L1A53oAh4wBDGwaDf+YHMlgAJbQIyEEiJswhXGsITlFobriFEnVDTSAkhT\r\nMJQNuFFcGX\/duGRdUD0c1VHi2YBHOZRI+YJ2SIaQmQXbeGwcVTRfwKXXSGJxmZbCQA+yRohel54u\r\nFCVQ1igsRChMpgYTsodM9qVTVIMUsjY32I5tOYAz0pf7Z20EKCf5NGKE4pbGRijJYAZ0gX6yphDR\r\ntQVRsmz3Wac1SqlueqiTCih6gZck1o7teI0R14aBuQVGoHbsiCe7Jo0RlZ546YZzWgyMcH6ylmO0\r\n1gVxuih3MjFJVqMUYiUdM0VcOUXUolLMMzGEEo+tKpdtKF88pIBLup1dICNewENM1qReIIP+blkG\r\ndDEPojerOTY9TMKmdgqmXTQxlpqMe+hhEfIXhEIyIgIn8BiqxBiPEWeYKRYhcpJkHfYl91kGjFAG\r\ngggfpLdjxzQhBsurF0KDVUKox1qoDLuYyfKWJKZwZRA0cXiY89qDChg0YRQoXQJfNpWWXOCvZWAM\r\nZ0pg4Wk9XFAxE3JBMbin\/qc8eGmYB0gxc3SfCognARiHEKeAJAOEAQgobIJHFbOH8ECy\/wgDqEkD\r\nTIsDOoCauqGRm\/YDOfADQTAEjaeRgddWwTlXgjcEuBcESpAhfpGwcxkjazCjCMiW\/Ld0NpIiOjJU\r\nhAKrijpgQ+ABJuABJTADMBACLTADMiD+FDJQAysABN\/hki5JeO3ha4zrkourHq5FdusaA4T2AcxF\r\nfagYBKRpAy1gf0eQeDXAezGQArxnAyNQA0ZAAntWBJb7AzHQaTFAAkZgF8ZgBgkVAwgAARCQAAcw\r\nAQiQACJAAjlwARWAARVgBHlDJDdCJMzbvEbFvEPSvGDkX1KIBtRYNEA6d9nYhVI5d+DZWmt3QkWw\r\nMuFRUXb1A3cnBRhCsrZLBTNASRlwAfKbAbQCAiZQZx9gAosWAy4AG9QHGzEAAzEwA7CBAovWv0PR\r\nmkJhAxnyGyWQBKE7cyvgejWQAjhgBck3AzdwBBZQA8yhBKKmczXABCtwihxAAr5purH+wQFSoAYl\r\nWwxIEMM6MAM6MAQ6oAPhoQTfcVWBZR7hkUKn15JGQHgqCcThdVdTgCeCBEMXZUJTMG1ThI3YmI1f\r\n0AVM4GVP3J1FIzMYlQZl16Uv9B4YMhWBeH5IkAWDuJUudF5R0yw4Ml9bdK9vLIAFOEbN8gaiYHci\r\nELrFh6I0d6C22ZmwtwJLQAGLxrrFdwFVcANG0IuK5gOBZgK4yL9FYAb+CsNXsAMTYAEmAAEeMJlG\r\nYEmnSAKWFAQycAQwsAIisGhM8AFBYAIiYAItuhslcANOgAIfkAIGbGcnhXDbSYUm5HrFpQTuF8ZR\r\nmQXW9QRJCUPQygRcaEIYVWu85q\/+xsCMAzbDn2tzNOCS4PEdOSAEWrBrW1hdRJBdprprSlA9KtkF\r\n2ntR0UYobBC7SyACqFkCEpAEloQCQkFYLJBpvPcBsEEC3IcDKSDLvRgCMTDCgrZoF2AEJlAEZ\/DC\r\nZiB6M5ABIeACMxACuycCMWAENvABS2ADJrBnH7CKEMzIWLsbzOF7K9AFvGd31IcCYlcEPUgG6kGF\r\nSUmFPjMFRcBRboeHRuBlyIZsRZN21Ih22Aie0aikZUjNYiBghFjDhKged\/eMS4BRjGUEZAd3eOjM\r\nJsQEUxDUL0RR1FhRvmbFE0UoORDKMXACuByjnmhJTGACTCAEJFACRuC6RVCJIYD+y6iZBA\/MiSiQ\r\n0fZ1rOP4wjBMBTqgiB7gtzDQAhegvxdAmj8gA0zwnx1tAjcHoTewBA89FAYcuruHA4MHHrBXInox\r\nIfZ5rApLYlRyrF7AjUsGqsb2hd9Ihnt4bD2oDBN9fkMwAzlZBE2oHmdHEUuKzISld0RAdqo6BWRn\r\nXZB33FdMhRGCr\/d5bH0agM4TNPUaIjAiIjlYl\/s3s4Wq29QMBqKnAyEQARn9ybJMiTMwavmrz09Q\r\nAzHai+8GaJI8FCMQorvHehSav0twl9edjAw3Yh2CJ\/sXRg8HhBV7tmugcG5IYhOSDLE6iKR5wwfZ\r\nEyspnwY5BNdpUXRHdgHiMwv+CXfZ6WXEzQR7OCGHymT6d6jJiZydSuNfmicI69pYFpaMsANXoAMT\r\ngAMV\/QEzQAMfQAL\/2cpLUJtLMAKiVgJsUAKlqAR5xntVgAMxKnOdaJpzzeIR8kKN+9UWxbhk13ZN\r\nUARrJV5oXgQ9R3zEh5pwznpPy3oTRQYvDF07QMODqAMr2R86PQTd6WUnZARuRzQlFQQppOJVoL1L\r\n0GxCTSiSvHsfUAMjcMC7UQSue6AlzDU3sAIdsC8PfLazxOA5jpfVLAYmNwMTMIsfUAEmkAE28ARC\r\nUQJVMAQRMFeLVgNbcAO3iJrqsQERigZFgAIwd+VdwGk1QJp4IgINYILy2wD+DCABEVBNJLABK8AA\r\nn04BB8ACKEABC8A6FYAC3O2UT5akSSotGlGyYIDnO6ADHYkEWv2SYY12aYe47IydL+RCWtiAwwZs\r\n+l6o1SV4Au+16BsEGllYAU\/M3OxrQ+x9efXwav58N5AFu60RovfYikgDESDLJzzX79YCk2gCivYD\r\nMFcDLjDSePYDRpACJSBz9u2Jq\/gBHFrna\/mDW2Tzo95FdZl0QTiOYQonYUpidCtgSIDD7o7DRmBr\r\ny0WFcdcFQzzmdRd37kl4TlAD2dXRwazyS1AGeiGFvlYFhPdr0Lyk3qt26dxBzqx4PnPT4AnM7Azi\r\ni34Fdh4JArbY+fu+GJD+Aa2xG0sQAZ3pAk+g5RtQA4\/Gfo62Aqs4AkYA2rkoeD8AnDjgJzaAviiA\r\ntTVgikuAAoQbAwlq1yhaoTjwBEjubzWwAR\/gApXpBLXpaCLYaB9gBD1YDOiNBKNFAztgckegGwVZ\r\nxM6Mie0H9oO36EF9UaVKheMVXou+hfE3UXFCNDMZHjrd1Uoj6Kb6HkZQ6z5jUb+GdqZ3xXN171q9\r\nBYkaDqK3AxmQAS3QAhkwAwwgyyDwAZtJifrrARF6AyHgAagpAkPw0JX4+InGooBQUxODM1R0k7aW\r\nVmSD8jNy83NRwnRTEoOCU7PhQhIzUnNS5IKDg2mStFEytCHIWWTCtDL+kgVGBiYmhnSFRNMyMzP0\r\nW8hUxGRUVHVs9MSUVKVzdLTEtFRkZazMRETVVU1t1MXGljZVtDTEVEU1tJSUlOVkpLwE5lT0s\/Rk\r\n9LW0hJPkSJEvz57kO5ekxpIvOLrcwgVm144MFFu0yBDigwkdFWLMiGUKRREcLoZ4uPECx48ZKJbc\r\nwEGkBI4SN1zG2ICjJTk1OWLUuFTlRowfQ2bUwGHCihEcWWqgIJWzCpASLp7W+HLDiJENmFyU+DCC\r\nyYcsZMyYyYUEyREa0XB8LHLEiEBlRpgwySKl2I8jVY78+EElsDG7Q55ssUvticEsZdSAwaEOxxKB\r\nXYbEEPLlycxkS+7+OamyZF6VLt5cmnCxZMuaL2vArFm9JQ0YMFwg7tIh4gMwHBdm5BBB6oggTE5w\r\nrPjogooPqjcsuCj5IwkhJj+K+EwnEowZMD8IrciZAplKfz9qDAESA0gRIIJq\/MAhcMYTnyWtrFb0\r\nhfXs2WVyRbxyBDAW6VDEDEfEoMNLki3xw0tMKLENN1T89YIhPzzhjiMlFGHQVEAMAUYaabCRhUh6\r\nNZjED1UQ4cQSghQBYxKZ3fPEOUsMhYMVKVoTQzuRwBhbGduJscMVO3yQwUWE6KCCbjDEINMPS61Q\r\nRBAoEJEEEUW98MINlg2hUg03uFBDEUfF4MIPryXShQtDYYJDCj\/+rMAggy\/UQAQLN\/hgBYMpuCTU\r\nBy14OaYLRXzQoAsfZEIWRFxIBMMOO9Aww4AG6kBEMEn4cMQNWPrQpQs+ALZiFSic8AMR0aWqyYVP\r\nDIFGrEPccM1fQACBDBBOVAfEDzzU0IRBPDzRQw9\/\/XWIeX85YsMhhyJVCxdlgFGGRCJMukOlO+jQ\r\n1iFDULFnckN4NeaeVBDBok+p1pDEDV76YN4TN5DWRYNDJNGDUO7ycEITvYZSA79NnKBBEvig0F4S\r\nbo65kiYFkoTmFmT0xwWRV9AwgQgiwBDNDNx+UAg67nLpAhEV+sAOSsuVR5QPS3C56a6jVPFFF1b8\r\nwF6LZR7bREL+xfbQhQYdnNBFrzdYwUMKlf0ABmpDlAAGPg0NsYVltWyRyxZXUNHLDDRkwLGBW+gQ\r\nzBGzDjGrD0RU4cMQWvqg9gtaAhFJivcWxmINVpCmIxF8utTirU1AAcSvivGQBBBQ+AtEF+1WMcQP\r\nW\/hQhRE1dAFjQz90YfkW0orBxRaQ0rADDDR8sINbJuBQ5Q0tgIrSC3H73XaF5jkBrwmg8sB7EiO8\r\n4ITNRdcABCh\/NdFDCilAkULhKQjxPA9QEPXDCyoOMeoMDQWIjCgiQL76FGB4LsYWRU5KOg1XwHCE\r\nDjSwv9QQsnvK5QvK0Y79qKn60OsPKfCeghrIaQn0utWvfqD+Px70oAbE6pn0evArNPzFCS9A3NqA\r\nwDorEAEFWSgCCkwwBHowhVoV48IVojCRi8AgAwc6jQeKQAIcvKAEyykBl5YDKvmB6gUp6IDcKoiC\r\nFJDpCSNA2OZsdoP\/9QBeQHgBC2rAPAWygAdNEAILetCBJhBhA35LQgNe8ASEMSEGRQgLEEwQgyfZ\r\nIBZk2EJ\/tkCFi7UABqajARK2ZbZloE2LM0QXujSYv3PxgAhN0OIGEVeFXUWHNPHAGRDQ5QQo9CAJ\r\niiHCE5IghGAVsgdNoKAGn+ADStIKc1WozhCEwDprMGViYsDFbUIAgve1gAamoKUOjuKCCtHEAyUw\r\n2QxfcIL+G5Ysl5ET5guS8AJRfWELXyCCl3yYBPlxaQQj8MGveMCCbP4PBZkcgZxegIIhGOE5IyjC\r\nBUxgNBO85ANboA0X3okEKmRrBkUg3Q7kcgwkoGMVKzKkv0pFBbZVYZChVFUSOpmEbcCHClawwhd6\r\nlqV3FHKiftNRIYGQBChk0glPqGIi14ahGjBhC0uowmH8QY0iaIE\/tIknDiAgghBkLAZG2MFGJhVC\r\nD+TPb9XjwS99sIEK\/k52MxzBaUrpAQsQIT9WqMEM8eSCEVQhqDAbQeGEcIIOQCGbJ+CBEHjggleV\r\nBAUecEQNOMCEGXxABlkgmxtr884dUKF90pjrDg6jFSP+ZKGka6vCiihXhSZYQYsNDSwVorkOJzgh\r\nCYrdghXW4dAvfKYKjI2mFZxgBYZOtAlomEKwFsehYC1WMaNRRhHk4YUsKOak7ywDXHcBAwjEIAS0\r\nhcDqRPADEMxgBCXo7TOS2i8LdGADHfABCl7QBCqUwIdVsOEv2HEEdDH1BSY4gQd+EAEPaMmG4Exa\r\nCljwvA6woAkI20DyfrAB6aTJMiMgQRBiEIRLzOACVBjf+KoFoBkgiAqXYkIUtpCFu7DDb0Qo7Nq0\r\neFBuFLgKmQUNFbToV2UcwaFoWGw+MMRYJ6hDi58dHBSm8ATPTvSRBbaCOrLQhWZkQQlTYEbl2lkG\r\nisX+8wggqMAFdEBbjWRABUyQQQ5ewLYOWACYHfBA\/TZg5CInQQM2tCERxJTMGbggBHtrqgtu0IES\r\nPOUHJVAqAk9wAiB0oAMjaAIPhqaB5o0AVUYoaww+ADLLgEAJJCgBCThwBDO8s6VqEYgOihGNIzAB\r\nCXnJwor6qsG1KZgb0STkXxiNLip0hrE0c6xiOlMFDEMusA1d3GYXh9GOKuYzkvYGDkazBCV0AcTV\r\nuAJtXl2kr00gSTLVDQgsAoJDlQAUp+pAC3gwgiK7AJlJnZUNmzAuUT2Hly5o6BdKcBKdNqcEVADm\r\nC3jbhBS8YAMaQEEHBJiCEWhgBE64QQ1GMIMbfGD+AR9wgQmKAIIPxCAGF8jzFsyAtV3M9Y4B8tgV\r\nZnCXLATYr0l4cJYabDYGRzjCJXZCQAcrWCswM0FWqFBhH\/sMiEMBDYPrGRQW9wQoPGFvzfjCY7dA\r\nry3U4AhdALDnQge6Vw4oAx8IQYAugAGkuPsHyr72CEy2XPs9Z0xGfoEHvJLLdiXH5F94ztNyySUq\r\nnADau8t2mQsH7BMkIQVZrcEKUEAVFFRCy0y4QLyNEINovZML59PBEHSwBCoghglFSgZoOKpYBkNU\r\nQpuCZIQ\/s4QCL5YbDt3CEQrOYB0NFuINjSRjg\/UOKOArkk+IpIm9sQUiqKMue4WPqz\/HdirEIAP+\r\nF4DzDDIyWxG0wAQmaIBzZlhcLvuAlyeYvQ1F5a4ZnKTLOphhCWbQ0Ir7\/gVWAFVvoY2C46YglGTe\r\nQAqawIKuOmGDJ3DBDKogbwYwEAUjoGkMOLADNqw99O3j1tthhAQmlIIJkUuCi4Yw\/eis7VxJuFkI\r\nh1BItLEIXE6A+xG+UAaPFRjJFVCBQUiZ9WBPwCJQgA9FkFFd0DPBckkhNHfyMgVCUAQroARaADpi\r\n4Fq3YQERQBEZQG9QYgEZQFYuxG0u0AIloAEu4AG8dF0jYGQWIIM2aH3pZgG9FXzNcXTNRVQm0wQ2\r\n5BzpZQlrlkU8oAEbcAJLAHangQI1wm0jcCP+SiADKrAEEyMtoWd+OrADRaADMZAV7USGEmczwXdx\r\naGhyaFBYzGRyEpcfJlcFZUA7maU2qrIOTeADnvIqbiN574BRndQFloQOReANRZAFq2AEUxAERWAE\r\n7QQ6FRNPX7N6MFApHiACsbAfjoWGnYiGaBCH+QGKoOhQzsZUX0A2yTF7JUNthJRMN+A7FMBBAnRt\r\nnfRII\/ADaCR2P2ADT6ARVSIB8iYFE+NajxIYoucx8KF+IPaFRXAuR1AhBTcrylGA\/IUu2OMlQZEy\r\n31IUVlAG66AlQ4CAN7Q2cGMFt1IE\/gIPLDIserg26FAjM7BXxeGIWlEEXkAGFeOBOnCMMdD+ArQl\r\nAkawOkZwCSAEi1c2Ay5xdDSkXMsREzBIFZ2iXDSRTMRnck9XAlagZVSnKtdGQcdlXOzCIiPgNk\/h\r\nD5eAAh9gBD\/ABCKwAfpFAipAFrnggUdABWSDAzrwC0tAA0dQCkGgBFlgbFgSTTewDoChKtrVNvKD\r\nLp2xhyEUTUtQirZXBdd1Ln5UBbUXHU2AD1iyWHLTM+VolM2gBI44El6AA0agBCYwjGeRC3KlVhYR\r\nAqQgbyYgAr9XBENwBMTUW\/bDJXuyil7hA0PnNpawJ711A2z4BbNnP1RBFR3wFEQQTF2FQOCGEijA\r\nO9VDBB5kHSZgAziwRmJnCiUAAnnWH7n+YJNH8AstgGMmIDZoxHMl4yXjkm4VgjYko0FyQ0NV0CVG\r\n6TYmU2D5MSvENCtARnXu6B4v82T9snVNaG7fZhM\/IATwxTrdoV9HwAY0SSQ3GQwtwIJPogNIkG6a\r\nUAJuhz3JRBVw0zaDCS6rIDsVNybIFnirEIdYMiZwA07g0pi1d1wJcW4pgC5g1ZHWVx2kcCMqoD1q\r\nZQMfQAVmQZM26QsGUiljNG84kAPa4y5XlkwF14Lg4gGQ4y5L+QLpRpEeegNUgAZQYAXc2DbmxoZW\r\nECsxmgajCIozGitrECuJwAavsaOvYQY9+qNssB1uKQbS0G9pWRc6wDoqURdv5yVaQgT+gWc2+jcD\r\nn7I21oNAfhMYflViK1pt+0MEMSqmXxCjMAqKOGqmbKgIIrIfs8EaZcAGZOAYYnAGDzpXEzASv6A9\r\nYVgKafcCzoESJWF9LzANOOg3JVCV58Jz3DB1KNGlbBh13BVMUXYnG4ACkQBtXNIELhB7M4QCG8Ag\r\nE+ABMTBGbgIDa8UFrCQGZnAEatEC7UNLQZADcGEE1JAF7BBK2NME6BCloIF\/gcdQBfabXIol39JQ\r\nAWiHbKNg9Oc2u4IliaarWvRgfqUZAncMaFMM8EEN+kiTM+YBEAABRoABGDADGmMCH8ABMwBthmkJ\r\nNNFbRsYAR1dNJUABY0ZD7ul7Gfn+WCZTZOhidB6QBDSEnuBUKbLjax2QBBbhAzToAhJwATawBC7A\r\nAGslCyogAxJQBG1Qp7lgBGmxLTvQqkWQF3URBDgASjWBNujQDiYTDHuIJVcZHYflR1gZfA8XGIOF\r\nLusQWFrifovlBE2gcIf2YESgV\/qAYt7ABKumBFIQBFlApNuJBBAAAiaAARqxAzJwrhIgAbxlAUoF\r\ng1NmAYbprtCGqEVVfRbwA1n2p0kQY0ERAh3gAsQFhMo1Q00wAr4zApwaVMM2rxZABVWRDxugAhdw\r\nTiRwASQgBTJAAkvQBnSKFmnRAveEBGrpD\/dkF9uANpKWJYEHOW7jEkT5DE3wA0D+21d+FXENtaU5\r\nq0Ea9AOZpXhReg8BJZVU8BkTpgyHMRhLIAUYsgQBNgWpehZ1ej4ioAJHsgI0gKAyYBw2oARzSbYl\r\ncQPppnvHNgPIFVQnQAEl0AT2E0zc1WlcxiU+pBy9tb1adwJ5O1QdsCJIxiLxmQXy9mYaARmeIANK\r\noAIS46C6wDVe6IXyVBcPUgRTMAUS4jaB0TZEEF1H0En+ALs9QzmCtWjiGIDnYrrcEFiJlCWJpFiK\r\npSNZYnEO5gRKIAQBlxhTwATmYHj3tqpvaSQXAQEWYQI7EAOZeAGgSVa7Z4MM8Hs26BxUEQK9FVUe\r\n8Ds+sINGZwEtEHy\/dK+9tIf+MHh0LXAuJ4EC2gMB1MZbeZsENrACbAUC5\/QBJOBeK1B693YWZxFH\r\n8gQXM7ADN3IhWWAEPUE5+ZMq58KrgecEaINMitUz5xJQCAwYNUvBbHMvGecON+Bw7eAMj2UFAuEO\r\n6mAFU+AFIosMWTAFZakFUyADUqAFT7sDWDARGVA6GUECVbsDYvEBiHoDEHBcNlgCS+ABP+wcQ3YE\r\niBq3XdJLXXYEHqADcKh7rneEEWABT7OEDbAp5hEBGxABk1ACG0CDpRcCYPwAJCAD0SyQJqACNna\/\r\nwbuqUcALNbUDWTC5LZYDk6EM61Bt4HKiaPObk1FuTEC7UHqVFswOiRdhUPn+DpWlee7QInZhaFUw\r\nBV0gcDaTBe3kBWDgBV7ABV0QOgiN0LXhuGfBzUeSASAQA1TLGxOAFDVnfS5gAcsRg11bAt7ZZacn\r\nKibACSXww5n6tcEHDEQgg9QUAiDUABGAArQVgzHgBSOiBmlw0AXdpmDgGPsxBrYwMWWsndwsBTTQ\r\nsVJwBbWaF0cQBEywyM8QGIARGN9y1Qs2YS\/gjKILWQHlV94YgGVQUpmVBFswGjUCDk+gDKpVlifc\r\nBV7wBbNx0HRt0D09G3BFk24ZBVqABJkIAk8S2PQ2tT\/QAjuIdNB2dDFIFRYwlxlgAbPcWxvQAka3\r\nbb\/XAjEWgFUAg8sRAY\/+YASEiwMfkAIxqK42oALDRQJF8NP74dO0gdB5vdcrfAVYoAW3bdtYwAW3\r\nvdBbwNC\/zQU+Ldxk4AUr9dp27dNyOhs87QVqMAVkMAayUdDELRs8HdRArQZBLadjMAZyCt1q0N1k\r\nIN7iHd5kIAbmbd5RgAVXcEJY4N62nQVYsAW3PQWec9Aud9Bwhddtegu1cQsPwdPibQvgnd3\/7Rhq\r\n4N3jPeBAPd4EXuBqcAbZbQYJPt7nfd7oLQVYgEJ0lAMZQAMfjrwgEAQqAAMyIAKTGwNK8E5jUNA5\r\nTdy0oeAhEiLenQbKXeMPLuAN7t3gXd7hfeANnt1qMOHifQZkEAZFTuT+FZ7htx0GWCAGtw3lth0G\r\nTw7lWsAFY\/BOB83drz3Ur\/bfdN3dzT3e3Q3eCk7eBD4GZlDe4y2nCA7dST7hQy7eFz7nF57hTd7k\r\nt03lYhAGYaAFU86BTz5+XsDd3F0br7YfrWQL+Mjdt9Dj5N3dY4DkYwDhko7kZUHhRF7ml27kderp\r\nR07kYRAFeI4Ffa4FTs7kf67nvP1OYlDoxV3ot+AfrfTfbE7etV7gY87mlH4Gka7m4m0GQo7gZ0Ds\r\nZBDhQ07snk6nU27eYqDeeV7lucCBqs7bfz5+47flhN7lsyEGjuHij\/7mBK7rPl7m3T3kcT7evX4G\r\nYWDeye64jovkxP7e3n1e6rZd5an+5FSONWuH0FgO3UNdMTDe6G\/+EAQf7pHO6Qiu5hPu5pge7Mle\r\n7Mq+7hNf7M3+3u7N5\/b+5FNe6mLg5LsNOvL9Tp4T6IY+1Pk48OY9G7KO3gY\/3nLO5g0\/3m1QFmwg\r\n6Za+7qAu3uyO3hau3hdf6k1+8R6v2\/auBfNt5ZGY72Ng5a3u6Oedqufdpq6+6zsv53Ru62RA8w1e\r\n5BNv7Dz\/9RJPBj8P9LlN77ld9Fbu5IK+27vd9Cbv6o1O6BDRSlNu4VU\/51kv5OIt88be3fF+5O9O\r\n7DTJ7oEAADs=\r\n",
+  "date": [
+    1997,
+    6,
+    26
+  ],
+  "names": [
+    
+  ],
+  "classification": [
+    
+  ],
+  "status": 200
+}</textarea>
+			<br />
+			<button onclick="convert()">Convert JSON to RDF</button>
+	</div>
+	<div style="clear:both;"></div>
+	
+	<div style="width:100%;">
+		<h2>JSON-LD</h2>
+		<div id="jsonld" style="width:100%;white-space:pre;background-color:#333;color:white;overflow:auto;"></div>
+
+</div>			
+			
+		
+		
+		
+<script>
+
+
+
+
+
+//----------------------------------------------------------------------------------------
+// START COUCHDB VIEW
+//----------------------------------------------------------------------------------------
+
+
+//----------------------------------------------------------------------------------------
+function add_values(elastic_search_doc, key, value, boost) {
+	elastic_search_doc.search_data.fulltext_values.push(value);
+	
+	boosted = (typeof boost !== 'undefined') ?  boost : false;
+	
+	if (boosted) {
+		elastic_search_doc.search_data.fulltext_boosted_values.push(value);
+	}
+	
+	switch (key) {
+		case 'classification':
+		case 'container':
+		case 'author':
+			elastic_search_doc.search_data[key].push(value);
+			break;
+			
+		case 'geometry':	
+		case 'type':
+		case 'year':
+			elastic_search_doc.search_data[key] = value;
+			break;
+	
+		default:
+			break;
+	}
+	
+	return elastic_search_doc;
+}
+
+//----------------------------------------------------------------------------------------
+function message(doc) {
+  if (doc._id.match(/biostor/)) {
+
+
+    var elastic_search_doc = {};
+    
+    elastic_search_doc.id = doc._id;
+    elastic_search_doc.id =  elastic_search_doc.id.replace(/\//, '-');
+    
+    // type of document
+    elastic_search_doc.type = doc.type;
+    
+	// output to display in list of hits
+	elastic_search_doc.search_result_data = {};
+	
+	// possible fields to hold information on how to display this object
+	elastic_search_doc.search_result_data.name = '';
+	elastic_search_doc.search_result_data.description = '';
+	elastic_search_doc.search_result_data.creator = [];
+	elastic_search_doc.search_result_data.thumbnailUrl = '';
+	elastic_search_doc.search_result_data.url = '';
+	
+	
+	// BioStor
+	elastic_search_doc.search_result_data.url = 'https://biostor.org/reference/' + doc._id.replace(/biostor\//, '');
+	elastic_search_doc.search_result_data.thumbnailUrl = 'https://biostor.org/reference/' + doc._id.replace(/biostor\//, '') + '/thumbnail';
+	
+	// temporary
+	elastic_search_doc.search_result_data.description_parts = [];
+	
+	/*
+	if ($url)
+	{
+		$doc->search_result_data->url = $url;
+	}
+	*/
+
+	// fields that will be searched on
+	elastic_search_doc.search_data = {};
+	
+	// text fields for searching on
+	elastic_search_doc.search_data.fulltext_values = [];
+	elastic_search_doc.search_data.fulltext_boosted_values = [];
+	
+	// things to use as facets
+	elastic_search_doc.search_data.container = [];
+	elastic_search_doc.search_data.author = [];
+	elastic_search_doc.search_data.year = null;
+	elastic_search_doc.search_data.classification = [];
+	
+	
+	// regular
+	
+	// type
+	elastic_search_doc.search_data.type = doc.type, false;
+	
+	// title
+
+	if (doc.title) {
+		elastic_search_doc = add_values(elastic_search_doc, 'title', doc.title, true);
+		elastic_search_doc.search_result_data.name = doc.title;
+	}
+	
+	// container
+    if (doc.journal) {
+		if (doc.journal.name) {
+			var container = doc.journal.name;
+			elastic_search_doc = add_values(elastic_search_doc, 'container', container, true);
+			elastic_search_doc.search_result_data.description_parts.push('in ' + container);	
+		}
+	}		
+	
+	// author
+	if (doc.author) {
+		for (var i in doc.author) {
+    		// simple case
+    		var name = [];
+    		
+    		if (doc.author[i].firstname) {
+    			name.push(doc.author[i].firstname);
+    		}
+     		if (doc.author[i].lastname) {
+    			name.push(doc.author[i].lastname);
+    		}
+ 			// just use literal if we have it
+     		if (doc.author[i].name) {
+    			name = [doc.author[i].name];
+    		}
+    		
+    		if (name.length > 0) {
+    			add_values(elastic_search_doc, 'author', name.join(' '), true); 
+    			elastic_search_doc.search_result_data.creator.push(name.join(' '));
+    		}
+		}
+	}
+		
+	//------------------------------------------------------------------------------------
+
+	// date
+	if (doc.year) {
+		elastic_search_doc = add_values(elastic_search_doc, 'year', parseInt(doc.year));			
+		elastic_search_doc.search_result_data.description_parts.push('in ' + doc.year);		
+	} 
+
+	// volume
+	if (doc.journal.volume) {
+		elastic_search_doc = add_values(elastic_search_doc, 'volume', doc.journal.volume);		
+		elastic_search_doc.search_result_data.description_parts.push('in volume ' + doc.journal.volume);		
+	} 
+
+	// issue
+	if (doc.journal.issue) {
+		elastic_search_doc = add_values(elastic_search_doc, 'issue', doc.journal.issue);		
+		elastic_search_doc.search_result_data.description_parts.push('issue ' + doc.journal.issue);		
+	} 
+
+	// page
+	if (doc.journal.pages) {
+		elastic_search_doc = add_values(elastic_search_doc, 'page', doc.journal.pages);
+		var prefix = 'page';
+		if (doc.journal.pages.match(/-/)) {
+			prefix = 'pages';
+		}
+		elastic_search_doc.search_result_data.description_parts.push(prefix + ' ' + doc.journal.pages.replace(/--/, '-'));		
+	} 
+
+	// DOI
+/*	if (doc.DOI) {
+		elastic_search_doc = add_values(elastic_search_doc, 'doi', doc.message.DOI);		
+		
+		elastic_search_doc.search_result_data.doi = doc.message.DOI;
+	} 
+	*/
+
+	//------------------------------------------------------------------------------------
+	// classification
+    if (doc.classification) {
+    	for (var i in doc.classification) {
+			elastic_search_doc = add_values(elastic_search_doc, 'classification', doc.classification[i], false);
+		}
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	
+	// geo
+    if (doc.geometry) {
+    	elastic_search_doc.search_data.geometry = doc.geometry, false;
+	}
+	
+	//------------------------------------------------------------------------------------
+	// cleanup
+	elastic_search_doc.search_data.fulltext = elastic_search_doc.search_data.fulltext_values.join(' ');
+	delete elastic_search_doc.search_data.fulltext_values;
+
+	elastic_search_doc.search_data.fulltext_boosted = elastic_search_doc.search_data.fulltext_boosted_values.join(' ');
+	delete elastic_search_doc.search_data.fulltext_boosted_values;
+	
+	elastic_search_doc.search_result_data.description = 'Published ' + elastic_search_doc.search_result_data.description_parts.join(', ');
+	delete elastic_search_doc.search_result_data.description_parts;
+	
+	if (!elastic_search_doc.search_result_data.creator) {
+		delete elastic_search_doc.search_result_data.creator;
+	}
+	
+	if (!elastic_search_doc.search_result_data.thumbnailUrl) {
+		delete elastic_search_doc.search_result_data.thumbnailUrl;
+	}
+
+	if (!elastic_search_doc.search_result_data.url) {
+		delete elastic_search_doc.search_result_data.url;
+	}
+	
+	$('#jsonld').html(JSON.stringify(elastic_search_doc, null, 2));
+    
+
+  }
+}
+
+function couchdb(doc) {
+    message(doc);
+}
+
+// END COUCHDB VIEW
+		
+//----------------------------------------------------------------------------------------
+function convert() {
+	var json = $('#json').val();
+	var doc = JSON.parse(json);
+	
+	couchdb(doc);
+}
+
+	
+	</script>		
+			
+
+</div>
+</body>
+</html>			

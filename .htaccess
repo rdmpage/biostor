@@ -4,8 +4,8 @@ RewriteEngine On
 # If you need to use the `RewriteBase` directive, it should be the
 # absolute physical path to the directory that contains this htaccess file.
 #
-RewriteBase /
-#RewriteBase /~rpage/biostor/
+#RewriteBase /
+RewriteBase /~rpage/biostor/
 
 # If URL has "www" prefix strip and redirect to biostor.org
 # We also need to disable default hostname (uncheck checkbox in Server Admin/Web/Sites)
@@ -23,6 +23,9 @@ RewriteRule ^reference/([0-9]+).text$  reference/$1 [R,L]
 # Reference
 RewriteRule ^reference/([0-9]+)$  index.php?id=biostor/$1 [NC,L]
 RewriteRule ^reference/(biostor/[0-9]+)$   index.php?id=$1 [NC,L]
+
+# Thumbnail
+RewriteRule ^reference/([0-9]+)/thumbnail$  api.php?id=biostor/$1&thumbnail [NC,L]
 
 #-----------------------------------------------------------------------------------------
 # DocumentCloud

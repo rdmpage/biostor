@@ -287,6 +287,7 @@ function display_record_summary ($reference, $highlights = null)
 				
 				//$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
 				$authors[] = '<a href="' . 'search/author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
+				//$authors[] = '<a href="' . '?q=' . $string . '">' . $string . '</a>';
 		
 			}
 			echo 'Authors: ' . join(', ', $authors);
@@ -566,6 +567,7 @@ function display_article_metadata($reference)
 			
 				//$authors[] = '<a href="' . '?q=author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
 				$authors[] = '<a href="' . 'search/author:&quot;' . $string . '&quot;' . '">' . $string . '</a>';
+				//$authors[] = '<a href="' . '?q=' . $string . '">' . $string . '</a>';
 	
 			}
 			echo join(', ', $authors);
@@ -1130,6 +1132,347 @@ function display_record($id, $page = 0)
 	
 	display_html_end();	
 }
+
+//----------------------------------------------------------------------------------------
+function display_search_elastic($q)
+{
+	global $config;
+	
+	// Parse query	
+	$query = array();
+	$query['q'] = $q;
+	
+	$matched = false;
+	
+	/*
+	if (!$matched)
+	{
+		if (preg_match('/(?<q>author:"(?<author>.*)")\s+AND\s+year:"(?<year>[0-9]{4})"/u', $q, $m))
+		{
+			$query['q'] = '';
+			$query['author'] = $m['author'];
+			$query['year'] = $m['year'];
+			$matched = true;
+		}
+	}
+	*/
+	
+	if (!$matched)
+	{
+		if (preg_match('/(?<q>author:"(?<author>.*)")/u', $q, $m))
+		{
+			$query['q'] =  $m['author'];
+			$query['author'] = $m['author'];
+			$matched = true;
+		}
+	}
+	
+	
+	if (!$matched)
+	{
+		if (preg_match('/(?<q>.*)\s+AND\s+year:"(?<year>[0-9]{4})"/u', $q, $m))
+		{
+			$query['q'] = $m['q'];
+			$query['year'] = $m['year'];
+			$matched = true;
+		}
+	}
+	
+	
+	// to do: 
+	// Author-specific stuff
+	$script = '';
+	
+	// Author-specific stuff
+	if (isset($query['author']))
+	{
+		$lastname = $firstname = '';
+		
+		// parse author name
+		$parts = parse_name($query['author']);
+		if (isset($parts['last']))
+		{
+			$lastname = $parts['last'];		
+		}
+		if (isset($parts['first']))
+		{
+			$firstname = $parts['first'];
+
+			if (array_key_exists('middle', $parts))
+			{
+				$firstname .= ' ' . $parts['middle'];
+			}
+		}	
+	
+		$script = '<script>
+			function show_similar_authors(lastname, firstname) {
+				$.getJSON("api_author.php?lastname=" + encodeURIComponent(lastname) + "&firstname=" + encodeURIComponent(firstname) + "&callback=?",
+					function(data){
+					  if (data.results.length > 0) {
+						 var html = \'<h4>Similar names</h4>\';
+						 html += \'<ul>\';
+						 for (var i in data.results) {
+							var name = data.results[i].name;
+							html += \'<li><a href="?q=author:&quot;\' + name + \'&quot;">\' + name + \'</a></li>\';
+						 }
+						 html += \'</ul>\';
+						 $("#query_suggest").html(html);
+					  }
+				});
+			}
+		</script>';
+	
+		$sparql = 'SELECT *
+	WHERE
+	{
+	  ?item rdfs:label "' . $query['author'] . '"@en .
+	  ?article schema:about ?item .
+	  ?article schema:isPartOf <https://species.wikimedia.org/> .
+	  OPTIONAL {
+	   ?item wdt:P213 ?isni .
+		}
+	  OPTIONAL {
+	   ?item wdt:P214 ?viaf .
+		}    
+	  OPTIONAL {
+	   ?item wdt:P18 ?image .
+		} 
+	  OPTIONAL {
+	   ?item wdt:P496 ?orcid .
+		} 		
+	  OPTIONAL {
+	   ?item wdt:P586 ?ipni .
+		} 
+	  OPTIONAL {
+	   ?item wdt:P2006 ?zoobank .
+		} 		
+	}';
+
+	 $sparql = str_replace("\n", " ", $sparql);
+	
+		$script .= '<script>
+			function show_wikidata() {
+				$.getJSON("https://query.wikidata.org/bigdata/namespace/wdq/sparql?query=" + encodeURIComponent(\'' . $sparql . '\') + "",
+					function(data){
+					  if (data.results.bindings.length > 0) {
+						 var html = \'<h4>Wikidata</h4>\';
+					 
+						 if (data.results.bindings[0].item) {
+						   html += \'<a href="\' + data.results.bindings[0].item.value + \'" target="_new">Wikidata: \' + data.results.bindings[0].item.value.replace(/http:\/\/www.wikidata.org\/entity\//, "") + \'</a><br />\';
+						 }
+
+						 if (data.results.bindings[0].article) {
+						   html += \'<a href="\' + data.results.bindings[0].article.value + \'" target="_new">Wikispecies</a><br />\';
+						 }
+					 
+						 if (data.results.bindings[0].isni) {
+						   html += \'<a href="http://isni.org/isni/\' + data.results.bindings[0].isni.value.replace(/ /g, \'\') + \'" target="_new">ISNI: \' + data.results.bindings[0].isni.value + \'</a><br />\';
+						 }
+						 if (data.results.bindings[0].viaf) {
+						   html += \'<a href="http://viaf.org/viaf/\' + data.results.bindings[0].viaf.value + \'" target="_new">VIAF: \' + data.results.bindings[0].viaf.value + \'</a><br />\';
+						 }
+						 
+						 if (data.results.bindings[0].orcid) {
+						   html += \'<a href="http://orcid.org/\' + data.results.bindings[0].orcid.value + \'" target="_new">ORCID: \' + data.results.bindings[0].orcid.value + \'</a><br />\';
+						 }
+						 
+						 
+						 
+						 if (data.results.bindings[0].ipni) {
+						   html += \'<a href="http://www.ipni.org/ipni/idAuthorSearch.do?id=\' + data.results.bindings[0].ipni.value + \'" target="_new">IPNI: \' + data.results.bindings[0].ipni.value + \'</a><br />\';
+						 }
+						 if (data.results.bindings[0].zoobank) {
+						   html += \'<a href="http://zoobank.org/Authors/\' + data.results.bindings[0].zoobank.value + \'" target="_new">ZooBank: \' + data.results.bindings[0].zoobank.value + \'</a><br />\';
+						 }
+					 
+					 
+						 if (data.results.bindings[0].image) {
+						   html += \'<img src="\' + data.results.bindings[0].image.value + \'" width="64" />\';
+						 }
+					 
+						 $("#wikidata").html(html);
+					  }
+				});
+			}
+		</script>';
+	}	
+	
+	display_html_start('Search results', '', $script);
+	display_navbar(htmlentities($q));	
+	
+	echo '<h4>Search results for "' . htmlentities($q) . '"</h4>';
+	
+	echo '<div class="container-fluid">' . "\n";
+	echo '  <div class="row">' . "\n";
+	echo '	  <div class="col-md-8">' . "\n";
+		
+	$url = $config['web_server'] . $config['web_root'] . 'api.php?q=' . urlencode($query['q']);
+	
+	if (isset($query['year']))
+	{
+		$url .= '&year=' . $query['year'];
+	}
+	
+	if (isset($query['author']))
+	{
+		$url .= '&author=' . urlencode($query['author']);
+	}
+	
+	$json = get($url);
+	
+	//echo $url . '<br />';
+	//echo 'json=' . $json;
+	
+	if ($json != '')
+	{
+		$obj = json_decode($json);
+	
+
+		echo '<h5>' . $obj->hits->total . ' hit(s)' . '</h3>';
+	
+		/*
+		if ($obj->total_rows > $rows_per_page)
+		{
+			echo '<nav>';
+			echo '  <ul class="pager">';
+			echo '    <li class="next">';
+			//echo '      <a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a>';
+			echo '      <a class="btn" href="search/' . urlencode($q) . '/bookmark/' . $obj->bookmark . '">More results »</a>';
+			echo '   </li>';
+			echo '  </ul>';
+			echo '</nav>';
+		}
+		*/
+	
+		if (isset($obj->hits->hits))
+		{
+			foreach ($obj->hits->hits as $hit)
+			{
+				//echo $hit->_source->search_result_data->name . '<br />';
+				
+				  echo '<div class="media" style="padding-bottom:5px;">
+				  <div class="media-left media-top" style="padding:10px;">';
+				  	if (isset($hit->_source->search_result_data->thumbnailUrl))
+				  	{
+						echo '<a href="reference/' . str_replace('biostor-', '', $hit->_source->id) . '">';
+						echo '<img style="box-shadow:2px 2px 2px #ccc;width:64px;" src="' . str_replace('https://biostor.org/', '', $hit->_source->search_result_data->thumbnailUrl) .  '">';	
+					}
+					else
+					{
+						echo '<div style="width:64px;height:64px;border:1px solid black;"></div>';
+					}
+				  echo '  </a>
+				  </div>
+				  <div class="media-body" style="padding:10px;">
+					<h4 class="media-heading">';
+				//	echo '<a href="?id=' . $reference->_id . '">' . $reference->title . '</a>';    
+					echo '<a href="reference/' . str_replace('biostor-', '', $hit->_source->id) . '">' . $hit->_source->search_result_data->name . '</a>';    
+					echo '</h4>';
+					echo '<div style="color:rgb(128,128,128);">';
+					echo $hit->_source->search_result_data->description;
+					echo '</div>';
+					
+					if (isset($hit->_source->search_result_data->creator))
+					{
+						$authors = array();
+						foreach ($hit->_source->search_result_data->creator as $creator)
+						{
+							$authors[] = '<a href="' . 'search/author:&quot;' . $creator . '&quot;' . '">' . $creator . '</a>';
+						}
+						
+						if (count($authors) > 0)
+						{
+							echo '<div>';
+							echo 'Authors: ' . join(', ', $authors);
+							echo '</div>';
+						}
+					}
+
+					
+					
+				echo '</div>';
+				echo '</div>';
+				
+			}
+		}
+				
+		/*
+		if ($obj->total_rows > $rows_per_page)
+		{
+			echo '<nav>';
+			echo '  <ul class="pager">';
+			echo '    <li class="next">';
+			//echo '      <a class="btn" href="?q=' . urlencode($q) . '&bookmark=' . $obj->bookmark . '">More results »</a>';
+			echo '      <a class="btn" href="search/' . urlencode($q) . '/bookmark/' . $obj->bookmark . '">More results »</a>';
+			echo '   </li>';
+			echo '  </ul>';
+			echo '</nav>';
+		}
+		*/
+		
+	}
+	
+	echo '   </div>';
+	
+	// Put further info about results here...
+	echo '	 <div class="col-md-4">' . "\n";
+	echo '      <div id="query_suggest"></div>' . "\n";	
+	echo '      <div id="wikidata"></div>' . "\n";	
+	
+	if (isset($obj->aggregations))
+	{
+		if (isset($obj->aggregations->year))
+		{
+			echo 	'<h4>Year</h4>';
+			echo '<ul class="nav nav-list">';
+			
+			foreach ($obj->aggregations->year->buckets as $bucket)
+			{
+				$year  = $bucket->key;
+				$count = $bucket->doc_count;
+			
+				echo '<li>';
+				
+				if (isset($query['year']) && ($query['year'] == $year))
+				{
+					echo '<a style="padding:2px;" href="search/' . urlencode($query['q']) . '">';
+					echo '<i class="glyphicon glyphicon-check"></i>';				
+				}
+				else
+				{
+					echo '<a style="padding:2px;" href="search/' . urlencode($query['q'] . ' AND year:"' . $year . '"') . '">';
+					echo '<i class="glyphicon glyphicon-unchecked"></i>';
+				}
+				
+//				echo  $year . ' (' . $count . ')';
+				echo  $year . ' <span class="badge">' . $count . '</span>';
+				echo '</a>';
+				echo '</li>';
+			}
+			
+			echo '</ul>';	
+		}
+	}
+	
+	echo '   </div>';
+	
+	
+	echo '  </div>';
+	echo '</div>';
+	
+	if (isset($query['author']))
+	{
+		echo '<script>';
+		echo 'show_similar_authors("' . addcslashes($lastname, '"') . '","' . addcslashes($firstname, '"') . '");';
+		echo 'show_wikidata();';
+		echo '</script>';
+	}
+	
+	display_html_end();		
+
+
+}
+
 
 //----------------------------------------------------------------------------------------
 // Display a list of search results, possibly with a Cloudant bookmark to indicate 
@@ -1904,6 +2247,8 @@ function display_labs()
 // Main...
 function main()
 {	
+	global $config;
+
 	$query = '';
 	$bookmark = '';
 		
@@ -2027,13 +2372,21 @@ function main()
 	// Show search (text, author)
 	if (isset($_GET['q']))
 	{	
-		$query = $_GET['q'];
-		$bookmark = '';
-		if (isset($_GET['bookmark']))
+		if ($config['use_elastic'])
 		{
-			$bookmark = $_GET['bookmark'];
+			$query = $_GET['q'];
+			display_search_elastic($query);
 		}
-		display_search($query, $bookmark);
+		else
+		{
+			$query = $_GET['q'];
+			$bookmark = '';
+			if (isset($_GET['bookmark']))
+			{
+				$bookmark = $_GET['bookmark'];
+			}
+			display_search($query, $bookmark);
+		}
 		exit(0);
 	}	
 	

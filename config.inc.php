@@ -19,7 +19,7 @@ $site = 'local';
 //$site = 'pagoda';
 //$site = 'heroku';
 
-$site = 'nanobox';
+//$site = 'nanobox';
 //$site = 'nanobox-local';
 
 switch ($site)
@@ -161,6 +161,7 @@ switch ($site)
 	case 'nanobox':
 	case 'pagoda':
 	case 'heroku':
+	case 'local':
 		// Cloudant
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
@@ -192,7 +193,22 @@ switch ($site)
 				'prefix' => 'http://'
 				);	
 		*/
-		break;
+		
+		
+		
+		// Bitnami Google Cloud CouchDB
+		// bitnami-couchdb-dm-a0f3
+		// N1-STANDARD-1
+		$config['couchdb_options'] = array(
+				'database' => 'biostor',
+				'host' => 'admin:3h0kylo8ljfp@35.204.147.240',
+				'port' => 5984,
+				'prefix' => 'http://'
+				);	
+		break
+		
+		
+		;
 		
 	case 'local':
 		/*
@@ -235,6 +251,20 @@ if ($config['proxy_name'] != '')
 }
 
 $config['stale'] = true;
+
+// Elastic--------------------------------------------------------------------------------
+
+$config['use_elastic'] = true;
+
+$config['elastic_options'] = array(
+		'index' => 'elasticsearch/biostor',
+		'protocol' => 'http',
+		'host' => '35.204.73.93',
+		'port' => 80,
+		'user' => 'user',
+		'password' => '7WbQZedlAvzQ'
+		);
+
 
 
 	

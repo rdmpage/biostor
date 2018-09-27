@@ -6,7 +6,9 @@ require_once (dirname(__FILE__) . '/api_utils.php');
 require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/reference_code.php');
 
-require_once(dirname(__FILE__) . '/CiteProc.php');
+require_once (dirname(__FILE__) . '/CiteProc.php');
+require_once (dirname(__FILE__) . '/elastic.php');
+
 
 
 //--------------------------------------------------------------------------------------------------
@@ -309,6 +311,178 @@ function display_search ($q, $bookmark = '', $callback = '')
 }
 
 //--------------------------------------------------------------------------------------------------
+// Full text search using Elastic
+function display_elastic_search ($q, $filter=null, $from = 0, $size = 20, $callback = '')
+{
+	global $config;
+	global $elastic;
+				
+	if ($q == '')
+	{
+		$obj = new stdclass;
+		$obj->rows = array();
+		$obj->total_rows = 0;
+		
+		// Add status
+		$obj->status = 404;
+			
+	}
+	else
+	{		
+		// query type
+		
+		$query_json = '';
+		
+		if ($filter)
+		{
+			if (isset($filter->author))
+			{
+				// author search is different
+		
+				$query_json = 		
+	'{
+    "query": {
+        "bool": {
+            "must": [
+                {
+                	"match": {"search_data.author": "<QUERY>"}
+                }
+            ],
+            "filter": <FILTER>
+        }
+    },
+    
+	"post_filter": { 
+		"bool": { 
+			"should": [
+			{
+				"match_phrase": { "search_data.author": "<QUERY>" }
+			}
+			]
+		}
+	 }
+	}';
+	
+/*
+    
+	"aggs": {
+	  "year" :{
+		"terms": { "field" : "search_data.year" }
+	  }
+	},    
+*/	
+	
+			$query_json = str_replace('<QUERY>', $q, $query_json);
+			
+			}
+		}
+		
+		// default is search on fulltext fields
+		if ($query_json == '')
+		{
+			$query_json = '{
+			"size":20,
+				"query": {
+					"bool" : {
+						"must" : [ {
+				   "multi_match" : {
+				  "query": "<QUERY>",
+				  "fields":["search_data.fulltext", "search_data.fulltext_boosted^4"] 
+				}
+				}],
+			"filter": <FILTER>
+				}
+			},
+			"aggs": {
+			"type" :{
+				"terms": { "field" : "search_data.type.keyword" }
+			  },
+			  "year" :{
+				"terms": { "field" : "search_data.year" }
+			  },
+			  "container" :{
+				"terms": { "field" : "search_data.container.keyword" }
+			  },
+			  "author" :{
+				"terms": { "field" : "search_data.author.keyword" }
+			  },
+			  "classification" :{
+				"terms": { "field" : "search_data.classification.keyword" }
+			  }  
+
+			}
+
+	
+			}';
+			
+			$query_json = str_replace('<QUERY>', $q, $query_json);
+		}
+	
+	$filter_string = '[]';
+	
+	if ($filter)
+	{
+		$f = array();
+		
+		if (isset($filter->year))
+		{
+			$one_filter = new stdclass;
+			$one_filter->match = new stdclass;
+			$one_filter->match->{'search_data.year'} = $filter->year;
+			
+			$f[] = $one_filter;			
+		}
+
+		// this doesn't work
+		if (isset($filter->author))
+		{
+			$one_filter = new stdclass;
+			$one_filter->match = new stdclass;
+			$one_filter->match->{'search_data.author'} = $filter->author;
+			
+			$f[] = $one_filter;			
+		}
+		
+		$filter_string = json_encode($f);
+	}
+	
+	$query_json = str_replace('<FILTER>', $filter_string, $query_json);
+	
+	//echo $query_json ;
+	
+	$resp = $elastic->send('POST', '_search?pretty', $post_data = $query_json);
+	
+
+		$obj = json_decode($resp);
+		
+		/*
+		// delete large fields from results, such as OCR text and list of names extracted
+		if (isset($obj->rows))
+		{
+			$n = count($obj->rows);
+			for ($i = 0; $i < $n; $i++)
+			{
+				if (isset($obj->rows[$i]->doc->text))
+				{
+					unset($obj->rows[$i]->doc->text);
+				}
+				if (isset($obj->rows[$i]->doc->names))
+				{
+					unset($obj->rows[$i]->doc->names);
+				}
+				
+			}
+		}
+		*/
+		
+		// Add status
+		$obj->status = 200;
+	}
+	
+	api_output($obj, $callback);
+}
+
+//--------------------------------------------------------------------------------------------------
 function display_images($callback = '')
 {
 	global $config;
@@ -474,6 +648,8 @@ function display_thumbnail_image ($id, $callback = '')
 //--------------------------------------------------------------------------------------------------
 function main()
 {
+	global $config;
+
 	$callback = '';
 	$handled = false;
 	
@@ -541,13 +717,48 @@ function main()
 		{	
 			$q = $_GET['q'];
 			
-			$bookmark = '';
-			if (isset($_GET['bookmark']))
-			{
-				$bookmark = $_GET['bookmark'];
-			}			
 			
-			display_search($q, $bookmark, $callback);
+			if ($config['use_elastic'])
+			{
+				// Elastic
+				$from = 0;
+				$size = 10;
+				
+				$filter = null;
+				
+				if (isset($_GET['year']))
+				{
+					if (!$filter)
+					{
+						$filter = new stdclass;
+					}
+				
+					$filter->year = (Integer)$_GET['year'];
+				}			
+
+				if (isset($_GET['author']))
+				{
+					if (!$filter)
+					{
+						$filter = new stdclass;
+					}
+				
+					$filter->author = $_GET['author'];
+				}											
+				
+				display_elastic_search($q, $filter, $from, $size, $callback);
+			}
+			else
+			{
+				// Cloudant fulltext search
+				$bookmark = '';
+				if (isset($_GET['bookmark']))
+				{
+					$bookmark = $_GET['bookmark'];
+				}			
+			
+				display_search($q, $bookmark, $callback);
+			}
 			$handled = true;
 		}
 			

@@ -14,6 +14,37 @@ class CouchSimple
              $this->$key = $value;
          }
      }
+     
+     //-----------------------------------------------------------------------------------
+	// Do HTTP HEAD to see if a document exists
+	function exists($id)
+	{
+		$ch = curl_init(); 
+		
+		$url = $this->prefix . $this->host . ':' . $this->port . '/' . $this->database . '/' . urlencode($id);
+		
+		//echo $url . "\n";
+
+		curl_setopt ($ch, CURLOPT_URL, $url); 
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1); 		
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, false);
+		
+		if (isset($this->proxy))
+		{
+			curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
+		}
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "HEAD");
+		
+		// http://stackoverflow.com/a/770200
+		curl_setopt($ch, CURLOPT_NOBODY, true);
+
+   		$response = curl_exec($ch);
+    	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    	
+    	//echo $response;
+    	
+   		return ($http_code == 200);
+	}     
 
 	//----------------------------------------------------------------------------------------------
      function send($method, $url, $post_data = NULL)

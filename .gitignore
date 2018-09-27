@@ -4,5 +4,10 @@
 
 junk
 
+upload_elastic/biostor-*
+upload_elastic/biostor.jsonl
 
 vendor/*
+bhl-import/xml/JournalRoyalSoc54Roya_djvu.xml
+upload_couchdb/biostor.txt
+upload_couchdb/missing.txt

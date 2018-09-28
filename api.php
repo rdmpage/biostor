@@ -341,6 +341,7 @@ function display_elastic_search ($q, $filter=null, $from = 0, $size = 20, $callb
 		
 				$query_json = 		
 	'{
+	"size":50,
     "query": {
         "bool": {
             "must": [
@@ -381,7 +382,7 @@ function display_elastic_search ($q, $filter=null, $from = 0, $size = 20, $callb
 		if ($query_json == '')
 		{
 			$query_json = '{
-			"size":20,
+			"size":50,
 				"query": {
 					"bool" : {
 						"must" : [ {

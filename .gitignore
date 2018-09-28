@@ -11,3 +11,5 @@ vendor/*
 bhl-import/xml/JournalRoyalSoc54Roya_djvu.xml
 upload_couchdb/biostor.txt
 upload_couchdb/missing.txt
+upload_couchdb/page.txt
+upload_couchdb/pinterest.txt

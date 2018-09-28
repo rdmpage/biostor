@@ -1352,9 +1352,10 @@ function display_search_elastic($q)
 				
 				  echo '<div class="media" style="padding-bottom:5px;">
 				  <div class="media-left media-top" style="padding:10px;">';
+					echo '<a href="reference/' . str_replace('biostor-', '', $hit->_source->id) . '">';
+				  
 				  	if (isset($hit->_source->search_result_data->thumbnailUrl))
 				  	{
-						echo '<a href="reference/' . str_replace('biostor-', '', $hit->_source->id) . '">';
 						echo '<img style="box-shadow:2px 2px 2px #ccc;width:64px;" src="' . str_replace('https://biostor.org/', '', $hit->_source->search_result_data->thumbnailUrl) .  '">';	
 					}
 					else
@@ -2178,41 +2179,42 @@ function display_map()
 	display_html_start('Map');
 	display_navbar();
 	
-	/*
-	echo '<div class="container-fluid">' . "\n";
-	echo '  <div class="row">' . "\n";
-	echo '	  <div class="col-md-8">' . "\n";
-	echo '      <div style="width:600px;height:500px;" id="map"></div>';
-	echo '    </div>';
-	echo '	  <div class="col-md-4">' . "\n";
-	echo '       <div id="hit" style="font-size:11px;"></div>';
-	echo '    </div>';
-	echo '  </div>';
-	echo '</div>';
-	*/
-	
-	
-	echo '<div class="container-fluid">' . "\n";
-	echo '  <div class="row">' . "\n";
-	echo '      <div style="width:100%;height:500px;" id="map" ></div>';
-	echo '  </div>';
-	echo '</div>';
+	if (1)
+	{
+		echo '<div class="container-fluid">' . "\n";
+		echo '  <div class="row">' . "\n";
+		echo '	  <div class="col-md-6">' . "\n";
+		echo '      <div style="width:100%;height:500px;" id="map"></div>';
+		echo '    </div>';
+		echo '	  <div class="col-md-6">' . "\n";
+		echo '       <div id="data"></div>';
+		echo '       <div id="hits"></div>';
+		echo '    </div>';
+		echo '  </div>';
+		echo '</div>';
+	}
+	else
+	{
+		echo '<div class="container-fluid">' . "\n";
+		echo '  <div class="row">' . "\n";
+		echo '      <div style="width:100%;height:500px;" id="map" ></div>';
+		echo '  </div>';
+		echo '</div>';
+	}
 	
 	// echo '<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>'; 
 	echo '<script src="js/leaflet_map.js"></script>';
 	
-	/*
+	
 	echo '<script>';
 	echo "	// http://stackoverflow.com/questions/6762564/setting-div-width-according-to-the-screen-size-of-user 
 	$(window).resize(function() { 
-			var windowWidth = $(window).width() - 40;
+			//var windowWidth = $(window).width() - 40;
 			var windowHeight =$(window).height() -  $('#map').offset().top - $('#footer').height();
-			$('#map').css({'height':windowHeight, 'width':windowWidth });
+			//$('#map').css({'height':windowHeight, 'width':windowWidth });
+			$('#map').css({'height':windowHeight });
 	});	";
 	echo '</script>';
-	*/
-
-	
 	
 	display_html_end();
 }

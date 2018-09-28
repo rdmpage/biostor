@@ -6,6 +6,7 @@ require_once (dirname(__FILE__) . '/couchsimple.php');
 require_once (dirname(__FILE__) . '/lib.php');
 
 require_once (dirname(__FILE__) . '/api_utils.php');
+require_once (dirname(__FILE__) . '/elastic.php');
 
 //--------------------------------------------------------------------------------------------------
 function default_display()
@@ -41,6 +42,46 @@ function display_wkt($wkt, $limit = 200,  $callback = '')
 	api_output($obj, $callback);
 }
 
+//--------------------------------------------------------------------------------------------------
+function display_elastic_geo($geojson, $limit=50, $callback='')
+{
+	global $config;
+	global $elastic;
+	
+	$query_json = '{
+	"size" : <LIMIT>,
+    "query": {        
+        "bool" : {
+            "must" : {
+                "match_all" : {}
+            },
+            "filter" : {
+                "geo_shape" : {
+                    "search_data.geometry" : {
+                        "shape": <SHAPE>
+                    }
+                }
+            }
+        }
+    }
+}';
+
+	$query_json = str_replace('<LIMIT>', $limit, $query_json);
+
+	$geojson_obj = json_decode($geojson);	
+	$query_json = str_replace('<SHAPE>', json_encode($geojson_obj->geometry), $query_json);
+	
+	//echo $query_json ;
+	
+	$resp = $elastic->send('POST', '_search?pretty', $post_data = $query_json);
+	
+	$obj = json_decode($resp);
+
+	// Add status
+	$obj->status = 200;
+	
+	api_output($obj, $callback);	
+}
 
 
 //--------------------------------------------------------------------------------------------------
@@ -70,6 +111,14 @@ function main()
 			display_wkt($_GET['wkt'], 100, $callback);
 			$handled = true;
 		}
+		
+		if (isset($_GET['geojson']))
+		{
+			display_elastic_geo($_GET['geojson'], 50, $callback);
+			$handled = true;
+		}
+		
+		
 	}	
 	
 }

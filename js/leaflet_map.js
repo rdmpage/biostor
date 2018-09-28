@@ -110,21 +110,86 @@
 			}
 			
 			var shape = JSON.stringify(layer.toGeoJSON());
-			$('#data').html(shape);
+			
+			// debug
+			// $('#data').html(shape);
 			
 			var wkt = new Wkt.Wkt();
             wkt.read(shape);
-			$('#data').html('<b>GeoJSON</b><br/>' + shape + '<br/>' + '<b>WKT</b><br/>' + wkt.write());
+            
+            // debug
+			//$('#data').html('<b>GeoJSON</b><br/>' + shape + '<br/>' + '<b>WKT</b><br/>' + wkt.write());
 			
 			// bounds
-			
-			
 			
 			// add data points
 			if (geojson) {
 				map.removeLayer(geojson);
 			}
+						
+			if (1)
+			{
+				// Query Elastic
+				$.getJSON('api_geo.php?geojson=' + shape + '&limit=100&callback=?',
+					function(data){
+						//alert(JSON.stringify(data));
+						if (data.hits) {
+							var html = '';
+							for (var i in data.hits.hits) {
+								//html += data.hits.hits[i]._source.search_result_data.name + '<br />';
+								
+html += '<div class="media" style="padding-bottom:5px;">';
+html += '  <div class="media-left media-top" style="padding:10px;">';
+html += '    <a href="reference/' + data.hits.hits[i]._source.id.replace(/biostor-/, '') +  '">';
+if (data.hits.hits[i]._source.search_result_data.thumbnailUrl) {
+	
+	html += '<img style="box-shadow:2px 2px 2px #ccc;width:64px;" src="' + data.hits.hits[i]._source.search_result_data.thumbnailUrl.replace(/https:\/\/biostor.org\//, '') +  '">';
+}
+html += '    </a>';
+html += '  </div>';
+
+html += '  <div class="media-body" style="padding:10px;">';
+html += '     <h4 class="media-heading">';
+html += '       <a href="reference/' + data.hits.hits[i]._source.id.replace(/biostor-/, '') +  '">' + data.hits.hits[i]._source.search_result_data.name + '</a>';    
+html += '     </h4>';
+
+html += '     <div style="color:rgb(128,128,128);">';
+html +=         data.hits.hits[i]._source.search_result_data.description;
+html += '     </div>';
+
+if (data.hits.hits[i]._source.search_result_data.creator) {
+	var authors = [];
+	for (var j in data.hits.hits[i]._source.search_result_data.creator) {
+		authors.push('<a href="' + 'search/author:&quot;' + data.hits.hits[i]._source.search_result_data.creator[j] + '&quot;' + '">' + data.hits.hits[i]._source.search_result_data.creator[j] + '</a>');
+	}
+	if (authors.length > 0) {
+		html += '<div>';
+		html += authors.join(', ');
+		html += '</div>';
+	}
+}
+
+html += '  </div>';
+
+html += '</div>';
+
+								
+							
+							}
+							$('#hits').html(html);
+							
+						
+						}
+					
+					});
+				
+				
 			
+			}
+			
+			
+			if (0)
+			{
 			//----------------------------------------------------------------------------
 			// Query Cloudant
 			$.getJSON('api_geo.php?wkt=' + wkt.write() + '&limit=200&callback=?',
@@ -172,6 +237,7 @@
 					}
 				}
 			); 
+		}
 			 			
 			
 			

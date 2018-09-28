@@ -30,9 +30,12 @@ if (isset($_GET['q']))
 
 foreach ($queries as $q)
 {
-	$url = 'http://direct.biostor.org/bhlapi_names.php?q=' . urlencode($q);
+	//$url = 'http://direct.biostor.org/bhlapi_names.php?q=' . urlencode($q);
+	$url = $config['web_server'] . $config['web_root'] . 'api_bhl_name.php?name=' . urlencode($q);
 	
 	$json = get($url);
+	
+	//echo $json;
 	if ($json != '')
 	{
 		$data[] = json_decode($json);

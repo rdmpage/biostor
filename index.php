@@ -743,6 +743,8 @@ function display_record($id, $page = 0)
 	
 	$meta = reference_to_google_scholar($reference);
 	
+	$meta .= reference_to_twitter($reference);
+	
 	$canonical_url = $config['web_server'] . $config['web_root'] . 'reference/' . str_replace('biostor/', '', $id);
 	if ($page != 0)
 	{
@@ -1793,7 +1795,7 @@ echo '<nav class="navbar navbar-default navbar-fixed-top">
 }
 
 //----------------------------------------------------------------------------------------
-function display_html_start($title = '', $meta = '', $script = '')
+function display_html_start($title = '', $meta = '', $script = '', $onload = '')
 {
 	global $config;
 	
@@ -1976,7 +1978,17 @@ function display_html_start($title = '', $meta = '', $script = '')
 	</style>	
 	
 	</head>
-<body style="padding-top:70px;padding-left:20px;padding-right:20px;padding-bottom:20px;">';
+	';
+
+	if ($onload == '')
+	{
+		echo '<body style="padding-top:70px;padding-left:20px;padding-right:20px;padding-bottom:20px;">';
+	}
+	else
+	{
+		echo '<body style="padding-top:70px;padding-left:20px;padding-right:20px;padding-bottom:20px;" onload="' . $onload . '">';
+	}
+
 
 if ($config['show_ads'])
 {
@@ -2176,7 +2188,7 @@ function display_map()
 	global $config;
 	global $couch;
 	
-	display_html_start('Map');
+	display_html_start('Map', '' , '', '$(window).resize();');
 	display_navbar();
 	
 	if (1)
@@ -2184,11 +2196,13 @@ function display_map()
 		echo '<div class="container-fluid">' . "\n";
 		echo '  <div class="row">' . "\n";
 		echo '	  <div class="col-md-6">' . "\n";
+		echo '      <h4>Map</h4>';
 		echo '      <div style="width:100%;height:500px;" id="map"></div>';
 		echo '    </div>';
 		echo '	  <div class="col-md-6">' . "\n";
+		echo '       <h4>Works with localities within map selection.</h4>';		
 		echo '       <div id="data"></div>';
-		echo '       <div id="hits"></div>';
+		echo '       <div id="hits" style="height:400px;overflow:hidden;overflow-y:auto;"></div>';
 		echo '    </div>';
 		echo '  </div>';
 		echo '</div>';
@@ -2213,6 +2227,7 @@ function display_map()
 			var windowHeight =$(window).height() -  $('#map').offset().top - $('#footer').height();
 			//$('#map').css({'height':windowHeight, 'width':windowWidth });
 			$('#map').css({'height':windowHeight });
+			$('#hits').css({'height':windowHeight });
 	});	";
 	echo '</script>';
 	
@@ -2234,7 +2249,7 @@ function display_labs()
 	echo '<p>This is a playground for various ideas.</p>';
 	
 	echo '<ul>';
-	echo '<li><a href="bhl-couchdb/?q=Serinus mozambicus">BHL CouchDB full-text indexing</a></li>';
+//	echo '<li><a href="bhl-couchdb/?q=Serinus mozambicus">BHL CouchDB full-text indexing</a></li>';
 	echo '<li><a href="match.html">Match references using reconcile service</a></li>';
 	echo '<li><a href="timeline.php?q=Aspidoscelis costata, Cnemidophorus costatus">Timeline of name in BHL</a></li>';
 	echo '</ul>';

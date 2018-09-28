@@ -19,8 +19,8 @@ $site = 'local';
 //$site = 'pagoda';
 //$site = 'heroku';
 
-//$site = 'nanobox';
-$site = 'nanobox-local';
+$site = 'nanobox';
+//$site = 'nanobox-local';
 
 switch ($site)
 {

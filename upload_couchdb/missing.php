@@ -8,11 +8,12 @@ require_once(dirname(dirname(__FILE__)) . '/couchsimple.php');
 $filename = 'biostor.txt';
 $filename = 'missing.txt';
 $filename = 'pinterest.txt';
+$filename = 'page.txt';
 
 $skip = 0;
 $count = 1;
 
-$chunksize = 50;
+$chunksize = 100;
 
 $missing = array();
 

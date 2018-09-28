@@ -727,19 +727,42 @@ function reference_to_google_scholar($reference)
 //--------------------------------------------------------------------------------------------------
 function reference_to_twitter($reference)
 {
+	global $config;
+
 	$twitter = '';
 	$twitter .= '<meta name="twitter:card" content="summary"/>' . "\n";
-	$twitter .= '<meta name="twitter:title" content="' . htmlentities($reference->title, ENT_COMPAT | ENT_HTML5, 'UTF-8') . '" />' . "\n";
+
+	//$twitter .= '<meta name="twitter:title" content="' . htmlentities($reference->title, ENT_COMPAT | ENT_HTML5, 'UTF-8') . '" />' . "\n";
+	
+	$clean_title = $reference->title;
+	$clean_title = str_replace('<', '&lt;', $clean_title);
+	$clean_title = str_replace('>', '&gt;', $clean_title);
+	
+	$twitter .= '<meta name="twitter:title" content="' . $clean_title . '" />' . "\n";
 	$twitter .= '<meta name="twitter:site" content="BioStor"/>' . "\n";
 
-	if (isset($reference->thumbnail))
+	$twitter .= '<meta name="twitter:image" content="' 
+		. $config['web_server'] 
+		. $config['web_root']
+		. 'reference/' . str_replace('biostor/', '', $reference->_id) . '/thumbnail" />' . "\n";
+	
+	
+	$description = '';
+	
+	if (isset($reference->journal))
 	{
-		//$twitter .= '<meta name="twitter:image" content="' . 'http://bionames.org/api/id/' . $doc->_id . '/thumbnail/image" />' . "\n";
+		if (isset($reference->journal->name))
+		{
+			$description = $reference->journal->name;
+		}
 	}
-	if (isset($doc->citation_string))
+		
+	if ($description == '' && isset($reference->citation))
 	{
-		$twitter .= '<meta name="twitter:description" content="' . htmlentities($reference->citation_string, ENT_COMPAT | ENT_HTML5, 'UTF-8') . '" />' . "\n";
-	}
+		$description = $reference->citation;
+	}	
+	
+	$twitter .= '<meta name="twitter:description" content="' . $description . '" />' . "\n";
 	
 	return $twitter;
 }

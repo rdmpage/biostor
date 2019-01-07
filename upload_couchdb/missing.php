@@ -13,7 +13,7 @@ $filename = 'page.txt';
 $skip = 0;
 $count = 1;
 
-$chunksize = 100;
+$chunksize = 1;
 
 $missing = array();
 
@@ -54,15 +54,15 @@ while (!feof($file_handle) && !$done)
 		
 		system($command);
 		
-		echo "Sleep...\n";
-		sleep(2);		
+		//echo "Sleep...\n";
+		//sleep(2);		
 		
 		$missing=[];
 		
 	}
 	
 	// Give server a break every 100 items
-	if (($count++ % 100) == 0)
+	if (($count++ % 10000) == 0)
 	{
 		$rand = rand(100000, 300000);
 		echo "[$count]...sleeping for " . round(($rand / 1000000),2) . ' seconds' . "\n";

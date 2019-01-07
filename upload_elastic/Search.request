@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>baseURL</key>
+	<string>http://35.204.73.93:80/elasticsearch/biostor/_search?pretty</string>
+	<key>bodyString</key>
+	<string>{
+"size":20,
+    "query": {
+       "multi_match" : {
+      "query": "Raxworthy",
+      "fields":["search_data.fulltext", "search_data.fulltext_boosted^4"] 
+    }
+},
+
+"aggs": {
+"type" :{
+    "terms": { "field" : "search_data.type.keyword" }
+  },
+  "year" :{
+    "terms": { "field" : "search_data.year" }
+  },
+  "container" :{
+    "terms": { "field" : "search_data.container.keyword" }
+  },
+  "author" :{
+    "terms": { "field" : "search_data.author.keyword" }
+  },
+  "classification" :{
+    "terms": { "field" : "search_data.classification.keyword" }
+  }  
+
+}
+
+    
+}</string>
+	<key>followRedirect</key>
+	<true/>
+	<key>handleJSONPCallbacks</key>
+	<false/>
+	<key>headers</key>
+	<array>
+		<dict>
+			<key>header</key>
+			<string>Content-Type</string>
+			<key>inUse</key>
+			<true/>
+			<key>value</key>
+			<string>application/json</string>
+		</dict>
+	</array>
+	<key>httpMethod</key>
+	<string>POST</string>
+	<key>jsonpScript</key>
+	<string></string>
+	<key>paramBodyUIChoice</key>
+	<integer>0</integer>
+	<key>parameters</key>
+	<array/>
+	<key>parametersType</key>
+	<integer>0</integer>
+	<key>presentBeforeChallenge</key>
+	<true/>
+	<key>stringEncoding</key>
+	<integer>4</integer>
+	<key>username</key>
+	<string>user</string>
+	<key>usingHTTPBody</key>
+	<true/>
+</dict>
+</plist>

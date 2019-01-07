@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>baseURL</key>
+	<string>http://35.204.73.93/elasticsearch/biostor</string>
+	<key>followRedirect</key>
+	<true/>
+	<key>handleJSONPCallbacks</key>
+	<false/>
+	<key>headers</key>
+	<array/>
+	<key>httpMethod</key>
+	<string>DELETE</string>
+	<key>jsonpScript</key>
+	<string></string>
+	<key>paramBodyUIChoice</key>
+	<integer>0</integer>
+	<key>parameters</key>
+	<array/>
+	<key>parametersType</key>
+	<integer>0</integer>
+	<key>password</key>
+	<string>7WbQZedlAvzQ</string>
+	<key>presentBeforeChallenge</key>
+	<true/>
+	<key>shouldStorePassword</key>
+	<true/>
+	<key>stringEncoding</key>
+	<integer>4</integer>
+	<key>username</key>
+	<string>user</string>
+	<key>usingHTTPBody</key>
+	<false/>
+</dict>
+</plist>

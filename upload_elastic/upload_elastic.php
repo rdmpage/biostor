@@ -2,34 +2,28 @@
 
 // Upload Elastic documents from CouchDB to Elastic
 
-require_once (dirname(__FILE__) . '/config.inc.php');
-require_once (dirname(__FILE__) . '/lib.php');
-require_once (dirname(__FILE__) . '/elastic.php');
+require_once (dirname(dirname(__FILE__)) . '/config.inc.php');
+require_once (dirname(dirname(__FILE__)) . '/couchsimple.php');
+require_once (dirname(dirname(__FILE__)) . '/elastic.php');
 
 
 
-$rows_per_page = 100;
-$skip = 1700;
+$start   = 246887;
+$end     = 247041;
 
-$count = 0;
+$start   = 248609;
+$end     = 248892;
 
-$done = false;
-while (!$done)
+
+for ($id = $start; $id <= $end; $id++)
 {
-	$url = 'http://direct.biostor.org:5984/biostor/_design/elastic/_view/biostor';
-	
-	//$url .= '?key=' . urlencode('"biostor/136987"');
-	
-	
-	$url .= '?limit=' . $rows_per_page . '&skip=' . $skip;
+//	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . urlencode('biostor/' . $id));
 		
-	// debug
-	//$url .= '&stale=ok';
+
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/_design/elastic/_view/biostor?key=" . urlencode('"biostor/' . $id . '"'));
 	
-	echo $url . "\n";
-
-	$resp = get($url);
-
+	//echo $resp;
+	
 	if ($resp)
 	{
 		
@@ -54,17 +48,6 @@ while (!$done)
 			}	
 		}
 	}
-
-	$count += $n;
-		
-
-	$skip += $rows_per_page;
-	
-	//$done = ($n < $rows_per_page);	
-	$done = ($count > 10000);	
-	
-	
-	
 		
 }
 

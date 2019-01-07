@@ -12,7 +12,36 @@ function default_display($error_msg = '')
 {
 	global $config;
 	
-	display_html_start('BioStor');
+	$script =   '<script>
+		function show_stats() {
+		//console.log("x");
+			$.get("api.php?stats" + "&callback=?",
+				function(data){
+				//console.log(data);
+				d = JSON.parse(data);
+				console.log(d);
+				   if (d.stats["biostor"]) {
+				   	$("#num_works").html(d.stats["biostor"].toLocaleString("en"));
+				   }
+
+				   if (d.stats["bhl_page"]) {
+				   	$("#num_pages").html(d.stats["bhl_page"].toLocaleString("en"));
+				   }
+
+				   if (d.stats["points"]) {
+				   	$("#num_points").html(d.stats["points"].toLocaleString("en"));
+				   }
+
+				   if (d.stats["doi"]) {
+				   	$("#num_dois").html(d.stats["doi"].toLocaleString("en"));
+				   }
+					
+			});
+		}
+    </script>';
+ 
+	
+	display_html_start('BioStor', '', $script, 'show_stats();');
 	display_navbar();
 	
 	echo  '<div class="container-fluid">';
@@ -33,12 +62,25 @@ function default_display($error_msg = '')
       	
        		
         	<div class="col-md-4">
-      			<h3>Recent additions</h3>
+      			<h3>Updates</h3>
 				<div>
 				<a class="twitter-timeline" href="https://twitter.com/biostor_org" data-widget-id="567310691699552256">Tweets by @biostor_org</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 				</div>
       			
       		</div>
+      		
+      		
+        	<div class="col-md-4">
+      			<h3>By the numbers</h3>
+				<div style="font-size:1.6em">
+					<span>Articles:</span> <span style="font-weight:bold" id="num_works">?</span><br />
+					<span>Scanned pages:</span> <span style="font-weight:bold" id="num_pages">?</span><br />
+					<span>Articles with DOIs:</span> <span style="font-weight:bold" id="num_dois">?</span><br />
+					<span>Point localities:</span> <span style="font-weight:bold" id="num_points">?</span><br />
+				</div>
+      			
+      		</div>
+      		
      		
       	
       		<div class="col-md-4">
@@ -69,6 +111,7 @@ function default_display($error_msg = '')
       	
       echo '</div>';
       
+     
 
 
 	display_html_end();

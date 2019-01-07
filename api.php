@@ -610,6 +610,54 @@ function display_cites ($id, $callback = '')
 	api_output($obj, $callback);	
 }
 
+
+//--------------------------------------------------------------------------------------------------
+// Counts of dicuments, etc.
+function display_stats ($callback = '')
+{
+	global $config;
+	global $couch;
+	
+	$url = '_design/count/_view/stats?group_level=1';	
+
+	if ($config['stale'])
+	{
+		$url .= '&stale=ok';
+	}	
+	
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+	$response_obj = json_decode($resp);	
+	
+	$obj = new stdclass;
+	$obj->status = 404;
+	$obj->url = $url;
+	
+	if (isset($response_obj->error))
+	{
+		$obj->error = $response_obj->error;
+	}
+	else
+	{
+		if (count($response_obj->rows) == 0)
+		{
+			$obj->error = 'Not found';
+		}
+		else
+		{	
+			$obj->status = 200;
+			
+			// citations
+			$obj->stats = array();
+			foreach ($response_obj->rows as $row)
+			{
+				$obj->stats[$row->key] = $row->value;
+			}	
+			
+		}
+	}
+	
+	api_output($obj, $callback);	
+}
 //--------------------------------------------------------------------------------------------------
 // Display thumbnail image
 function display_thumbnail_image ($id, $callback = '')
@@ -773,6 +821,16 @@ function main()
 			$handled = true;
 		}
 	}
+	
+	if (!$handled)
+	{
+		if (isset($_GET['stats']))
+		{
+			display_stats();
+			$handled = true;
+		}
+	}
+	
 	
 	if (!$handled)
 	{

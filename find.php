@@ -20,65 +20,148 @@ function find_citation($citation, &$result, $threshold = 0.8)
 	
 	$q = clean_string($citation);
 	
-	$rows_per_page = 5;
-	$parameters = array(
-			'q'					=> $q,
-			//'include_docs' 		=> 'true',
-			'limit' 			=> $rows_per_page
-		);
-				
-	$url = '/_design/citation/_search/all?' . http_build_query($parameters);
-	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
-	$obj = json_decode($resp);
-	
-	//print_r($q);
-	
-	if (isset($obj->error))
+	if (1)
 	{
+		// Elastic
+		
+		// BioStor search API
+		$url = 'http://biostor.org/api.php?q=' . urlencode($q);
+		
+		$json = get($url);
+
+		if ($json != '')
+		{
+			$obj = json_decode($json);
+			$result->status = 200;
+			
+			if (isset($obj->hits))
+			{
+				$best_hit = 0;
+				
+				for ($i = 0; $i < 3; $i++)
+				{
+					$row = $obj->hits->hits[$i];
+					// check 
+					
+					$v1 = clean_string($q);
+					$v1 = strtolower($v1);
+					
+					$hit_text = '';
+					
+					if (isset($obj->hits->hits[$i]->_source->search_result_data->creator))
+					{
+						$hit_text .= join(' ', $obj->hits->hits[$i]->_source->search_result_data->creator);
+						$hit_text .= ' ';
+					}
+					
+					$hit_text .= $obj->hits->hits[$i]->_source->search_result_data->name;
+					$hit_text .= $obj->hits->hits[$i]->_source->search_result_data->description;
+					
+					$hit_text = preg_replace('/Published\s+in\s+/', '', $hit_text);
+					$hit_text = preg_replace('/,\s+in\s+/', ' ', $hit_text);
+					$hit_text = preg_replace('/\s+volume/', '', $hit_text);
+					$hit_text = preg_replace('/,\s+pages\s+/', ' ', $hit_text);
+					
+					$v2 = clean_string($hit_text);
+					$v2 = strtolower($v2);
+					
+					$lcs = new LongestCommonSequence($v1, $v2);
+					$d = $lcs->score();
+					
+					$score = min($d / strlen($v1), $d / strlen($v2));
+					
+					if ($score > $threshold)
+					{
+						if ($score >= $best_hit)
+						{
+							$best_hit = $score;
+						
+							
+							$match = new stdclass;
+							$match->text = $citation;
+							$match->hit = $hit_text;
+							$match->match = true;
+							$match->id = str_replace('biostor-', 'biostor/', $obj->hits->hits[$i]->_id);
+							$match->score = $score;
+						
+							if ($score > $best_hit)
+							{
+								$result->results = array();
+							}						
+							$result->results[] = $match;							
+						}
+						
+					}				
+				
+				
+				}
+			}
+		}		
+	
 	}
 	else
 	{
-		$result->status = 200;
-		if ($obj->total_rows > 0)
+		// Cloudant
+		$rows_per_page = 5;
+		$parameters = array(
+				'q'					=> $q,
+				//'include_docs' 		=> 'true',
+				'limit' 			=> $rows_per_page
+			);
+				
+		$url = '/_design/citation/_search/all?' . http_build_query($parameters);
+		$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+		$obj = json_decode($resp);
+	
+		//print_r($q);
+	
+		if (isset($obj->error))
 		{
-			$best_hit = 0;
-		
-			$q = strtolower($q);
-		
-			foreach ($obj->rows as $row)
+		}
+		else
+		{
+			$result->status = 200;
+			if ($obj->total_rows > 0)
 			{
-				$hit = $row->fields->default;
-				$hit_original = $hit;
-				$hit = clean_string($hit);
+				$best_hit = 0;
 		
-				$hit = strtolower($hit);
-					
-				$query_length = strlen($q);
-				$hit_length = strlen($hit);
-				
-				$lcs = new LongestCommonSequence($hit, $q);
-				$d = $lcs->score();
-				
-				$score = min($d / strlen($hit), $d / strlen($q));
-				
-				if ($score > $threshold)
+				$q = strtolower($q);
+		
+				foreach ($obj->rows as $row)
 				{
-					if ($score >= $best_hit)
+					$hit = $row->fields->default;
+					$hit_original = $hit;
+					$hit = clean_string($hit);
+		
+					$hit = strtolower($hit);
+					
+					$query_length = strlen($q);
+					$hit_length = strlen($hit);
+				
+					$lcs = new LongestCommonSequence($hit, $q);
+					$d = $lcs->score();
+				
+					$score = min($d / strlen($hit), $d / strlen($q));
+				
+					if ($score > $threshold)
 					{
-						$best_hit = $score;
-						
-						$match = new stdclass;
-						$match->text = $citation;
-						$match->hit = $hit_original;
-						$match->match = true;
-						$match->id = $row->id;
-						$match->score = $score;
-						
-						if ($score > $best_hit)
+						if ($score >= $best_hit)
 						{
-							$result->results = array();
-						}						
-						$result->results[] = $match;
+							$best_hit = $score;
+						
+							$match = new stdclass;
+							$match->text = $citation;
+							$match->hit = $hit_original;
+							$match->match = true;
+							$match->id = $row->id;
+							$match->score = $score;
+						
+							if ($score > $best_hit)
+							{
+								$result->results = array();
+							}						
+							$result->results[] = $match;
+						}
 					}
 				}
 			}

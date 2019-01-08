@@ -134,6 +134,10 @@ function display_one ($id, $format= '', $callback = '')
 				$obj = reference_to_citeprocjs($obj);
 				$obj['status'] = 200;
 				break;
+				
+			case 'jsonld':
+				$obj = reference_to_jsonld($obj);
+				break;				
 
 			default:
 				break;

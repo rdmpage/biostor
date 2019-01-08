@@ -2,6 +2,8 @@
 
 // bibliographic reference
 
+require_once('php-json-ld/jsonld.php');
+
 //--------------------------------------------------------------------------------------------------
 /**
  * @brief Get identifiers for a reference
@@ -40,7 +42,6 @@ function reference_to_citation_string($reference)
 {
 	$citation = '';
 	
-
 	//echo "citation=$citation\n";
 	if (isset($reference->author))
 	{
@@ -766,6 +767,373 @@ function reference_to_twitter($reference)
 	
 	return $twitter;
 }
+
+//--------------------------------------------------------------------------------------------------
+/**
+ * @brief Convert BibJSON object to JSON-LD
+ *
+ * @param reference Reference object to be converted
+ *
+ * @return JSON-LD object
+ */
+function reference_to_jsonld($reference)
+{
+	global $config;
+
+	$triples = array();
+	
+	$subject_id = 
+		$config['web_server'] 
+		. $config['web_root']
+		. 'reference/' . str_replace('biostor/', '', $reference->_id);
+
+	$s = '<' . $subject_id . '>';
+	
+	// type-------------------------------------------------------------------------------
+	switch ($reference->type)
+	{	
+		case 'book':
+			$type = 'http://schema.org/Book';
+			break;
+
+		case 'chapter':
+			$type = 'http://schema.org/Chapter';
+			break;
+	
+		case 'article':
+			$type = 'http://schema.org/ScholarlyArticle';
+			break;
+			
+		default:
+			$type = 'http://schema.org/CreativeWork';
+			break;
+	}
+	
+	$triples[] = $s . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <' . $type . '> .';
+	
+	// url--------------------------------------------------------------------------------
+	$triples[] = $s . ' <http://schema.org/url> "' . $subject_id . '" .';
+
+	// title------------------------------------------------------------------------------
+	if (isset($reference->title))
+	{
+		$title = $reference->title;
+		$title = strip_tags($title);
+		
+		$title = preg_replace('/\.$/', '', $title);
+		$title = preg_replace('/\n/', '', $title);
+		$title = preg_replace('/\r/', '', $title);
+	
+		$triples[] = $s . ' <http://schema.org/name> ' . '"' . addcslashes($title, '"\\') . '" .';
+	}
+	
+	// date-------------------------------------------------------------------------------
+	if (isset($reference->date))
+	{
+		$date = $reference->date;
+		while (count($date) < 3)
+		{
+			$date[] = '00';
+		}
+		$triples[] = $s . ' <http://schema.org/datePublished> ' . '"' . join('-', $date) . '" .';		
+	}
+	else
+	{
+		if (isset($reference->year))
+		{
+			$triples[] = $s . ' <http://schema.org/datePublished> ' . '"' . $reference->year . '" .';		
+		}	
+	}
+	
+	// authors----------------------------------------------------------------------------
+	if (isset($reference->author))
+	{
+		$use_role = true;
+		
+		$n = count($reference->author);
+		for ($i = 0; $i < $n; $i++)
+		{
+			$index = $i + 1;
+		
+			// Author
+			$author_id = '<' . $subject_id . '#creator/' . $index . '>';
+			
+			$triples[] = $author_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Person> .';			
+			
+			if (isset($reference->author[$i]->name))
+			{
+				$name = $reference->author[$i]->name;
+				$name = preg_replace('/\s\s+/u', ' ', $name);
+				
+				$triples[] = $author_id . ' <http://schema.org/name> ' . '"' . addcslashes($name, '"') . '"' . ' .';
+			}
+
+			if (isset($reference->author[$i]->firstname))
+			{
+				$triples[] = $author_id . ' <http://schema.org/givenName> ' . '"' . addcslashes($reference->author[$i]->firstname, '"') . '"' . ' .';
+			}
+
+			if (isset($reference->author[$i]->lastname))
+			{
+				$triples[] = $author_id . ' <http://schema.org/familyName> ' . '"' . addcslashes($reference->author[$i]->lastname, '"') . '"' . ' .';
+			}			
+			
+			if ($use_role)
+			{
+				// Role to hold author position
+				$role_id = '<' . $subject_id . '#role/' . $index . '>';
+				
+				$triples[] = $role_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ' . ' <http://schema.org/Role>' . ' .';			
+				$triples[] = $role_id . ' <http://schema.org/roleName> "' . $index . '" .';			
+			
+				$triples[] = $s . ' <http://schema.org/creator> ' .  $role_id . ' .';
+				$triples[] = $role_id . ' <http://schema.org/creator> ' .  $author_id . ' .';			
+			}
+			else
+			{
+				$triples[] = $s . ' <http://schema.org/creator> ' . $author_id  . ' .';							
+			}			
+		}
+	
+	}
+	
+	// identifiers------------------------------------------------------------------------
+	
+	// biostor
+	$identifier_id = '<' . $subject_id . '#biostor' . '>';
+
+	$triples[] = $s . ' <http://schema.org/identifier> ' . $identifier_id . '.';			
+	$triples[] = $identifier_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PropertyValue> .';
+	$triples[] = $identifier_id . ' <http://schema.org/propertyID> ' . '"biostor"' . '.';
+	$triples[] = $identifier_id . ' <http://schema.org/value> ' . '"' . str_replace('biostor/', '', $reference->_id) . '"' . '.';
+
+	$triples[] = $s . ' <http://schema.org/sameAs> ' . '"https://biostor.org/reference/' . str_replace('biostor/', '', $reference->_id) . '" ' . '. ';	
+	
+	// other identifiers (DOI, JSTOR, etc.)
+	if (isset($reference->identifier))
+	{
+		foreach ($reference->identifier as $identifier)
+		{
+			switch ($identifier->type)
+			{
+				case 'doi':
+					$identifier_id = '<' . $subject_id . '#doi' . '>';
+
+					$triples[] = $s . ' <http://schema.org/identifier> ' . $identifier_id . '.';			
+					$triples[] = $identifier_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PropertyValue> .';
+					$triples[] = $identifier_id . ' <http://schema.org/propertyID> ' . '"doi"' . '.';
+					$triples[] = $identifier_id . ' <http://schema.org/value> ' . '"' . $identifier->id . '"' . '.';
+
+					$triples[] = $s . ' <http://schema.org/sameAs> ' . '"https://doi.org/' . $identifier->id . '" ' . '. ';
+					break;
+
+				case 'handle':
+					$identifier_id = '<' . $subject_id . '#handle' . '>';
+
+					$triples[] = $s . ' <http://schema.org/identifier> ' . $identifier_id . '.';			
+					$triples[] = $identifier_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PropertyValue> .';
+					$triples[] = $identifier_id . ' <http://schema.org/propertyID> ' . '"handle"' . '.';
+					$triples[] = $identifier_id . ' <http://schema.org/value> ' . '"' . $identifier->id . '"' . '.';
+
+					$triples[] = $s . ' <http://schema.org/sameAs> ' . '"https://hdl.handle.net/' . $identifier->id . '" ' . '. ';
+					break;
+
+				case 'jstor':
+					$identifier_id = '<' . $subject_id . '#jstor' . '>';
+
+					$triples[] = $s . ' <http://schema.org/identifier> ' . $identifier_id . '.';			
+					$triples[] = $identifier_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PropertyValue> .';
+					$triples[] = $identifier_id . ' <http://schema.org/propertyID> ' . '"jstor"' . '.';
+					$triples[] = $identifier_id . ' <http://schema.org/value> ' . '"' . $identifier->id . '"' . '.';
+
+					$triples[] = $s . ' <http://schema.org/sameAs> ' . '"https://www.jstor.org/stable/' . $identifier->id . '" ' . '. ';
+					break;
+				
+				default:
+					break;
+			}
+		}
+	}	
+	
+	// container--------------------------------------------------------------------------
+	if ($reference->type == 'article')
+	{
+		$container_id = '<' . $subject_id . '#container' . '>';
+		
+		$issn = array();
+		if (isset($reference->journal->identifier))
+		{
+			foreach ($reference->journal->identifier as $identifier)
+			{
+				if ($identifier->type == 'issn')
+				{
+					$issn[] = $identifier->id;
+				}
+			}
+		}
+		
+		if (count($issn) > 0)
+		{
+			$container_id = '<http://worldcat.org/issn/' . $issn[0] . '>';
+			$triples[] = $container_id . ' <http://schema.org/issn> ' .  '"' . addcslashes($issn[0], '"') . '" .';			
+		}
+		
+		$triples[] = $s . ' <http://schema.org/isPartOf> ' . $container_id . ' .';
+		
+		if (isset($reference->journal->name))
+		{
+			$triples[] = $container_id . ' <http://schema.org/name> ' .  '"' . addcslashes($reference->journal->name, '"') . '" .';
+		}
+		if (isset($reference->journal->volume))
+		{
+			$triples[] = $s . ' <http://schema.org/volume> ' .  '"' . addcslashes($reference->journal->volume, '"') . '" .';
+		}
+		if (isset($reference->journal->issue))
+		{
+			$triples[] = $s . ' <http://schema.org/issueNumber> ' .  '"' . addcslashes($reference->journal->issue, '"') . '" .';
+		}
+		if (isset($reference->journal->pages))
+		{
+			if (preg_match('/^(?<spage>[^-]+)(-[-]?(?<epage>.*))?$/', $reference->journal->pages, $m))
+			{
+				$triples[] = $s . ' <http://schema.org/pageStart> ' .  '"' . addcslashes($m['spage'], '"') . '" .';
+				if ($m['epage'] != '')
+				{
+					$triples[] = $s . ' <http://schema.org/pageEnd> ' .  '"' . addcslashes($m['epage'], '"') . '" .';				
+				}
+			}
+			else
+			{
+				$triples[] = $s . ' <http://schema.org/pagination> ' .  '"' . addcslashes(str_replace('--', '-', $reference->journal->pages), '"') . '" .';							
+			}
+		}
+	}
+	
+	// page images------------------------------------------------------------------------
+	if (1)
+	{
+		// itemList
+		if (isset($reference->bhl_pages))
+		{
+			$triples[] = $s . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/itemList> .';
+	
+			$count = 1;
+			foreach($reference->bhl_pages as $page_name => $PageID)
+			{
+				$ListItem_id = '<' . $subject_id . '#listitem_' . $count . '>';
+				$triples[] = $ListItem_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/ListItem> .';
+				$triples[] = $ListItem_id . ' <http://schema.org/position> "' . $count . '" . ';
+
+				// image
+				$image_id = '<https://biodiversitylibrary.org/page/' . $PageID . '>';
+		
+				// ImageObject
+				$triples[] = $image_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/ImageObject> .';
+
+				// do we add details here, or load the images separately?
+				if (0)
+				{
+					$triples[] = $image_id . ' <http://schema.org/fileFormat> "image/jpeg" .';
+
+					// URLs to images
+					$triples[] = $image_id . ' <http://schema.org/contentUrl> ' . '"' . addcslashes('https://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',700,1000', '"') . '"' . ' .';
+					$triples[] = $image_id . ' <http://schema.org/thumbnailUrl> ' . '"' . addcslashes('https://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',100,150', '"') . '"' . ' .';
+		
+					// page name
+					$triples[] = $image_id . ' <http://schema.org/name> ' . '"' . addcslashes($page_name, '"') . '"' . ' .';
+				}
+			
+				$triples[] = $ListItem_id . ' <http://schema.org/item> ' . $image_id . ' . ';
+					
+				// page image is part of the encoding
+				$triples[] = $s . ' <http://schema.org/itemListElement> ' .  $ListItem_id . ' .';	
+		
+				$count++;				
+			}
+		}	
+	}
+	else
+	{
+		// simple part list
+		if (isset($reference->bhl_pages))
+		{
+			$count = 1;
+			foreach($reference->bhl_pages as $page_name => $PageID)
+			{
+				// image
+				$image_id = '<https://biodiversitylibrary.org/page/' . $PageID . '>';
+		
+				// ImageObject
+				$triples[] = $image_id . ' <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/ImageObject> .';
+
+				// order (note this may break SPARQL queries if we have > one article that includes the same page)
+				$triples[] = $image_id . ' <http://schema.org/position> ' . '"' . addcslashes($count, '"') . '"' . ' .';
+
+				// do we add details here, or load the images separately?
+				if (0)
+				{
+					$triples[] = $image_id . ' <http://schema.org/fileFormat> "image/jpeg" .';
+
+					// URLs to images
+					$triples[] = $image_id . ' <http://schema.org/contentUrl> ' . '"' . addcslashes('https://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',700,1000', '"') . '"' . ' .';
+					$triples[] = $image_id . ' <http://schema.org/thumbnailUrl> ' . '"' . addcslashes('https://www.biodiversitylibrary.org/pagethumb/' . $PageID . ',100,150', '"') . '"' . ' .';
+		
+					// page name
+					$triples[] = $image_id . ' <http://schema.org/name> ' . '"' . addcslashes($page_name, '"') . '"' . ' .';
+				}
+			
+					
+				// page image is part of the encoding
+				$triples[] = $s . ' <http://schema.org/hasPart> ' .  $image_id . ' .';	
+		
+				$count++;				
+			}
+		}							
+	}					
+
+	//------------------------------------------------------------------------------------
+	$t = join("\n", $triples);
+	
+	$doc = jsonld_from_rdf($t, array('format' => 'application/nquads'));
+		
+	// Context to set vocab to schema
+	$context = new stdclass;
+
+	$context->{'@vocab'} = "http://schema.org/";
+
+	// sameAs is always an array
+	$sameAs = new stdclass;
+	$sameAs->{'@id'} = "http://schema.org/sameAs";
+	$sameAs->{'@container'} = "@set";
+	$context->sameAs = $sameAs;
+
+	/*
+	// identifier is always an array
+	$identifier = new stdclass;
+	$identifier->{'@id'} = "http://schema.org/identifier";
+	$identifier->{'@container'} = "@set";
+	$context->identifier = $identifier;
+	*/
+
+	// issn is always an array
+	$issn = new stdclass;
+	$issn->{'@id'} = "http://schema.org/issn";
+	$issn->{'@container'} = "@set";
+	$context->issn = $issn;
+	
+	$frame = (object)array(
+		'@context' => $context,
+
+		// Root on article
+		'@type' => $type,
+	);	
+
+	$framed = jsonld_frame($doc, $frame);
+	
+	//print_r($framed);
+
+	return $framed;
+}	
 
 
 

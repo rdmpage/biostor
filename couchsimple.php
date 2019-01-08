@@ -8,7 +8,7 @@ $couch = new CouchSimple($config['couchdb_options']);
 class CouchSimple
 {
 	//----------------------------------------------------------------------------------------------
-     function CouchSimple($options)
+     function __construct($options)
      {
          foreach($options AS $key => $value) {
              $this->$key = $value;

@@ -28,7 +28,7 @@ switch ($site)
 	case 'nanobox':
 		// Server-------------------------------------------------------------------------
 		$config['web_server']	= 'http://happy-hog.nanoapp.io'; 
-		$config['web_server']	= 'http://biostor.org'; 
+		$config['web_server']	= 'https://biostor.org'; 
 		$config['site_name']	= 'BioStor';
 
 		// Memcache-----------------------------------------------------------------------
@@ -133,7 +133,7 @@ $config['use_image_proxy']	= true; // if true use local proxy to trigger caching
 
 // Logging--------------------------------------------------------------------------------
 // View logging (requires writing to CouchDB and POSTs are expensive)
-$config['use_view_counter']	= false; // if true record and display number of article views
+$config['use_view_counter']	= true; // if true record and display number of article views
 
 // Hypothesis--------------------------------------------------------------------------------
 $config['use_hypothesis'] = false; // if true display hypothesis annotation tools

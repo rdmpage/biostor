@@ -986,7 +986,7 @@ function reference_to_jsonld($reference)
 		}
 		if (isset($reference->journal->volume))
 		{
-			$triples[] = $s . ' <http://schema.org/volume> ' .  '"' . addcslashes($reference->journal->volume, '"') . '" .';
+			$triples[] = $s . ' <http://schema.org/volumeNumber> ' .  '"' . addcslashes($reference->journal->volume, '"') . '" .';
 		}
 		if (isset($reference->journal->issue))
 		{

@@ -9,11 +9,12 @@ $filename = 'biostor.txt';
 $filename = 'missing.txt';
 $filename = 'pinterest.txt';
 $filename = 'page.txt';
+$filename = 'extra.txt';
 
 $skip = 0;
 $count = 1;
 
-$chunksize = 1;
+$chunksize = 10;
 
 $missing = array();
 
@@ -29,7 +30,7 @@ while (!feof($file_handle) && !$done)
 	
 	if ($couch->exists($id))
 	{
-		//echo "OK\n";
+		echo "OK\n";
 	}
 	else
 	{
@@ -52,7 +53,7 @@ while (!feof($file_handle) && !$done)
 		
 		echo $command . "\n";
 		
-		system($command);
+		//system($command);
 		
 		//echo "Sleep...\n";
 		//sleep(2);		
@@ -89,7 +90,7 @@ if (count($missing) > 0)
 		
 		echo $command . "\n";
 		
-		system($command);
+		//system($command);
 
 
 }

@@ -127,9 +127,9 @@ $config['proxy_port'] 	= '';
 $config['image_source']		= 'bhl'; // bhl to use remote images, biostor for local
 
 // Image caching--------------------------------------------------------------------------
-$config['use_cloudimage']	= false; // if true use https://cloudimage.io/
+$config['use_cloudimage']	= true; // if true use https://cloudimage.io/
 $config['use_weserv']		= false; // if true use https://images.weserv.nl/
-$config['use_image_proxy']	= true; // if true use local proxy to trigger caching
+$config['use_image_proxy']	= false; // if true use local proxy to trigger caching
 
 // Logging--------------------------------------------------------------------------------
 // View logging (requires writing to CouchDB and POSTs are expensive)

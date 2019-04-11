@@ -17,9 +17,9 @@ date_default_timezone_set('UTC');
 $site = 'local';
 //$site = 'biostor';
 //$site = 'pagoda';
-//$site = 'heroku';
+$site = 'heroku';
 
-$site = 'nanobox';
+//$site = 'nanobox';
 //$site = 'nanobox-local';
 
 switch ($site)
@@ -55,8 +55,8 @@ switch ($site)
 
 	case 'heroku':
 		// Server-------------------------------------------------------------------------
-		//$config['web_server']	= 'https://biostor.herokuapp.com'; 
-		$config['web_server']	= 'http://biostor.org'; 
+		$config['web_server']	= 'https://biostor.herokuapp.com'; 
+		//$config['web_server']	= 'http://biostor.org'; 
 		$config['site_name']	= 'BioStor';
 
 		// Memcache-----------------------------------------------------------------------
@@ -133,7 +133,7 @@ $config['use_image_proxy']	= false; // if true use local proxy to trigger cachin
 
 // Logging--------------------------------------------------------------------------------
 // View logging (requires writing to CouchDB and POSTs are expensive)
-$config['use_view_counter']	= true; // if true record and display number of article views
+$config['use_view_counter']	= false; // if true record and display number of article views
 
 // Hypothesis--------------------------------------------------------------------------------
 $config['use_hypothesis'] = false; // if true display hypothesis annotation tools

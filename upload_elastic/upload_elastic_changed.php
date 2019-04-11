@@ -7,7 +7,7 @@ require_once (dirname(dirname(__FILE__)) . '/lib.php');
 require_once (dirname(dirname(__FILE__)) . '/couchsimple.php');
 require_once (dirname(dirname(__FILE__)) . '/elastic.php');
 
-$limit = 20;
+$limit = 100;
 
 $url = '_changes?limit=' . $limit . '&descending=true';
 

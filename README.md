@@ -95,7 +95,31 @@ nanobox deploy
 
 ### Nanobox resources required
 
-Initially ran on Google Cloud using f1-micro (1 vCPU, 0.6 GB memory), which Google Cloud reported was overused. Can add more resources via nanobox “scale” which sets up a new server. Need to explore why we need more resources. 
+Initially ran on Google Cloud using f1-micro (1 vCPU, 0.6 GB memory), which Google Cloud reported was overused. Can add more resources via nanobox “scale” which sets up a new server. Need to explore why we need more resources.
+
+## Cloudflare
+
+### nanobox
+
+Type | Name | Value
+---|---|---
+A | 	biostor.org | IP address from nanobox
+
+### heroku
+
+Type | Name | Value
+---|---|---
+CNAME | 	biostor.org | biostor.org.herokudns.com
+CNAME | www | biostor.org.herokudns.com
+
+Cloudflare applies [CNAME flattening](https://support.cloudflare.com/hc/en-us/articles/200169056-CNAME-Flattening-RFC-compliant-support-for-CNAME-at-the-root) to 
+
+
+## Heroku
+
+Deploy to Heroku.
+
+
 
 ## CouchDB on Bitnami
 

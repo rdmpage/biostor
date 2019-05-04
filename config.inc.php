@@ -133,7 +133,7 @@ $config['use_image_proxy']	= false; // if true use local proxy to trigger cachin
 
 // Logging--------------------------------------------------------------------------------
 // View logging (requires writing to CouchDB and POSTs are expensive)
-$config['use_view_counter']	= false; // if true record and display number of article views
+$config['use_view_counter']	= true; // if true record and display number of article views
 
 // Hypothesis--------------------------------------------------------------------------------
 $config['use_hypothesis'] = false; // if true display hypothesis annotation tools

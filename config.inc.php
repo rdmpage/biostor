@@ -197,11 +197,11 @@ switch ($site)
 		
 		
 		// Bitnami Google Cloud CouchDB
-		// bitnami-couchdb-dm-a0f3
+		// bitnami-couchdb-dm-5947
 		// N1-STANDARD-1
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
-				'host' => 'admin:3h0kylo8ljfp@35.204.147.240',
+				'host' => 'admin:3h0kylo8ljfp@34.90.120.208',
 				'port' => 5984,
 				'prefix' => 'http://'
 				);	

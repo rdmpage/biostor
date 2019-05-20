@@ -23,7 +23,7 @@ class CouchSimple
 		
 		$url = $this->prefix . $this->host . ':' . $this->port . '/' . $this->database . '/' . urlencode($id);
 		
-		//echo $url . "\n";
+		echo $url . "\n";
 
 		curl_setopt ($ch, CURLOPT_URL, $url); 
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1); 		

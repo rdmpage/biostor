@@ -115,7 +115,11 @@ for ($id = $start; $id <= $end; $id++)
 					$doc->source = "biostor";
 					$doc->target = "https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor";
 					$doc->doc_ids = $replicate;
-
+					
+					$doc->source = "biostor";
+					$doc->target = "http://admin:3h0kylo8ljfp@34.90.120.208:5984/biostor";
+					$doc->doc_ids = $replicate;
+	
 					print_r($doc);
 
 
@@ -140,6 +144,12 @@ if (count($replicate) > 0)
 	$doc->source = "biostor";
 	$doc->target = "https://4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix:6727bfccd5ac5213a9a05f87e5161c153131af6b2c0f3355fe1aa0fe2f97a35f@4c577ff8-0f3d-4292-9624-41c1693c433b-bluemix.cloudant.com/biostor";
 	$doc->doc_ids = $replicate;
+	
+	$doc->source = "biostor";
+	$doc->target = "http://admin:3h0kylo8ljfp@34.90.120.208:5984/biostor";
+	$doc->doc_ids = $replicate;
+	
+	
 
 	print_r($doc);
 

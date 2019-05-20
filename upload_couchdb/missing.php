@@ -10,6 +10,7 @@ $filename = 'missing.txt';
 $filename = 'pinterest.txt';
 $filename = 'page.txt';
 $filename = 'extra.txt';
+$filename = 'more.txt';
 
 $skip = 0;
 $count = 1;
@@ -47,13 +48,17 @@ while (!feof($file_handle) && !$done)
 		$doc->target = "http://admin:3h0kylo8ljfp@35.204.147.240:5984/biostor";
 		$doc->doc_ids = $missing;
 		
+		$doc->source = "biostor";
+		$doc->target = "http://admin:3h0kylo8ljfp@34.90.120.208:5984/biostor";
+		$doc->doc_ids = $missing;			
+		
 		print_r($doc);
 		
 		$command = "curl http://direct.biostor.org:5984/_replicate -H 'Content-Type: application/json' -d '" . json_encode($doc) . "'";
 		
 		echo $command . "\n";
 		
-		//system($command);
+		system($command);
 		
 		//echo "Sleep...\n";
 		//sleep(2);		
@@ -84,13 +89,18 @@ if (count($missing) > 0)
 		$doc->target = "http://admin:3h0kylo8ljfp@35.204.147.240:5984/biostor";
 		$doc->doc_ids = $missing;
 		
+		$doc->source = "biostor";
+		$doc->target = "http://admin:3h0kylo8ljfp@34.90.120.208:5984/biostor";
+		$doc->doc_ids = $missing;			
+		
+		
 		print_r($doc);
 		
 		$command = "curl http://direct.biostor.org:5984/_replicate -H 'Content-Type: application/json' -d '" . json_encode($doc) . "'";
 		
 		echo $command . "\n";
 		
-		//system($command);
+		system($command);
 
 
 }

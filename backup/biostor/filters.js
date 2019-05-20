@@ -1,0 +1,1 @@
+{"_id":"_design/filters","_rev":"1-332217083d9573aa638bd932b5236c12","filters":{"works":"function(doc, req) { if (doc._deleted) { return true; } else { var types = ['article','book','chapter','generic']; if(types.indexOf(doc.type) != -1) { return true; } else { return false; } } }"}}

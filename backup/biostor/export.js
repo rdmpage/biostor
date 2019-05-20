@@ -1,0 +1,1 @@
+{"_id":"_design/export","_rev":"3-d313766309226a66b1ad81a769b979e2","language":"javascript","lists":{"values":"function(head,req) { var row; start({ 'headers': { 'Content-Type': 'text/plain' } }); while(row = getRow()) { send(JSON.stringify(row.value) + '\\n'); } }"},"views":{"jsonl":{"map":"function(doc) {\n  emit(doc._id, doc);\n}"}}}

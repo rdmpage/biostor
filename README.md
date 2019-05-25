@@ -184,4 +184,9 @@ BioStor uses CloudFlare http://cloudflare.com to provide caching, and by default
 
 For a very different interface to historical texts see the [UK Medical Heritage Library](https://ukmhl.historicaltexts.jisc.ac.uk/home).
 
+## Backup
+
+See details in “backup” folder.
+
+
 

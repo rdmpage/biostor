@@ -29,6 +29,7 @@ $url = '_design/geo/_view/tile?startkey=' . urlencode(json_encode($startkey))
 	. '&endkey=' .  urlencode(json_encode($endkey))
 	. '&group_level=8';
 	
+$url .= '&limit=100';
 	
 if ($config['stale'])
 {

@@ -308,6 +308,8 @@ function display_starting_with($letter='A', $callback)
 
 	$url = '_design/journal_articles/_view/name_sort?startkey=' . json_encode($startkey) . '&endkey=' . json_encode($endkey) . '&group_level=3';	
 
+	$url .= '&limit=100';
+
 	if ($config['stale'])
 	{
 		$url .= '&stale=ok';

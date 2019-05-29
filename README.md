@@ -119,6 +119,13 @@ Cloudflare applies [CNAME flattening](https://support.cloudflare.com/hc/en-us/ar
 
 Deploy to Heroku.
 
+### New Relic on Heroku
+
+Check it is installed:
+
+```
+heroku run env --app biostor | grep NEW_RELIC
+```
 
 
 ## CouchDB on Bitnami

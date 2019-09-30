@@ -201,7 +201,8 @@ switch ($site)
 		// N1-STANDARD-1
 		$config['couchdb_options'] = array(
 				'database' => 'biostor',
-				'host' => 'admin:3h0kylo8ljfp@34.90.120.208',
+				//'host' => 'admin:3h0kylo8ljfp@34.90.120.208',
+				'host' => 'admin:3h0kylo8ljfp@35.204.124.197',
 				'port' => 5984,
 				'prefix' => 'http://'
 				);	

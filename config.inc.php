@@ -203,6 +203,7 @@ switch ($site)
 				'database' => 'biostor',
 				//'host' => 'admin:3h0kylo8ljfp@34.90.120.208',
 				'host' => 'admin:3h0kylo8ljfp@35.204.124.197',
+				'host' => 'admin:3h0kylo8ljfp@35.204.144.59',
 				'port' => 5984,
 				'prefix' => 'http://'
 				);	

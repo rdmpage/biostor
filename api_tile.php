@@ -29,7 +29,7 @@ $url = '_design/geo/_view/tile?startkey=' . urlencode(json_encode($startkey))
 	. '&endkey=' .  urlencode(json_encode($endkey))
 	. '&group_level=8';
 	
-$url .= '&limit=100';
+//$url .= '&limit=1000';
 	
 if ($config['stale'])
 {
@@ -46,12 +46,18 @@ $response_obj = json_decode($resp);
 $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" 
 xmlns="http://www.w3.org/2000/svg" 
-width="256" height="256px">
+width="256" height="256px" >
    <style type="text/css">
       <![CDATA[     
       ]]>
    </style>
- <g>';
+ <g >';
+ 
+// viewBox="-10 -10 266 266" overflow="visible" 
+// transform="translate(0 0)"
+ 
+//$xml .= '<rect  x="0" y="0" width="256" height="256" style="stroke-width:1;fill:none;stroke:rgb(255,0,0);" />';
+ 
  
 foreach ($response_obj->rows as $row)
 {
